@@ -1,0 +1,655 @@
+#include<cmath>
+#include "controller.h"
+#include "HungarianAlg.h"
+#include<fstream>
+#include "common.h"
+//#include "icpPointToPoint.h"
+//#include "icpPointToPlane.h"
+#include <armadillo>
+extern Parameter parameter;
+
+Controller::Controller(){
+//    readErrorMap();
+//    initialize targets
+    radius = parameter.radius;
+    numP = parameter.N;
+    dimP = parameter.dim;
+    
+    colliInfo.vSet[0] = 0.0;
+    colliInfo.vSet[1] = 2.0;
+    colliInfo.vSet[2] = 5.0;
+    colliInfo.colliThresh = 6.0;
+    for (int i = 0; i < numP; i++)
+        availControl.push_back(2);
+    
+   
+    min_x = -25;
+    min_y = -25;
+    del_x = 0.5;
+    del_y = 0.5;
+    x_binNum = 101;
+    y_binNum = 101;
+    
+    
+    
+     std::array<Array2D_type::index, 2> dim = {x_binNum,y_binNum};
+    maps[0] = std::make_shared<Array2D_type>(dim);
+    maps[1] = std::make_shared<Array2D_type>(dim);
+    maps[2] = std::make_shared<Array2D_type>(dim);
+    
+    this->readCostMap();
+            /*
+    double R = (int)(dim/2.0/M_PI) * radius;
+    double d_theta = 2.0*M_PI/dim;
+    R= 10;
+    for(int i = 0; i < dim; i++){
+        targets.push_back(Model::particle());
+        targets[i].r[0] = R*cos(d_theta*i);
+        targets[i].r[1] = R*sin(d_theta*i);
+    }
+    
+*/
+}
+
+void Controller::calControl(Model::state s, Model::state targets, int dim){
+    if (dim ==2){
+        calControl2d(s, targets);    
+    } else if(dim ==3){
+        calControl3d(s, targets);
+    }
+}
+
+
+double Controller::calAssignment(Model::state s, Model::state targets, int dim){
+    double totalCost;
+    if (dim ==2){
+      totalCost = calAssignment2d(s, targets);    
+    } else if(dim ==3){
+       totalCost = calAssignment3d(s, targets);
+    }
+    return totalCost;
+}
+
+
+void Controller::calControl2d(Model::state s, Model::state targets){
+//    Controller::control control;
+    for(int i=0; i < numP; i++){
+        int t_idx = assignment[i];
+        double rx = targets[t_idx]->r[0] - s[i]->r[0]/radius ;
+        double ry = targets[t_idx]->r[1] - s[i]->r[1]/radius ;
+        double dot_prod = cos(s[i]->phi)*rx + sin(s[i]->phi)*ry;
+        if (dot_prod < 0){
+            s[i]->u = 0;
+        } else {
+            if (dot_prod < 1){
+                s[i]->u = 0;;
+            } else if(dot_prod < 3.7){
+                s[i]->u = 1;
+            } else{
+                s[i]->u = 2;
+            }
+        }
+        
+        if (s[i]->u > availControl[i]){
+            s[i]->u = availControl[i];
+        }
+        
+    }
+}
+
+void Controller::readCostMap(){    
+    std::ifstream is;
+    std::string line;
+    for (int mapIdx = 0; mapIdx < 3; mapIdx++) {
+        std::stringstream ss;
+        ss << mapIdx;
+        is.open("costMap"+ss.str()+".txt");
+        for (int i = 0; i < x_binNum; i++) {
+            getline(is, line);
+            std::stringstream linestream(line);
+            for (int j = 0; j < y_binNum; j++){
+                linestream >> (*(maps[mapIdx]))[i][j];
+//                std::cout<<(*(maps[mapIdx]))[i][j]<<"\t";
+            }
+                
+        }
+        is.close();
+    }
+}
+
+double Controller::getCostFromMap(double x,double y, double z, int mapIndex){
+    int z_bin, x_bin, y_bin;
+//
+//    if (dim == 2) {
+//        z_bin = 0;
+//        x_bin = (int) ((x - min_x) / del_x);
+//        y_bin = (int) ((y - min_y) / del_y);
+//    } else {
+        x_bin = (int) ((x - min_x) / del_x);
+        y_bin = (int) ((y - min_y) / del_y);
+//        z_bin = (int) ((z - min_z) / del_z);
+       
+        double c = (*(maps[mapIndex]))[x_bin][y_bin];
+        return c;
+}
+
+/*
+void Controller::calAvoidance2d(Model::state s){
+
+    for (int i=0; i < numP; i++){
+        availControl[i] = 2;
+    }
+    
+    for (int i=0; i < numP-1; i++){
+        for (int j = i+1; j < numP; j++){
+            double v_dot = cos(s[i]->phi)*cos(s[j]->phi)+
+            sin(s[i]->phi)*sin(s[j]->phi);
+            if (v_dot > sqrt(3.0)/2.0) break;  // if in the same direction within 30 degree difference, no need to avoid          
+//          otherwise calculate the intersection
+            double r[3];
+            double v[3];
+            r[0] = (s[i]->r[0] - s[j]->r[0])/radius;
+            r[1] = (s[i]->r[1] - s[j]->r[1])/radius;
+            r[2] = (s[i]->r[2] - s[j]->r[2])/radius;
+            double dist = r[0]*r[0]+r[1]*r[1]+r[2]*r[2];
+            dist = sqrt(dist);             
+            if (dist > colliInfo.colliThresh) break; // too far away to hit
+            
+            v[0] = cos(s[i]->phi) - cos(s[j]->phi);
+            v[1] = sin(s[i]->phi) - sin(s[j]->phi);
+            v[2] = 0;
+            double b = r[0] * v[0] + r[1] * v[1] + r[2] * v[2];
+            if (b > 0) break;// collision cannot happen since particles are moving away from each other
+                       
+            double InvertMat[2][2];
+            double det = -cos(s[i]->phi)*sin(s[j]->phi)+cos(s[j]->phi)*sin(s[i]->phi);
+            InvertMat[0][0] = -sin(s[j]->phi);
+            InvertMat[1][1] = cos(s[i]->phi);
+            InvertMat[0][1] = cos(s[j]->phi);
+            InvertMat[1][0] = -sin(s[i]->phi);
+            
+            double t0,t1;
+            if (det < 1e-6){ // this is the case two particle are almost anti-parallel
+                double perpDist = abs(-r[0]*sin(s[i]->phi) + r[1]*cos(s[j]->phi));
+                if (perpDist > 2.0) break; // the perpendicular distance is big, they won't collide
+                t0 = 0.5*dist;
+                t1 = 0.5*dist;
+            } else {
+                t0 = (InvertMat[0][0]*b[0]+InvertMat[0][1]*b[1])/det;
+                t1 = (InvertMat[1][0]*b[0]+InvertMat[1][1]*b[1])/det;
+            }
+            // if both greater than zero then they intersect on their front path
+            if (t1 > 0 && t0 > 0){
+                if (t1 > t0){
+                    
+                    while(colliInfo.vSet[availControl[j]] >= t1){
+                        availControl[j]--;
+                        if (availControl[j] == 0) break;
+                    }
+                } else {
+                    while(colliInfo.vSet[availControl[i]] >= t0){
+                        availControl[i]--;
+                        if (availControl[i] == 0) break;
+                    }
+                }           
+            } else {// t1*t0<0, where one hit another in the back, then reduce the speed of particle that hits others
+                if (t1 > 0){
+                    
+                    while(colliInfo.vSet[availControl[j]] >= t1){
+                        availControl[j]--;
+                        if (availControl[j] == 0) break;
+                    }
+                } else if(t0 >0) {
+                    while(colliInfo.vSet[availControl[i]] >= t0){
+                        availControl[i]--;
+                        if (availControl[i] == 0) break;
+                    }
+                }            
+            }
+ 
+        }
+    }
+                
+}
+*/
+void Controller::calAvoidance2d_simpleCollision(Model::state s){
+    for (int i=0; i < numP; i++){
+        availControl[i] = 2;
+    }
+    
+    for (int i=0; i < numP; i++){
+        for (int j = 0; j < numP; j++){
+            //if one is diffuse only
+//            std::cout << j << "\t";
+            if (i != j){
+            if (availControl[i] == 0) break;
+            double r[3];
+            double v[3];
+            r[0] = (s[i]->r[0] - s[j]->r[0])/radius;
+            r[1] = (s[i]->r[1] - s[j]->r[1])/radius;
+            r[2] = (s[i]->r[2] - s[j]->r[2])/radius;
+            double dist = r[0]*r[0]+r[1]*r[1]+r[2]*r[2];
+            dist = sqrt(dist);             
+            if (dist > colliInfo.colliThresh) continue;
+            int totalControl = availControl[i];
+            int iter = 0;
+            while (iter < totalControl){
+                iter++;
+                // assume the second particle is static
+                v[0] = colliInfo.vSet[availControl[i]]*cos(s[i]->phi) - 0.0;
+                v[1] = colliInfo.vSet[availControl[i]]*sin(s[i]->phi) - 0.0;
+                v[2] = 0;
+                double v_sq = v[0]*v[0]+v[1]*v[1]+v[2]*v[2];
+                double b = r[0] * v[0] + r[1] * v[1] + r[2] * v[2];
+                if (b > 0) break;// collision cannot happen at this speed
+                double delta = b * b - v_sq * (dist * dist - 4.0);
+                if (delta < 0) break; // collision cannot happen at this speed
+                // if collision can happen
+                double t = (-b - sqrt(delta)) / v_sq;
+                if (t < 1.0) {
+                    availControl[i]--;   
+                } else {
+                    break;
+                }
+            }
+            }
+        }
+    }
+    for (int i=0; i < numP; i++){
+        s[i]->availControl=availControl[i];
+//        std::cout << i << "\t" << s[i]->availControl << std::endl;
+    }
+}
+
+/*
+
+void Controller::calAvoidance2d_colliVersion(Model::state s){
+// this version use collision checking in Molecular simulation
+// I have not figured it out yet
+    for (int i=0; i < numP; i++){
+        availControl[i] = 2;
+    }
+    
+    for (int i=0; i < numP-1; i++){
+        for (int j = i+1; j < numP; j++){
+            double v_dot = cos(s[i]->phi)*cos(s[j]->phi)+
+            sin(s[i]->phi)*sin(s[j]->phi);
+            if (v_dot > 0) break;  // if in the same direction, no need to avoid          
+            if (availControl[i] == 0 && availControl[j] == 0) break;
+            double r[3];
+            double v[3];
+            r[0] = (s[i]->r[0] - s[j]->r[0])/radius;
+            r[1] = (s[i]->r[1] - s[j]->r[1])/radius;
+            r[2] = (s[i]->r[2] - s[j]->r[2])/radius;
+            double dist = r[0]*r[0]+r[1]*r[1]+r[2]*r[2];
+            dist = sqrt(dist);             
+            if (dist > colliInfo.colliThresh) break;
+            int totalControl = availControl[i] + availControl[j];
+            int iter = 0;
+            while (iter < totalControl){
+                iter++;
+                v[0] = colliInfo.vSet[availControl[i]]*cos(s[i]->phi) - colliInfo.vSet[availControl[i]]*cos(s[j]->phi);
+                v[1] = colliInfo.vSet[availControl[i]]*sin(s[i]->phi) - colliInfo.vSet[availControl[j]]*sin(s[j]->phi);
+                v[2] = 0;
+                double v_sq = v[0]*v[0]+v[1]*v[1]+v[2]*v[2];
+                double b = r[0] * v[0] + r[1] * v[1] + r[2] * v[2];
+                if (b > 0) break;// collision cannot happen at this speed
+                double delta = b * b - v_sq * (dist * dist - 4.0);
+                if (delta < 0) break; // collision cannot happen at this speed
+                // if collision can happen
+                double t = (-b - sqrt(delta)) / v_sq;
+                if (t < 1.0) {
+                    if (availControl[i] = availControl[j]) {
+                        int randomSelect;
+                        randomSelect = rand() % 2;
+                        if (randomSelect == 0) {
+                            availControl[i]--;
+                        } else {
+                            availControl[j]--;
+                        }
+                    } else if (availControl[i] > availControl[j]) {
+                        availControl[i]--;
+                    } else {
+                        availControl[j]--;
+                    }
+                }
+            }
+        }
+    }
+                
+}
+  */  
+double Controller::calAssignment3d(Model::state s, Model::state targets) {
+    vector< vector<double> > Cost(numP, vector<double>(numP));
+    double totalCost = 0.0;
+    for(int i=0; i<numP; i++){
+	for(int j=0; j<numP; j++){
+            double rx = targets[j]->r[0] - s[i]->r[0]/radius ;
+            double ry = targets[j]->r[1] - s[i]->r[1]/radius ;
+            double rz = targets[j]->r[2] - s[i]->r[2]/radius;
+            double proj_x = s[i]->ori_vec[0][0]*rx + s[i]->ori_vec[0][0]*ry+s[i]->ori_vec[0][0]*rz;
+            double proj_y = s[i]->ori_vec[0][1]*rx + s[i]->ori_vec[0][1]*ry+s[i]->ori_vec[0][1]*rz;
+            double proj_z = s[i]->ori_vec[0][2]*rx + s[i]->ori_vec[0][2]*ry+s[i]->ori_vec[0][2]*rz;
+            double c = pow((proj_x - 2)/1.2,2.0) + pow((proj_y),2.0) + pow((proj_z),2.0);
+//            Cost[i][j] = (long)(sqrt(c)*10.0);
+            Cost[i][j] = c;
+        }
+    }   
+    AssignmentProblemSolver APS;
+    APS.Solve(Cost, assignment);
+    for(int i=0; i < numP; i++){
+        s[i]->targetIdx = assignment[i];
+        s[i]->cost = Cost[i][assignment[i]];
+        totalCost += s[i]->cost;
+    }
+    return totalCost;
+}
+
+void Controller::calControl3d(Model::state s, Model::state targets){
+//    Controller::control control;
+    for(int i=0; i < numP; i++){
+        int t_idx = assignment[i];
+        double rx = targets[t_idx]->r[0] - s[i]->r[0]/radius ;
+        double ry = targets[t_idx]->r[1] - s[i]->r[1]/radius ;
+        double rz = targets[t_idx]->r[2] - s[i]->r[2]/radius;
+        double dot_prod = s[i]->ori_vec[0][0]*rx + s[i]->ori_vec[0][1]*ry+s[i]->ori_vec[0][2]*rz;
+        if (dot_prod < 0){
+            s[i]->u = 0;
+        } else {
+            if (dot_prod < 1){
+                s[i]->u = 0;;
+            } else if(dot_prod < 2.8){
+                s[i]->u = 1;
+            } else{
+                s[i]->u = 2;
+            }
+        }
+    }
+}
+
+
+double Controller::calAssignment2d(Model::state s, Model::state targets) {
+    this->calAvoidance2d_simpleCollision(s);
+    
+    vector< vector<double> > Cost(numP, vector<double>(numP));
+    double totalCost = 0.0;
+    for(int i=0; i<numP; i++){
+	for(int j=0; j<numP; j++){
+            double rx = targets[j]->r[0] - s[i]->r[0]/radius ;
+            double ry = targets[j]->r[1] - s[i]->r[1]/radius ;
+            double proj_x = cos(s[i]->phi)*rx + sin(s[i]->phi)*ry;
+            double proj_y = -sin(s[i]->phi)*rx + cos(s[i]->phi)*ry;
+            
+            double dist = proj_x*proj_x + proj_y*proj_y;
+            dist = sqrt(dist);
+            double c;
+            if (dist > 20){
+                c = pow((proj_x - 2)/1.2,2.0) + pow((proj_y),2.0);
+            } else{
+                c = this->getCostFromMap(proj_x,proj_y,0,availControl[i]);
+            }
+                Cost[i][j] = c;
+//            Cost[i][j] = (long)(sqrt(c)*10.0);
+        }
+    }   
+    AssignmentProblemSolver APS;
+    APS.Solve(Cost, assignment);
+    for(int i=0; i < numP; i++){
+        s[i]->targetIdx = assignment[i];
+        s[i]->cost = Cost[i][assignment[i]];
+        totalCost += s[i]->cost;
+    }
+    return totalCost;
+}
+
+void Controller::translate_2d(double phi,Model::state s){
+// first select a subset of particles that is in the right direction
+//  let them go until shape change too much
+    
+    for (int i = 0; i < numP; i++){
+        double proj;
+        proj = cos(s[i]->phi - phi);
+        if (proj > sqrt(3.0)/2.0) {
+            s[i]->u = 2;
+        }
+    }
+    
+}
+
+void Controller::rotate_2d(Model::state s){
+// first determine a rotational center
+    double center_s[3];
+    this->calInlier(s);    
+    this->calWeightCenter(s,center_s,1);
+    for (int k = 0; k < 3; k++){
+        std::cout << "rotate center_s: " << center_s[k] << std::endl;
+    }
+    
+
+    for (int i = 0; i < numP; i++){
+        double proj;
+        double pos_phi = atan2(s[i]->r[1]/radius-center_s[1],s[i]->r[0]/radius-center_s[0]) + M_PI/2.0;
+        proj = cos(s[i]->phi - pos_phi);
+        if (proj > sqrt(3.0)/2.0 && s[i]->inlier) {
+            s[i]->u = 2;
+        }
+    }
+
+    
+}
+
+void Controller::calWeightCenter(Model::state s, double center[3],int flag) {
+    if (flag == 0) {
+        for (int k = 0; k < 3; k++) {
+            center[k] = 0;
+            for (int i = 0; i < numP; i++) {
+                center[k] += s[i]->r[k];
+            }
+            center[k] /= numP;
+        }
+    } else {
+        for (int k = 0; k < 3; k++) {
+            center[k] = 0;
+            double weight_sum = 0.0;
+            for (int i = 0; i < numP; i++) {
+                double weight = s[i]->inlier;
+                center[k] += s[i]->r[k] * weight;
+                weight_sum += weight;
+            }
+            center[k] /= (weight_sum);
+        }
+    }
+}
+
+void Controller::alignTarget_t(Model::state s, Model::state targets){
+
+    double center_target[3], center_s[3];
+        
+    this->calWeightCenter(targets,center_target,0);
+    for (int k = 0; k < 3; k++){
+        
+        std::cout << "center_target: " << center_target[k] << std::endl;
+    }
+
+    this->calWeightCenter(s,center_s,1);
+    for (int k = 0; k < 3; k++){
+        center_s[k] /= (radius);
+        std::cout << "center_s: " << center_s[k] << std::endl;
+        
+    }
+
+    // for do the shift
+    for (int i = 0; i < numP; i++) {
+        for (int k = 0; k < 3; k++) {
+            targets[i]->r[k] += center_s[k] - center_target[k];
+        }
+    }
+}
+
+/*
+void Controller::register_2d(Model::state s, Model::state targets){
+  // define a 3 dim problem with 10000 model points
+  // and 10000 template points:
+  int32_t dim = 2;
+  int32_t num = numP;
+
+  // allocate model and template memory
+  double* M = (double*)calloc(dim*num,sizeof(double));
+  double* T = (double*)calloc(dim*num,sizeof(double));
+
+  // set model and template points
+  for (int i = 0; i < numP; i++){
+      T[i*dim+0] = targets[i]->r[0];
+      T[i*dim+1] = targets[i]->r[1];
+  
+      M[i*dim+0] = s[i]->r[0]/radius;
+      M[i*dim+1] = s[i]->r[1]/radius;
+  }
+  // start with identity as initial transformation
+  // in practice you might want to use some kind of prediction here
+  Matrix R = Matrix::eye(2);
+  Matrix t(2,1);
+  
+  
+      double center_target[3], center_s[3];
+        
+    this->calWeightCenter(targets,center_target,0);
+    for (int k = 0; k < 3; k++){
+        
+        std::cout << "center_target: " << center_target[k] << std::endl;
+    }
+
+    this->calWeightCenter(s,center_s,1);
+    for (int k = 0; k < 3; k++){
+        center_s[k] /= (radius);
+        std::cout << "center_s: " << center_s[k] << std::endl;
+        
+    }
+
+    // for do the shift
+    for (int i = 0; i < numP; i++) {
+        for (int k = 0; k < 3; k++) {
+            t(0,0)= -center_s[0] + center_target[0];
+            t(1,0)= -center_s[1] + center_target[1];
+        }
+    }
+  
+
+  // run point-to-plane ICP (-1 = no outlier threshold)
+  cout << endl << "Running ICP (point-to-point, no outliers)" << endl;
+  IcpPointToPoint icp(M,num,dim);
+  icp.fit(T,num,R,t,2.5);
+
+  // results
+  cout << endl << "Transformation results:" << endl;
+  cout << "R:" << endl << R << endl << endl;
+  cout << "t:" << endl << t << endl << endl;
+
+  // free memory
+  free(M);
+  free(T);
+
+  for (int i = 0; i < numP; i++){
+      targets[i]->r[0] -= t(0,0) ;
+      targets[i]->r[1] -= t(1,0);
+      targets[i]->r[0] = R(0,0)*targets[i]->r[0] + R(0,1)*targets[i]->r[1];
+      targets[i]->r[1] = R(1,0)*targets[i]->r[0] + R(1,1)*targets[i]->r[1];      
+  }
+  
+  
+  
+}
+*/
+void Controller::calInlier(Model::state s){
+
+    double r[3],dist;
+    for (int i = 0; i < numP; i++) {
+        s[i]->nbcount = 0;
+        s[i]->inlier = 0;
+    }
+    for (int i = 0; i < numP - 1; i++) {
+        for (int j = i + 1; j < numP; j++) {
+            dist = 0.0;
+            for (int k = 0; k < dimP; k++) {
+
+                r[k] = (s[j]->r[k] - s[i]->r[k]) / radius;
+                dist += pow(r[k], 2.0);
+            }
+            dist = sqrt(dist);
+            if (dist < 2.5) {
+                s[i]->nbcount++;
+                s[j]->nbcount++;
+            }
+
+        }
+    }
+    for (int i = 0; i < numP; i++) {
+       if( s[i]->nbcount >=3){
+           s[i]->inlier = 1;
+       }
+    }
+    
+
+
+
+}
+
+void Controller::alignTarget_rt(Model::state s, Model::state targets){
+
+    
+    
+    this->calInlier(s);
+//    NRmatrix<double> b(2, 2);
+    arma::mat cov(2,2);
+    double center_s[3], center_target[3];
+    
+    this->calWeightCenter(targets,center_target,0);
+    for (int k = 0; k < 3; k++){
+        
+        std::cout << "center_target: " << center_target[k] << std::endl;
+    }
+
+    this->calWeightCenter(s,center_s,1);
+    for (int k = 0; k < 3; k++){
+        center_s[k] /= (radius);
+        std::cout << "center_s: " << center_s[k] << std::endl;
+        
+    }
+    
+    
+    for (int i =0; i <2; i++){
+        for (int j = 0; j < 2; j++) {
+            cov(i,j) = 0;
+            for (int k = 0; k < numP; k++){
+                int t_idx = s[k]->targetIdx;
+               double weight = s[i]->inlier;
+                cov(i,j) += (s[k]->r[j]/radius - center_s[j])*(targets[t_idx]->r[i] - center_target[i])*weight;            
+            }
+        }
+    }
+    arma::mat U;
+    arma::vec sin;
+    arma::mat V;
+
+    arma::svd(U,sin,V,cov);
+    
+    arma::mat R;
+    R = V*U.t();
+    R.print("rotation matrix:");
+
+    double tran[2];
+    tran[0] = center_s[0] - (R(0,0)*center_target[0]+R(0,1)*center_target[1]);
+    tran[1] = center_s[1] - (R(1,0)*center_target[0]+R(1,1)*center_target[1]);   
+    std::cout << "translation:" << std::endl;
+    std::cout << tran[0] << "\t" << tran[1] << std::endl;
+    for (int i = 0; i < numP; i++) {
+        targets[i]->r[0] = R(0,0)*targets[i]->r[0] + R(0,1)*targets[i]->r[1];
+        targets[i]->r[1] = R(1,0)*targets[i]->r[0] + R(1,1)*targets[i]->r[1];
+
+        targets[i]->r[0] += tran[0];
+        targets[i]->r[1] += tran[1];        
+    }
+    
+    
+
+}
