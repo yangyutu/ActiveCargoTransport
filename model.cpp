@@ -131,16 +131,22 @@ void Model::readTarget(std::string filename){
         linestream >> targets[i]->r[0];
         linestream >> targets[i]->r[1];
         linestream >> targets[i]->r[2];
+        linestream >> dum;
+        linestream >> dum;
+        linestream >> targets[i]->marked;
     }
     
     osTarget.open("target.txt");
+/*    
     for(int i = 0; i < numP; i++){
         osTarget << i << "\t";
         osTarget << targets[i]->r[0] << "\t";
         osTarget << targets[i]->r[1] << "\t";
-        osTarget << targets[i]->r[2] << std::endl;
+        osTarget << targets[i]->r[2] << "\t";
+        osTarget << targets[i]->marked << std::endl;
     }  
-}
+*/
+ }
 
 void Model::calForcesHelper(int i, int j, double F[3]) {
     double r[dimP], dist;
@@ -300,6 +306,7 @@ void Model::outputTrajectory(std::ostream& os) {
         for (int j = 0; j < 3; j++){
             osTarget << targets[i]->r[j] << "\t";
         }
+        osTarget << targets[i]->marked << "\t";
         osTarget << std::endl;
         
         os << particles[i]->phi<< "\t";
@@ -315,7 +322,9 @@ void Model::outputTrajectory(std::ostream& os) {
 void Model::outputOrderParameter(std::ostream& os) {
 
     os << this->timeCounter << "\t";
-        os << this->calHausdorff() << std::endl;
+        os << this->calHausdorff() << "\t";
+        os << this->calPsi6() << "\t";
+        os << this->calRg() << std::endl;
 }
 
 
@@ -455,6 +464,72 @@ double Model::calHausdorff(){
         }
     }
     return maxdist;
+}
+
+double Model::calRg(){
+    //      calculate Rg
+    double xmean = 0;
+    double ymean = 0;
+    double zmean = 0;
+
+    for (int i = 0; i < numP; i++) {
+        xmean = xmean + particles[i]->r[0];
+        ymean = ymean + particles[i]->r[1];
+        zmean = zmean + particles[i]->r[2];
+    }
+    xmean /= numP;
+    ymean /= numP;
+
+    double rgmean = 0;
+    for (int i = 0; i < numP; i++) {
+        rgmean = rgmean + (particles[i]->r[0] - xmean)*(particles[i]->r[0] - xmean);
+        rgmean = rgmean + (particles[i]->r[1] - ymean)*(particles[i]->r[1] - xmean);
+        rgmean = rgmean + (particles[i]->r[2] - ymean)*(particles[i]->r[2] - xmean);
+    }
+    rgmean /= numP;
+
+    rgmean = sqrt(rgmean)/radius;
+    
+    return rgmean;
+}
+
+double Model::calPsi6(){
+    
+    double rmin=2.7;
+    std::vector<double> psir(numP,0.0),psii(numP,0.0);
+    for (int i = 0; i < numP; i++) {
+        int nb = 0;
+        for (int j = 0; j < numP; j++) {
+            if (i != j) {
+                double rxij = particles[j]->r[0] - particles[i]->r[0];
+                double ryij = particles[j]->r[1] - particles[i]->r[1];
+                double RP = sqrt(rxij * rxij + ryij * ryij)/radius;
+                if (RP < rmin) {
+                    nb += 1;
+                    double theta = std::atan2(ryij, rxij);
+                    psir[i] += cos(6 * theta);
+                    psii[i] += sin(6 * theta);
+                }
+            }
+                      
+        } 
+            if (nb > 0) {
+                psir[i] /=  nb;
+                psii[i] /=  nb;
+            }
+    }
+    double psi6 = 0;
+    double accumpsi6r = 0;
+    double accumpsi6i = 0;
+    for (int i = 0; i < numP; i++) {
+
+        accumpsi6r = accumpsi6r + psir[i];
+        accumpsi6i = accumpsi6i + psii[i];
+    }
+    accumpsi6r = accumpsi6r / numP;
+    accumpsi6i = accumpsi6i / numP;
+    psi6 = sqrt(accumpsi6r * accumpsi6r + accumpsi6i * accumpsi6i);
+    return psi6;
 }
 
 void Model::getPermutator() {

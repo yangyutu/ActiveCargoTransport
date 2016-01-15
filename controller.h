@@ -8,12 +8,12 @@
 #include <iostream>
 #include "boost/multi_array.hpp"
 #include "model.h"
-
+#include "lemon/list_graph.h"
 class Controller {
 public:
 
-    Controller();
 
+    Controller(Model::state targets);
     ~Controller() {
     }
     typedef std::vector<int> control;
@@ -21,6 +21,7 @@ public:
     void calControl(Model::state s, Model::state targets, int dimP);
     void calControl2d(Model::state s, Model::state targets);
     double calAssignment2d(Model::state s, Model::state targets);
+    double calSeqAssignment(Model::state s, Model::state targets, int expand);
     void calControl3d(Model::state s, Model::state targets);
     double calAssignment3d(Model::state s, Model::state targets);
     void getErrorDist();
@@ -29,6 +30,9 @@ public:
     void alignTarget_t(Model::state s, Model::state targets);
 //    void alignTarget_r(Model::state s, Model::state targets);
     void alignTarget_rt(Model::state s, Model::state targets);
+    void buildTargetGraph();
+    int getNumMarked(){return numMarked;}
+    double getDeviation(){return deviation;}
 //    void register_2d(Model::state s, Model::state targets);
     struct ColliInfo{
         double vSet[3];
@@ -36,6 +40,13 @@ public:
     };
     
 private:
+    lemon::ListGraph targetG;
+    std::vector<lemon::ListGraph::Node> nodes_t; 
+    std::vector<lemon::ListGraph::Edge> edges_t;
+    std::shared_ptr<lemon::ListGraph::NodeMap<int>> marked_t,index_t;
+    int numMarked,numSurface;
+    double deviation;
+    std::vector<int> markedIdx;
     ColliInfo colliInfo;
     std::random_device rd;
     typedef boost::multi_array<double, 2> Array2D_type;
@@ -54,5 +65,8 @@ private:
     void calWeightCenter(Model::state s, double center[3],int flag);
     void calInlier(Model::state s);
     void readCostMap();
+
+    void expandTargets();
     std::vector<int> assignment,availControl;
+    Model::state targets_;
 };

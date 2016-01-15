@@ -23,6 +23,7 @@ public:
         int availControl;
         int nbcount;
         int inlier;
+        int marked;
     };
     typedef std::shared_ptr<particle> particle_ptr;
     typedef std::vector<particle_ptr> state;
@@ -42,6 +43,8 @@ public:
     double dt(){return dt_;}
     int np(){return numP;}
     double calHausdorff();
+    double calPsi6();
+    double calRg();
 private:
     void calForces();
     void calForcesHelper(int i, int j, double F[3]);

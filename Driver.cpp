@@ -17,14 +17,16 @@ int main(){
     double radius = 1e-6;
     cellList_ptr cell(new CellList(3.0*radius,3,20,30.0*radius,30.0*radius,30.0*radius));
     std::shared_ptr<Model> m(new Model(nullptr));
-    std::shared_ptr<Controller> c(new Controller());
+    std::shared_ptr<Controller> c(new Controller(m->getTargets()));
     Simulator simulator(m,c);
-    if (parameter.shapeFlag){
-    simulator.run();
-    } else if(parameter.motionFlag==1){
-    simulator.translate_2d();
+    if (parameter.shapeFlag == 1){
+        simulator.shapeForming();
+    } else if(parameter.shapeFlag == 2){
+        simulator.shapeForming_seq();
+    }else if(parameter.motionFlag==1){
+        simulator.translate_2d();
     } else if(parameter.motionFlag==2){
-    simulator.rotate_2d();
+        simulator.rotate_2d();
     }
     
     return 0;

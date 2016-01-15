@@ -17,7 +17,7 @@ Simulator::Simulator(std::shared_ptr<Model> model0,std::shared_ptr<Controller> c
     move_recoverStep = 20;
 }
 
-void Simulator::run(){
+void Simulator::shapeForming(){
     double totalCost;   
     model->createInitialState();
     totalCost = controller->calAssignment(model->getCurrState(),model->getTargets(),model->getDimP());
@@ -27,7 +27,30 @@ void Simulator::run(){
     for(int s=0; s < nstep_control; s++){
         if ((s+1)%assignmentFrequency == 0){
             totalCost = controller->calAssignment(model->getCurrState(),model->getTargets(),model->getDimP());
-            std::cout << totalCost << std::endl;
+            std::cout << s << "\t" <<totalCost << std::endl;
+        }
+        controller->calControl(model->getCurrState(),model->getTargets(),model->getDimP());        
+        model->run(controlFrequency);
+    }
+    model->setControl(0);
+    for(int s = 0; s < nstep_equilibrate; s++){
+        model->run(controlFrequency);
+    }
+}
+
+
+void Simulator::shapeForming_seq(){
+    double totalCost;   
+    model->createInitialState();
+    controller->buildTargetGraph();
+    totalCost = controller->calSeqAssignment(model->getCurrState(),model->getTargets(),0);
+    controller->calControl(model->getCurrState(),model->getTargets(),model->getDimP());
+    int iter;
+    std::cout << totalCost << std::endl;
+    for(int s=0; s < nstep_control; s++){
+        if ((s+1)%assignmentFrequency == 0){
+            totalCost = controller->calSeqAssignment(model->getCurrState(),model->getTargets(),1);
+            std::cout << s << "\t" <<totalCost <<"\t" << controller->getNumMarked()<<"\t" <<controller->getDeviation()<< std::endl;
         }
         controller->calControl(model->getCurrState(),model->getTargets(),model->getDimP());        
         model->run(controlFrequency);
@@ -62,6 +85,7 @@ void Simulator::translate_2d(){
             }
             controller->calControl(model->getCurrState(), model->getTargets(), model->getDimP());
             model->run(controlFrequency);
+            controller->alignTarget_rt(model->getCurrState(),model->getTargets());
         }
     
     }

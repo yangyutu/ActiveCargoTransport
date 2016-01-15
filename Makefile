@@ -18,7 +18,7 @@ CXXFLAGS=  -std=c++0x -I$(HOME)Copy/workspace/munkres-cpp/src $(BOOST_INCLUDE) -
 #CXXFLAGS += $(DEBUGFLAG)
 #CXXFLAGS += $(RELEASEFLAG)
 LINKOPTFLAGS= -O3 -flto=4 -fwhole-program
-LDFLAG= -L./libicp -licp -llapack -lopenblas
+LDFLAG= -L./libicp -licp -llapack -lblas -lgfortran -lquadmath
 
 OBJ=HungarianAlg.o controller.o model.o simulator.o Driver.o CellList.o
 OBJ2=cellList_test.o CellList.o

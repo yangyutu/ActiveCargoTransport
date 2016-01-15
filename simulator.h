@@ -7,7 +7,8 @@ public:
     Simulator(){}
     Simulator(std::shared_ptr<Model> model0,std::shared_ptr<Controller> controller0);
     ~Simulator(){}
-    void run();
+    void shapeForming();
+    void shapeForming_seq();
     void translate_2d();
     void rotate_2d();
     

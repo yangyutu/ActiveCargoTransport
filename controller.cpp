@@ -1,16 +1,21 @@
 #include<cmath>
+#include<set>
 #include "controller.h"
 #include "HungarianAlg.h"
 #include<fstream>
 #include "common.h"
+
 //#include "icpPointToPoint.h"
 //#include "icpPointToPlane.h"
 #include <armadillo>
+
+using namespace lemon;
 extern Parameter parameter;
 
-Controller::Controller(){
+Controller::Controller(Model::state targets){
 //    readErrorMap();
 //    initialize targets
+    targets_ = targets;
     radius = parameter.radius;
     numP = parameter.N;
     dimP = parameter.dim;
@@ -74,26 +79,28 @@ double Controller::calAssignment(Model::state s, Model::state targets, int dim){
 void Controller::calControl2d(Model::state s, Model::state targets){
 //    Controller::control control;
     for(int i=0; i < numP; i++){
-        int t_idx = assignment[i];
-        double rx = targets[t_idx]->r[0] - s[i]->r[0]/radius ;
-        double ry = targets[t_idx]->r[1] - s[i]->r[1]/radius ;
-        double dot_prod = cos(s[i]->phi)*rx + sin(s[i]->phi)*ry;
-        if (dot_prod < 0){
-            s[i]->u = 0;
-        } else {
-            if (dot_prod < 1){
-                s[i]->u = 0;;
-            } else if(dot_prod < 3.7){
-                s[i]->u = 1;
-            } else{
-                s[i]->u = 2;
+        int t_idx = s[i]->targetIdx;
+        if (t_idx >=0){
+            double rx = targets[t_idx]->r[0] - s[i]->r[0]/radius ;
+            double ry = targets[t_idx]->r[1] - s[i]->r[1]/radius ;
+            double dot_prod = cos(s[i]->phi)*rx + sin(s[i]->phi)*ry;
+            if (dot_prod < 0) {
+                s[i]->u = 0;
+            } else {
+                if (dot_prod < 1) {
+                    s[i]->u = 0;
+                    ;
+                } else if (dot_prod < 3.7) {
+                    s[i]->u = 1;
+                } else {
+                    s[i]->u = 2;
+                }
+            }
+
+            if (s[i]->u > availControl[i]) {
+                s[i]->u = availControl[i];
             }
         }
-        
-        if (s[i]->u > availControl[i]){
-            s[i]->u = availControl[i];
-        }
-        
     }
 }
 
@@ -397,6 +404,7 @@ double Controller::calAssignment2d(Model::state s, Model::state targets) {
     for(int i=0; i < numP; i++){
         s[i]->targetIdx = assignment[i];
         s[i]->cost = Cost[i][assignment[i]];
+        targets[s[i]->targetIdx]->targetIdx = i;
         totalCost += s[i]->cost;
     }
     return totalCost;
@@ -405,11 +413,11 @@ double Controller::calAssignment2d(Model::state s, Model::state targets) {
 void Controller::translate_2d(double phi,Model::state s){
 // first select a subset of particles that is in the right direction
 //  let them go until shape change too much
-    
+    this->calInlier(s);
     for (int i = 0; i < numP; i++){
         double proj;
         proj = cos(s[i]->phi - phi);
-        if (proj > sqrt(3.0)/2.0) {
+        if (proj > sqrt(3.0)/2.0 && s[i]->nbcount >3) {
             s[i]->u = 2;
         }
     }
@@ -563,12 +571,13 @@ void Controller::register_2d(Model::state s, Model::state targets){
 void Controller::calInlier(Model::state s){
 
     double r[3],dist;
-    for (int i = 0; i < numP; i++) {
+    int size = s.size();
+    for (int i = 0; i < size; i++) {
         s[i]->nbcount = 0;
         s[i]->inlier = 0;
     }
-    for (int i = 0; i < numP - 1; i++) {
-        for (int j = i + 1; j < numP; j++) {
+    for (int i = 0; i < size - 1; i++) {
+        for (int j = i + 1; j < size; j++) {
             dist = 0.0;
             for (int k = 0; k < dimP; k++) {
 
@@ -583,20 +592,82 @@ void Controller::calInlier(Model::state s){
 
         }
     }
-    for (int i = 0; i < numP; i++) {
+    for (int i = 0; i < size; i++) {
        if( s[i]->nbcount >=3){
            s[i]->inlier = 1;
        }
     }
     
-
-
-
 }
+
+double Controller::calSeqAssignment(Model::state s, Model::state targets, int expandFlag){
+
+    if (expandFlag) {
+        deviation = 0.0;
+        double r[3];
+        for (int i = 0; i < numP; i++) {
+            if (targets[i]->marked) {
+
+                r[0] = targets[i]->r[0] - s[targets[i]->targetIdx]->r[0] / radius;
+                r[1] = targets[i]->r[1] - s[targets[i]->targetIdx]->r[1] / radius;
+                r[2] = targets[i]->r[2] - s[targets[i]->targetIdx]->r[2] / radius;
+                deviation += sqrt(pow(r[0], 2) + pow(r[1], 2) + pow(r[2], 2));
+            }
+            
+        }
+        deviation /= numMarked;
+
+        if (deviation < 1.0) {
+            this->expandTargets();
+        }
+    }
+    this->calAvoidance2d_simpleCollision(s);
+    
+    vector< vector<double> > Cost(numP, vector<double>(numMarked));
+
+    for(int i=0; i<numP; i++){
+	for(int j=0; j<numMarked; j++){
+            double rx = targets[markedIdx[j]]->r[0] - s[i]->r[0]/radius ;
+            double ry = targets[markedIdx[j]]->r[1] - s[i]->r[1]/radius ;
+            double proj_x = cos(s[i]->phi)*rx + sin(s[i]->phi)*ry;
+            double proj_y = -sin(s[i]->phi)*rx + cos(s[i]->phi)*ry;
+            
+            double dist = proj_x*proj_x + proj_y*proj_y;
+            dist = sqrt(dist);
+            double c;
+            if (dist > 20){
+                c = pow((proj_x - 2)/1.2,2.0) + pow((proj_y),2.0);
+            } else{
+                c = this->getCostFromMap(proj_x,proj_y,0,availControl[i]);
+            }
+                Cost[i][j] = c;
+//            Cost[i][j] = (long)(sqrt(c)*10.0);
+        }
+    }   
+    AssignmentProblemSolver APS;
+    APS.Solve(Cost, assignment);
+    double totalCost = 0.0;
+    for(int i=0; i < numP; i++){
+        if(assignment[i] >= 0){
+            s[i]->targetIdx = markedIdx[assignment[i]];
+            s[i]->cost = Cost[i][assignment[i]];
+            targets[markedIdx[assignment[i]]]->targetIdx = i;
+            totalCost += s[i]->cost;
+        } else {
+            availControl[i] =0; // no need to control;
+        
+        }
+    }
+    totalCost /=numMarked;
+    return totalCost;
+}
+
+// here is alignement with correponding
+// specific derivation can be found at thesis: Evaluation of surface registration algorithms for PET motion correction
 
 void Controller::alignTarget_rt(Model::state s, Model::state targets){
 
-    
+    int size = s.size();
     
     this->calInlier(s);
 //    NRmatrix<double> b(2, 2);
@@ -620,7 +691,7 @@ void Controller::alignTarget_rt(Model::state s, Model::state targets){
     for (int i =0; i <2; i++){
         for (int j = 0; j < 2; j++) {
             cov(i,j) = 0;
-            for (int k = 0; k < numP; k++){
+            for (int k = 0; k < size; k++){
                 int t_idx = s[k]->targetIdx;
                double weight = s[i]->inlier;
                 cov(i,j) += (s[k]->r[j]/radius - center_s[j])*(targets[t_idx]->r[i] - center_target[i])*weight;            
@@ -642,7 +713,7 @@ void Controller::alignTarget_rt(Model::state s, Model::state targets){
     tran[1] = center_s[1] - (R(1,0)*center_target[0]+R(1,1)*center_target[1]);   
     std::cout << "translation:" << std::endl;
     std::cout << tran[0] << "\t" << tran[1] << std::endl;
-    for (int i = 0; i < numP; i++) {
+    for (int i = 0; i < size; i++) {
         targets[i]->r[0] = R(0,0)*targets[i]->r[0] + R(0,1)*targets[i]->r[1];
         targets[i]->r[1] = R(1,0)*targets[i]->r[0] + R(1,1)*targets[i]->r[1];
 
@@ -650,6 +721,70 @@ void Controller::alignTarget_rt(Model::state s, Model::state targets){
         targets[i]->r[1] += tran[1];        
     }
     
-    
+}
 
+
+void Controller::buildTargetGraph(){
+    numMarked = 0;
+    
+    marked_t = std::make_shared<lemon::ListGraph::NodeMap<int>>(targetG);
+    index_t = std::make_shared<lemon::ListGraph::NodeMap<int>>(targetG);
+    for (int i = 0; i < numP; i++){
+        nodes_t.push_back(targetG.addNode());
+        (*marked_t)[nodes_t[i]] = targets_[i]->marked;
+       (*index_t)[nodes_t[i]] = i;
+       if (targets_[i]->marked){
+        numMarked++;
+       markedIdx.push_back(i);        
+       }
+
+    }
+    numSurface=numMarked;
+// add edges
+   double r[3],dist;
+
+    for (int i = 0; i < numP - 1; i++) {
+        for (int j = i + 1; j < numP; j++) {
+            dist = 0.0;
+            for (int k = 0; k < dimP; k++) {
+
+                r[k] = (targets_[j]->r[k] - targets_[i]->r[k]);
+                dist += pow(r[k], 2.0);
+            }
+            dist = sqrt(dist);
+            if (dist < 2.5) {
+                edges_t.push_back(targetG.addEdge(nodes_t[i],nodes_t[j]));
+            }
+
+        }
+    }
+   std::cout << "target graph info:" << std::endl;
+   std::cout << "nodes: " << countNodes(targetG) << std::endl;
+   std::cout << "nodes: " << countArcs(targetG) << std::endl;
+   
+}
+
+void Controller::expandTargets(){
+    
+    std::set<ListGraph::Node> nodes;
+    for (int i = 0; i < numP; i++){
+        if ((*marked_t)[nodes_t[i]]){
+            for (ListGraph::OutArcIt e(targetG,nodes_t[i]); e != INVALID;++e){
+                ListGraph::Node n = targetG.oppositeNode(nodes_t[i],e);
+                if ((*marked_t)[n] == 0){
+                    nodes.insert(n);
+                }
+ 
+            }
+        }
+    }
+    
+    for (ListGraph::Node n: nodes){
+        numMarked++;
+        (*marked_t)[n] = 1;
+        int idx = (*index_t)[n];
+        targets_[idx]->marked = 1; 
+        markedIdx.push_back(idx); 
+    }
+//    numSurface = nodes.size();
 }

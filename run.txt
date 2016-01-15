@@ -1,11 +1,11 @@
 N
-99
+97
 dim
 2
 radius
 1e-6
 constrol step
-0
+2000
 equilibrate step
 0
 dt
@@ -27,17 +27,17 @@ kappa
 seed
 2
 shapeflag
-0
-motionflag
 2
+motionflag
+0
 trajOutputInterval
 1000
 initial config
-square_99p.txt
+config2d.txt
 file tag
-control
+square
 target config
-square_99p.txt
+square_97p.txt
 
 
 
