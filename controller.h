@@ -40,11 +40,13 @@ public:
     };
     
 private:
-    lemon::ListGraph targetG;
-    std::vector<lemon::ListGraph::Node> nodes_t; 
-    std::vector<lemon::ListGraph::Edge> edges_t;
+    lemon::ListGraph targetG, landMarkG;
+    std::vector<lemon::ListGraph::Node> nodes_t, nodes_l; 
+    std::vector<lemon::ListGraph::Edge> edges_t, edges_l;
     std::shared_ptr<lemon::ListGraph::NodeMap<int>> marked_t,index_t;
-    int numMarked,numSurface;
+	std::shared_ptr<lemon::ListGraph::EdgeMap<double>> internalLength, length;
+    int numMarked,numSurface, landmarkLength, numLandmark;
+	double landmarkDist;
     double deviation;
     std::vector<int> markedIdx;
     ColliInfo colliInfo;
@@ -67,6 +69,13 @@ private:
     void readCostMap();
 
     void expandTargets();
+
+	void constructLandmark();
+	void calShortestPathLandmark();
+	void assignTargetToLandmark();
+
+
+	std::vector<Model::particle> landmarks;
     std::vector<int> assignment,availControl;
     Model::state targets_;
 };

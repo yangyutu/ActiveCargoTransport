@@ -1,5 +1,5 @@
 N
-97
+595
 dim
 2
 radius
@@ -27,17 +27,17 @@ kappa
 seed
 2
 shapeflag
-2
-motionflag
 0
+motionflag
+2
 trajOutputInterval
-1000
+5000
 initial config
-config2d.txt
+gear_595p.txt
 file tag
-square
+gear
 target config
-square_97p.txt
+gear_595p.txt
 
 
 

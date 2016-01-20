@@ -15,8 +15,8 @@ int main(){
     int N = 85;
     int dim = 2;
     double radius = 1e-6;
-    cellList_ptr cell(new CellList(3.0*radius,3,20,30.0*radius,30.0*radius,30.0*radius));
-    std::shared_ptr<Model> m(new Model(nullptr));
+    cellList_ptr cell(new CellList(3.0*radius,2,10,150.0*radius,150.0*radius,50.0*radius));
+    std::shared_ptr<Model> m(new Model(cell));
     std::shared_ptr<Controller> c(new Controller(m->getTargets()));
     Simulator simulator(m,c);
     if (parameter.shapeFlag == 1){

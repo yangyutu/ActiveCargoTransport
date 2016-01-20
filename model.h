@@ -24,6 +24,9 @@ public:
         int nbcount;
         int inlier;
         int marked;
+		int landmarkIdx;
+		double EudDistToTarget;
+		double ShortestPathDistToTarget;
     };
     typedef std::shared_ptr<particle> particle_ptr;
     typedef std::vector<particle_ptr> state;

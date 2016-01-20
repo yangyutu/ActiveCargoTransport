@@ -417,7 +417,7 @@ void Controller::translate_2d(double phi,Model::state s){
     for (int i = 0; i < numP; i++){
         double proj;
         proj = cos(s[i]->phi - phi);
-        if (proj > sqrt(3.0)/2.0 && s[i]->nbcount >3) {
+        if (proj > sqrt(3.0)/2.0 && s[i]->nbcount >=6) {
             s[i]->u = 2;
         }
     }
@@ -430,15 +430,15 @@ void Controller::rotate_2d(Model::state s){
     this->calInlier(s);    
     this->calWeightCenter(s,center_s,1);
     for (int k = 0; k < 3; k++){
-        std::cout << "rotate center_s: " << center_s[k] << std::endl;
+        std::cout << "rotate center_s: " << center_s[k]/radius << std::endl;
     }
     
 
     for (int i = 0; i < numP; i++){
         double proj;
-        double pos_phi = atan2(s[i]->r[1]/radius-center_s[1],s[i]->r[0]/radius-center_s[0]) + M_PI/2.0;
+        double pos_phi = atan2(s[i]->r[1]/radius-center_s[1]/radius,s[i]->r[0]/radius-center_s[0]/radius) + M_PI/2.0;
         proj = cos(s[i]->phi - pos_phi);
-        if (proj > sqrt(3.0)/2.0 && s[i]->inlier) {
+        if (proj > sqrt(3.0)/2.0 && s[i]->nbcount >=6) {
             s[i]->u = 2;
         }
     }
@@ -788,3 +788,64 @@ void Controller::expandTargets(){
     }
 //    numSurface = nodes.size();
 }
+/*
+void Controller::constructLandmark(){
+	int count = 0;
+	for (int i = 0; i < landmarkLength; i++){
+		for (int j = 0; j < landmarkLength; j++){			
+			nodes_l.push_back(landmarkG.addNode());
+			landmark_pos[nodes_l[count]] = Model::particle(i - 0.5*landmarkLength, j - 0.5*landmarkLength, 0);
+			count++;
+		}
+	}
+
+	for (int i = 0; i < numLandmark-1; i++){
+		for (int j = i+1; j < numLandmark; j++){
+			double dx = landmark_pos[nodes_l[i]].r(0) - landmark_pos[nodes_l[j]].r(0);
+			double dy = landmark_pos[nodes_l[i]].r(1) - landmark_pos[nodes_l[j]].r(1);
+			double d = sqrt(dx*dx + dy*dy);
+			if (d < sqrt(3)*landmarkDist){
+				edges_l.push_back(landmarkG.addEdge(nodes_l[i], nodes_l[j]));
+				internalLength[edges_l[edges_l.size() - 1]] = d;
+			}
+		}
+	}
+}
+
+void Controller::assignLandmarkIdx(Model::state s, double scale){
+	for (int i = 0; i < numP; i++){
+		double minDist = 100000;
+		for (int j = 0; j < numLandmark; j++){
+			double dx = landmark_pos[nodes_l[j]].r(0) - s[i]->r(0)/scale;
+			double dy = landmark_pos[nodes_l[j]].r(1) - s[i]->r(1)/scale;
+			double d = sqrt(dx*dx + dy*dy);
+			if (d < minDist){
+				minDist = d;
+				s[i]->landmarkIdx = j;
+			}
+		}
+	}
+}
+
+void Controller::calShortestPathLandmark(){
+	Dijkstra<ListGraph, ListGraph::EdgeMap<double>> dij(landmarkG, length);
+	for (int i = 0; i < numLandmark; i++){
+		dij.run(nodes_l[i]);
+		for (int j = 0; j < numLandmark; j++){
+			shortPathMat[i][j] = dij.dist(nodes_l[j]);
+		}
+	}
+}
+
+double Controller::calPathDistViaLandmark(Model::state s, int i, Model::state targets, int j){
+	
+	double pathDist;
+
+	pathDist = 
+
+	
+
+
+}
+ * 
+ */
