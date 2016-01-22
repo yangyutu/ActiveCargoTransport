@@ -1,9 +1,11 @@
 #include<cmath>
 #include<set>
+#include<limits>
 #include "controller.h"
 #include "HungarianAlg.h"
 #include<fstream>
 #include "common.h"
+#include <lemon/dijkstra.h>
 
 //#include "icpPointToPoint.h"
 //#include "icpPointToPlane.h"
@@ -43,6 +45,11 @@ Controller::Controller(Model::state targets){
     maps[2] = std::make_shared<Array2D_type>(dim);
     
     this->readCostMap();
+    
+    if (parameter.landmarkFlag){
+        this->constructLandmark();
+    
+    }
             /*
     double R = (int)(dim/2.0/M_PI) * radius;
     double d_theta = 2.0*M_PI/dim;
@@ -69,6 +76,9 @@ double Controller::calAssignment(Model::state s, Model::state targets, int dim){
     double totalCost;
     if (dim ==2){
       totalCost = calAssignment2d(s, targets);    
+      if (parameter.motionFlag){
+//          totalCost = calAssignment2d
+      }
     } else if(dim ==3){
        totalCost = calAssignment3d(s, targets);
     }
@@ -723,6 +733,36 @@ void Controller::alignTarget_rt(Model::state s, Model::state targets){
     
 }
 
+void Controller::translateCargo_2d(double phi, Model::state s){
+    this->calInlier(s);
+    for (int i = 0; i < numP; i++){
+        double proj;
+        proj = cos(s[i]->phi - phi);
+        if (proj > sqrt(3.0)/2.0 && s[i]->nbcount >=4) {
+            s[i]->u = 2;
+        }
+    }
+    // the cargo just diffuse
+    s[0]->u = 0;
+}
+void Controller::alignCargo(Model::state s,Model::state targets){
+    double t[3];
+  //  s[0] is the cargo, targets[0] is the center of the template
+    t[0] = s[0]->r[0]/radius - targets[0]->r[0];
+    t[1] = s[0]->r[1]/radius - targets[0]->r[1];
+    t[2] = s[0]->r[2]/radius - targets[0]->r[2];
+    
+    std::cout << "align with cargo " << std::endl;
+    std::cout << t[0] << "\t" << t[1] << std::endl;
+    
+    for (int i = 0; i < numP; i++){
+        targets[i]->r[0] += t[0];
+        targets[i]->r[1] += t[1]; 
+        targets[i]->r[2] += t[2]; 
+    
+    }
+    
+}
 
 void Controller::buildTargetGraph(){
     numMarked = 0;
@@ -788,64 +828,169 @@ void Controller::expandTargets(){
     }
 //    numSurface = nodes.size();
 }
-/*
-void Controller::constructLandmark(){
-	int count = 0;
-	for (int i = 0; i < landmarkLength; i++){
-		for (int j = 0; j < landmarkLength; j++){			
-			nodes_l.push_back(landmarkG.addNode());
-			landmark_pos[nodes_l[count]] = Model::particle(i - 0.5*landmarkLength, j - 0.5*landmarkLength, 0);
-			count++;
-		}
-	}
 
-	for (int i = 0; i < numLandmark-1; i++){
-		for (int j = i+1; j < numLandmark; j++){
-			double dx = landmark_pos[nodes_l[i]].r(0) - landmark_pos[nodes_l[j]].r(0);
-			double dy = landmark_pos[nodes_l[i]].r(1) - landmark_pos[nodes_l[j]].r(1);
-			double d = sqrt(dx*dx + dy*dy);
-			if (d < sqrt(3)*landmarkDist){
-				edges_l.push_back(landmarkG.addEdge(nodes_l[i], nodes_l[j]));
-				internalLength[edges_l[edges_l.size() - 1]] = d;
-			}
-		}
-	}
+void Controller::constructLandmark() {
+    landmarkLength = parameter.landmarkLength;
+    landmarkDist = parameter.landmarkDist;
+    
+    landmark_pos = std::make_shared<lemon::ListGraph::NodeMap<Model::particle_ptr>>(landmarkG);
+    internalLength = std::make_shared<lemon::ListGraph::EdgeMap<double>>(landmarkG);
+    length = std::make_shared<lemon::ListGraph::EdgeMap<double>>(landmarkG);
+    int count = 0;
+    for (int i = 0; i < landmarkLength; i++) {
+        for (int j = 0; j < landmarkLength; j++) {
+            nodes_l.push_back(landmarkG.addNode());
+            Model::particle_ptr p =  std::make_shared<Model::particle>(i*landmarkDist - 0.5 * landmarkLength,
+                    j*landmarkDist - 0.5 * landmarkLength, 0.0);
+            (*landmark_pos)[nodes_l[count]] = p;
+            count++;
+        }
+    }
+    
+    numLandmark = count + 1;
+    for (int i = 0; i < numLandmark; i++) {
+        shortPathMat.push_back(std::vector<double>(numLandmark,0.0));
+    }
+    for (int i = 0; i < numLandmark - 1; i++) {
+        for (int j = i + 1; j < numLandmark; j++) {
+            double dx = (*landmark_pos)[nodes_l[i]]->r[0] - (*landmark_pos)[nodes_l[j]]->r[0];
+            double dy = (*landmark_pos)[nodes_l[i]]->r[1] - (*landmark_pos)[nodes_l[j]]->r[1];
+            double d = sqrt(dx * dx + dy * dy);
+            if (d < sqrt(3) * landmarkDist) {
+                edges_l.push_back(landmarkG.addEdge(nodes_l[i], nodes_l[j]));
+                (*internalLength)[edges_l[edges_l.size() - 1]] = d;
+                (*length)[edges_l[edges_l.size() - 1]] = 0.0;
+            }
+        }
+    }
+    
+    
+    
+    
 }
 
-void Controller::assignLandmarkIdx(Model::state s, double scale){
-	for (int i = 0; i < numP; i++){
-		double minDist = 100000;
-		for (int j = 0; j < numLandmark; j++){
-			double dx = landmark_pos[nodes_l[j]].r(0) - s[i]->r(0)/scale;
-			double dy = landmark_pos[nodes_l[j]].r(1) - s[i]->r(1)/scale;
-			double d = sqrt(dx*dx + dy*dy);
-			if (d < minDist){
-				minDist = d;
-				s[i]->landmarkIdx = j;
-			}
-		}
-	}
+void Controller::assignLandmarkIdx(Model::state s, double scale) {
+    for (int i = 0; i < numP; i++) {
+        s[i]->nbLandmark.clear();
+        s[i]->nbLandmarkDist.clear();
+        for (int j = 0; j < numLandmark; j++) {
+            double dx = (*landmark_pos)[nodes_l[j]]->r[0] - s[i]->r[0] / scale;
+            double dy = (*landmark_pos)[nodes_l[j]]->r[1] - s[i]->r[1] / scale;
+            double d = sqrt(dx * dx + dy * dy);
+            if (d < sqrt(2) * landmarkDist) {
+                s[i]->nbLandmark.push_back(j);
+                s[i]->nbLandmarkDist.push_back(d);
+            }
+        }
+    }
 }
 
-void Controller::calShortestPathLandmark(){
-	Dijkstra<ListGraph, ListGraph::EdgeMap<double>> dij(landmarkG, length);
-	for (int i = 0; i < numLandmark; i++){
-		dij.run(nodes_l[i]);
-		for (int j = 0; j < numLandmark; j++){
-			shortPathMat[i][j] = dij.dist(nodes_l[j]);
-		}
-	}
+double Controller::calExtraCost(Model::state s, double r1[3], double scale1, 
+                            double r2[3], double scale2){
+    
+    r1[0] *= scale1;
+    r1[1] *= scale1;
+    r1[2] *= scale1;
+    
+    r2[0] *= scale2;
+    r2[1] *= scale2;
+    r2[2] *= scale2;
+    
+    
+    double vec1[3];
+    double vec2[3];
+    
+    vec1[0] = r2[0] - r1[0];
+    vec1[1] = r2[1] - r1[1];
+    vec1[2] = r2[2] - r1[2];
+    double norm1 = sqrt(vec2[0]*vec2[0] + vec2[1]*vec2[1] + vec2[2]*vec2[2]);
+    vec1[0] /= norm1;
+    vec1[1] /= norm1;
+    vec1[2] /= norm1;
+    
+    for (int i = 0; i < numP; i++){
+        vec2[0] = s[i]->r[0] - r1[0];
+        vec2[1] = s[i]->r[1] - r1[1];
+        vec2[2] = s[i]->r[2] - r1[0];
+        
+        double proj = vec1[0]*vec2[0]+vec1[1]*vec2[1]+vec1[2]*vec2[2];
+        double norm = sqrt(vec2[0]*vec2[0] + vec2[1]*vec2[1] + vec2[2]*vec2[2]);
+        double dist = sqrt(norm*norm - proj);
+        
+        if (dist < (2.0*radius) && proj > radius && proj < (norm-radius)){
+            return blockCost;
+        }
+        
+           
+    }
+
+    return 0.0;
+}
+
+void Controller::calShortestPathMat(Model::state s, Model::state targets) {
+    
+    this->assignLandmarkIdx(s, radius);
+    this->assignLandmarkIdx(targets,1.0);
+    
+    for (int i = 0; i < numLandmark; i++){
+        for (ListGraph::OutArcIt e(landmarkG,nodes_l[i]); e != INVALID;++e){
+            ListGraph::Node n = landmarkG.oppositeNode(nodes_l[i],e);
+            double extraCost = calExtraCost(s,(*landmark_pos)[nodes_l[i]]->r,radius,(*landmark_pos)[n]->r,radius);
+            (*length)[e] = (*internalLength)[e] + extraCost;
+        }
+    }
+    
+    for (int i = 0; i < numP; i++){
+        for (int j=0; s[i]->nbLandmark.size(); j++){
+            int idx = s[i]->nbLandmark[j];
+            double extraCost = calExtraCost(s,s[i]->r,1.0,(*landmark_pos)[nodes_l[idx]]->r,radius);
+            s[i]->nbLandmarkDist[j] += extraCost;
+        }
+    }
+    
+    for (int i = 0; i < numP; i++){
+        for (int j: targets[i]->nbLandmark){
+            int idx = s[i]->nbLandmark[j];
+            double extraCost = calExtraCost(s,targets[i]->r,radius,(*landmark_pos)[nodes_l[j]]->r,radius);
+            targets[i]->nbLandmarkDist[j] += extraCost;
+        }
+    }
+    
+ 
+    Dijkstra<ListGraph, ListGraph::EdgeMap<double>> dij(landmarkG, *length);
+    for (int i = 0; i < numLandmark; i++) {
+        dij.run(nodes_l[i]);
+        for (int j = 0; j < numLandmark; j++) {
+            shortPathMat[i][j] = dij.dist(nodes_l[j]);
+        }
+    }
 }
 
 double Controller::calPathDistViaLandmark(Model::state s, int i, Model::state targets, int j){
-	
-	double pathDist;
 
-	pathDist = 
+    double r[3];
+    r[0] = s[i]->r[0]/radius - targets[i]->r[0];
+    r[1] = s[i]->r[1]/radius - targets[i]->r[1];
+    r[2] = s[i]->r[2]/radius - targets[i]->r[2];
+    
+    // calculate the shortpathmat
+    this->calShortestPathMat(s,targets);
+        
+    double pathDist = sqrt(pow(r[0],2)+pow(r[1],2)+pow(r[2],2)) + 
+        this->calExtraCost(s,s[i]->r,1.0,targets[i]->r,radius);
 
-	
-
-
+    for (int ii = 0; ii < s[i]->nbLandmark.size(); ii++){
+        for (int jj=0; jj < targets[j]->nbLandmark.size();jj++){
+            int idx1 = s[i]->nbLandmark[ii];
+            int idx2 = s[j]->nbLandmark[jj];
+            double pathDistTemp = s[i]->nbLandmarkDist[ii] + targets[j]->nbLandmarkDist[jj]+
+                    shortPathMat[idx1][idx2];
+            if (pathDistTemp < pathDist){
+                pathDist = pathDistTemp;
+                s[i]->landmarkIdx = idx1;
+                targets[j]->landmarkIdx = idx2;
+            }
+            
+        }
+    }
 }
- * 
- */

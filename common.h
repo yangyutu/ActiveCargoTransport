@@ -7,7 +7,12 @@ struct Parameter{
 	int controlStep, equilibrateStep;
 	std::string iniConfig, filetag, targetConfig;
         int seed;
-        int motionFlag, shapeFlag;
+        int motionFlag, shapeFlag, cargoTransFlag;
+        
+        int landmarkFlag;
+        double landmarkLength;
+        double landmarkDist;
+        double blockCost;
 };
 
 

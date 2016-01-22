@@ -24,9 +24,16 @@ public:
         int nbcount;
         int inlier;
         int marked;
-		int landmarkIdx;
-		double EudDistToTarget;
-		double ShortestPathDistToTarget;
+	int landmarkIdx;
+        double targetPos[3];
+        std::vector<int> nbLandmark;
+        std::vector<double> nbLandmarkDist;
+        double EudDistToTarget;
+	double ShortestPathDistToTarget;
+        
+        particle(double x = 0, double y = 0, double z = 0){
+            r[0]=x;r[1]=y;r[2]=z;
+        }
     };
     typedef std::shared_ptr<particle> particle_ptr;
     typedef std::vector<particle_ptr> state;

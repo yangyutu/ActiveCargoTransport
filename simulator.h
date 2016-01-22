@@ -11,6 +11,7 @@ public:
     void shapeForming_seq();
     void translate_2d();
     void rotate_2d();
+    void cargoTransport_2d();
     
 private:
     std::shared_ptr<Model> model;

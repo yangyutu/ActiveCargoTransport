@@ -16,7 +16,7 @@ int main(){
     int dim = 2;
     double radius = 1e-6;
     cellList_ptr cell(new CellList(3.0*radius,2,10,150.0*radius,150.0*radius,50.0*radius));
-    std::shared_ptr<Model> m(new Model(cell));
+    std::shared_ptr<Model> m(new Model(nullptr));
     std::shared_ptr<Controller> c(new Controller(m->getTargets()));
     Simulator simulator(m,c);
     if (parameter.shapeFlag == 1){
@@ -27,6 +27,8 @@ int main(){
         simulator.translate_2d();
     } else if(parameter.motionFlag==2){
         simulator.rotate_2d();
+    } else if(parameter.cargoTransFlag==1){
+        simulator.cargoTransport_2d();
     }
     
     return 0;
@@ -85,7 +87,22 @@ void readParameter(){
     runfile >> parameter.motionFlag;
     getline(runfile, line);
     getline(runfile, line);
+    runfile >> parameter.cargoTransFlag;
+    getline(runfile, line);
+    getline(runfile, line);
     runfile >> parameter.trajOutputInterval;
+    getline(runfile, line);
+    getline(runfile, line);
+    runfile >> parameter.landmarkFlag;
+    getline(runfile, line);
+    getline(runfile, line);
+    runfile >> parameter.landmarkLength;
+    getline(runfile, line);
+    getline(runfile, line);
+    runfile >> parameter.landmarkDist;
+    getline(runfile, line);
+    getline(runfile, line);
+    runfile >> parameter.blockCost;
     getline(runfile, line);
     getline(runfile, line);
     getline(runfile, parameter.iniConfig);

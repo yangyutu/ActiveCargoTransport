@@ -1,5 +1,5 @@
 N
-595
+19
 dim
 2
 radius
@@ -25,19 +25,31 @@ cutoff
 kappa
 50
 seed
-2
+3
 shapeflag
 0
 motionflag
-2
+0
+cargoTransflag
+1
 trajOutputInterval
 5000
+landmarkFlag
+0
+landmarklength
+100
+landmarkdist
+10
+blockcost
+100
 initial config
-gear_595p.txt
+hexagon_19p.txt
 file tag
 gear
 target config
-gear_595p.txt
+hexagon_19p.txt
+
+
 
 
 

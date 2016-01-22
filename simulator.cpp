@@ -12,7 +12,7 @@ Simulator::Simulator(std::shared_ptr<Model> model0,std::shared_ptr<Controller> c
     nstep_equilibrate = parameter.equilibrateStep;
 //    motionCycle = parameter.motionCycle;
 //    motionFlag = parameter.motionFlag;
-    motionCycle = 10;
+    motionCycle = 30;
     move_motionStep = 2;
     move_recoverStep = 20;
 }
@@ -91,6 +91,37 @@ void Simulator::translate_2d(){
     }
 }
 
+
+void Simulator::cargoTransport_2d(){
+    double totalCost;   
+    model->createInitialState();
+    totalCost = controller->calAssignment(model->getCurrState(),model->getTargets(),model->getDimP());
+    controller->calControl(model->getCurrState(),model->getTargets(),model->getDimP());
+    int iter;
+    std::cout << totalCost << std::endl;
+    for(int c = 0; c < motionCycle; c++){
+        for (int s = 0; s < move_recoverStep; s++) {
+            if ((s + 1) % assignmentFrequency == 0) {
+                totalCost = controller->calAssignment(model->getCurrState(), model->getTargets(), model->getDimP());
+                std::cout << totalCost << std::endl;
+            }
+            controller->calControl(model->getCurrState(), model->getTargets(), model->getDimP());
+            model->run(controlFrequency);
+            controller->alignCargo(model->getCurrState(),model->getTargets());
+        }
+
+
+        for (int s = 0; s < move_motionStep; s++) {
+            
+            controller->translateCargo_2d(0.0, model->getCurrState());
+            model->run(controlFrequency);
+            controller->alignCargo(model->getCurrState(),model->getTargets());
+//            controller->register_2d(model->getCurrState(),model->getTargets());
+        }
+        
+    
+    }
+}
 
 void Simulator::rotate_2d(){
     double totalCost;   
