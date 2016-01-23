@@ -1,28 +1,4782 @@
 model initialize at round 0
-212.299
-234.214
-250.181
-218.931
-235.439
-307.588
-401.834
-299.866
-429.519
-413.862
-416.633
-613.649
-606.248
-514.128
-604.312
-547.243
-450.13
-434.298
-358.982
-447.056
-525.807
-582.143
-479.513
-298.123
-341.803
-334.392
-242.095
+5572.4
+align with cargo 
+-2.09524	-1.21469e-14
+5824.34
+align with cargo 
+0.0783459	-1.1757
+5347.44
+align with cargo 
+0.0672005	-0.0403484
+5125.49
+align with cargo 
+0.207116	0.328702
+4883.2
+align with cargo 
+0.104881	0.232639
+4549.79
+align with cargo 
+0.533198	1.00792
+4254.17
+align with cargo 
+0.381942	0.405067
+3912.23
+align with cargo 
+0.279182	-0.314191
+3699
+align with cargo 
+0.398075	0.425091
+3548.54
+align with cargo 
+0.179406	-0.403129
+3674.16
+align with cargo 
+-0.0212917	0.00901066
+3595.36
+align with cargo 
+-0.0994039	-0.240966
+3431.62
+align with cargo 
+0.0515527	-0.206053
+3456.18
+align with cargo 
+-0.0599764	-0.189609
+3218.44
+align with cargo 
+-0.487312	-0.0627756
+2982.8
+align with cargo 
+-0.647181	0.126246
+3071.49
+align with cargo 
+-0.219446	0.523944
+3048.29
+align with cargo 
+0.10137	0.195327
+2940.76
+align with cargo 
+0.18214	0.118554
+3009.7
+align with cargo 
+-0.134903	-0.675228
+3245.88
+align with cargo 
+0.419937	-0.0928626
+3184.93
+align with cargo 
+-0.0561315	-0.416509
+3111.26
+align with cargo 
+-0.395877	0.316001
+2895.58
+align with cargo 
+-0.454661	0.258593
+2884.62
+align with cargo 
+0.692879	0.221409
+2718.33
+align with cargo 
+0.23758	-0.419316
+2699.76
+align with cargo 
+-0.398234	-1.55263
+2560.82
+align with cargo 
+-0.130235	0.209225
+2459.68
+align with cargo 
+-1.07497	-1.58003
+2737.56
+align with cargo 
+-0.00791479	-0.113829
+2748.11
+align with cargo 
+0.72577	-0.28729
+2570.18
+align with cargo 
+-0.0110969	0.0732521
+2538.68
+align with cargo 
+-0.818267	0.2278
+2613.58
+align with cargo 
+-0.122163	0.248067
+2520.51
+align with cargo 
+-0.506729	-0.254769
+2484.97
+align with cargo 
+0.169833	0.772901
+2281.35
+align with cargo 
+0.304737	-0.300997
+2256.11
+align with cargo 
+-0.0267703	0.417303
+2375.23
+align with cargo 
+-0.913102	0.380812
+2437.49
+align with cargo 
+0.357738	-0.0982341
+2338.5
+align with cargo 
+0.379651	0.517637
+2288.22
+align with cargo 
+-0.0848173	-0.978694
+2363.53
+align with cargo 
+0.128155	0.288791
+2349.75
+align with cargo 
+0.410582	0.121953
+2437.09
+align with cargo 
+0.302553	-0.418082
+2401.6
+align with cargo 
+-0.0779759	0.257053
+2451.27
+align with cargo 
+0.0139917	-0.109429
+2439.08
+align with cargo 
+0.415167	0.538054
+2295.58
+align with cargo 
+-0.0344134	-0.210105
+2277.56
+align with cargo 
+0.0612058	0.169004
+2238.74
+align with cargo 
+-0.105055	0.0536282
+2237.76
+align with cargo 
+0.126024	-0.543022
+2135.5
+align with cargo 
+0.273013	0.446023
+2163.29
+align with cargo 
+-0.078368	0.050008
+2207.82
+align with cargo 
+-0.041427	0.248101
+2310.45
+align with cargo 
+0.119927	0.14321
+2251.56
+align with cargo 
+-0.293887	0.0182554
+2362.16
+align with cargo 
+-0.385533	0.273255
+2472.79
+align with cargo 
+0.202462	0.281045
+2484.51
+align with cargo 
+-0.214447	-0.0630147
+2352.66
+align with cargo 
+-0.296314	-0.0753755
+2372.24
+align with cargo 
+-0.0680663	-0.266666
+2237.63
+align with cargo 
+-0.248322	-0.244324
+2038.17
+align with cargo 
+0.19228	0.44818
+1930.61
+align with cargo 
+-0.314024	-0.114398
+1610.49
+align with cargo 
+0.0353334	-0.0833993
+1530.5
+align with cargo 
+-0.0977171	0.0216441
+1426.81
+align with cargo 
+-0.0991204	0.127376
+1325.58
+align with cargo 
+0.147211	0.27448
+1306.78
+align with cargo 
+0.0264081	0.281933
+1220.55
+align with cargo 
+0.104887	0.100559
+1107.79
+align with cargo 
+-0.031061	0.0338553
+1164.15
+align with cargo 
+0.0873194	-0.117913
+1089.96
+align with cargo 
+-0.00355501	0.02059
+1171.14
+align with cargo 
+-0.178278	0.170988
+1085.74
+align with cargo 
+0.12931	-0.346463
+1060.37
+align with cargo 
+0.0471656	-0.132251
+1030.2
+align with cargo 
+0.274589	-0.0960424
+992.425
+align with cargo 
+-0.214875	-0.121301
+922.393
+align with cargo 
+-0.222026	-0.0569308
+1063.52
+align with cargo 
+-0.196413	-0.081976
+1038.75
+align with cargo 
+0.356583	0.218439
+1036.59
+align with cargo 
+-0.0556619	0.233277
+1051.85
+align with cargo 
+-0.127643	0.135419
+897.612
+align with cargo 
+-0.294083	-0.226379
+818.649
+align with cargo 
+0.00567756	-0.00724345
+785.245
+align with cargo 
+-0.127023	-0.142605
+803.228
+align with cargo 
+-0.124059	0.00259904
+905.363
+align with cargo 
+0.134104	0.34487
+865.075
+align with cargo 
+0.179602	-0.0752303
+867.601
+align with cargo 
+0.0433306	-0.00663207
+896.109
+align with cargo 
+-0.132	-0.0139025
+797.809
+align with cargo 
+-0.0365541	-0.257351
+677.085
+align with cargo 
+0.0609506	-0.12523
+770.605
+align with cargo 
+0.151792	-0.163707
+763.82
+align with cargo 
+-0.00264905	-0.191388
+631.547
+align with cargo 
+0.00376576	-0.126543
+504.173
+align with cargo 
+-0.0984097	-0.139819
+458.585
+align with cargo 
+-0.132965	0.010721
+369.52
+align with cargo 
+-0.0365317	0.12541
+242.841
+align with cargo 
+1.0557	0.428865
+align with cargo 
+1.02376	0.448845
+378.221
+align with cargo 
+0.201225	-0.114013
+375.4
+align with cargo 
+0.00340495	-0.172479
+369.751
+align with cargo 
+-0.0223693	-0.0325998
+402.248
+align with cargo 
+0.34613	0.149672
+383.876
+align with cargo 
+0.112877	0.267319
+380.703
+align with cargo 
+-0.0256164	-0.107927
+397.863
+align with cargo 
+-0.0757372	0.0708165
+382.114
+align with cargo 
+0.0281367	0.102742
+352.95
+align with cargo 
+-0.284524	-0.00172608
+334.862
+align with cargo 
+0.306644	-0.116032
+322.534
+align with cargo 
+-0.0806055	-0.0502178
+248.434
+align with cargo 
+0.0717212	-0.0223377
+232.769
+align with cargo 
+-0.0364029	-0.0295442
+200.168
+align with cargo 
+-0.0172151	-0.0563432
+198.857
+align with cargo 
+-0.0497902	-0.237997
+186.87
+align with cargo 
+-0.018533	-0.160455
+187.101
+align with cargo 
+0.0559105	0.0103484
+181.654
+align with cargo 
+0.0223522	-0.219777
+176.274
+align with cargo 
+0.099602	0.111108
+163.247
+align with cargo 
+0.0168219	-0.0733528
+align with cargo 
+0.675057	0.173965
+align with cargo 
+0.607989	-0.126792
+204.596
+align with cargo 
+-0.0560358	-0.257508
+196.85
+align with cargo 
+0.177859	0.0882136
+208.094
+align with cargo 
+-0.146657	0.161922
+192.59
+align with cargo 
+-0.0724866	-0.00532757
+210.586
+align with cargo 
+-0.174035	0.108366
+207.588
+align with cargo 
+-0.0150172	0.221298
+191.524
+align with cargo 
+-0.0723975	-0.0169229
+167.557
+align with cargo 
+0.0491327	0.0879623
+177.604
+align with cargo 
+-0.0498141	0.00602271
+168.101
+align with cargo 
+0.220374	-0.0152637
+168.613
+align with cargo 
+-0.0863862	0.0547528
+174.848
+align with cargo 
+-0.00677825	0.061763
+162.851
+align with cargo 
+0.0786748	-0.0714934
+155.95
+align with cargo 
+-0.174239	0.149658
+161.852
+align with cargo 
+0.0028216	0.0316957
+160.104
+align with cargo 
+-0.0527778	0.118341
+169.604
+align with cargo 
+-0.130471	-0.107465
+183.352
+align with cargo 
+0.0431914	0.075627
+186.6
+align with cargo 
+0.0685981	0.126739
+186.099
+align with cargo 
+0.141297	-0.0328453
+align with cargo 
+-0.178206	0.058397
+align with cargo 
+0.201822	0.27993
+179.602
+align with cargo 
+-0.121565	-0.0227783
+182.848
+align with cargo 
+-0.0833106	-0.00935123
+169.353
+align with cargo 
+-0.193154	-0.069386
+173.509
+align with cargo 
+-0.108318	0.137303
+176.146
+align with cargo 
+0.161301	0.0828054
+194.648
+align with cargo 
+-0.0525852	0.215519
+179.405
+align with cargo 
+-0.0275189	0.145972
+168.822
+align with cargo 
+-0.0361733	-0.0669252
+180.148
+align with cargo 
+0.0364823	-0.0277434
+164.209
+align with cargo 
+-0.0314337	-0.00718184
+184.1
+align with cargo 
+-0.210956	-0.0325082
+184.598
+align with cargo 
+0.0542596	-0.0649525
+195.602
+align with cargo 
+0.120809	-0.00675324
+190.548
+align with cargo 
+0.074316	-0.218764
+195.345
+align with cargo 
+0.035904	-0.0794536
+209.633
+align with cargo 
+-0.16353	0.100621
+216.637
+align with cargo 
+0.0969633	-0.0503148
+200.842
+align with cargo 
+-0.0346652	-0.142313
+223.591
+align with cargo 
+0.122025	-0.0278485
+216.093
+align with cargo 
+0.0884371	-0.114398
+align with cargo 
+0.21762	-0.316193
+align with cargo 
+0.679785	-0.205319
+243.588
+align with cargo 
+0.124586	-0.0986146
+260.838
+align with cargo 
+-0.109077	-0.094643
+282.087
+align with cargo 
+0.0217403	-0.0138316
+295.339
+align with cargo 
+-0.257094	0.28064
+261.634
+align with cargo 
+0.121289	0.00362261
+279.09
+align with cargo 
+0.101836	0.0660635
+295.341
+align with cargo 
+0.0876066	-0.389429
+294.991
+align with cargo 
+-0.083422	-0.0361495
+239.463
+align with cargo 
+-0.000112456	0.0655171
+242.075
+align with cargo 
+0.0646536	-0.013116
+182.659
+align with cargo 
+0.163324	0.200975
+207.846
+align with cargo 
+0.0944508	0.0446151
+225.843
+align with cargo 
+0.254301	-0.128845
+215.593
+align with cargo 
+0.0545151	0.112927
+228.588
+align with cargo 
+-0.0695114	-0.0586085
+217.137
+align with cargo 
+0.0785879	-0.00547219
+179.784
+align with cargo 
+-0.0855532	-0.0116472
+213.59
+align with cargo 
+-0.0340998	-0.0432369
+196.343
+align with cargo 
+0.164829	0.105186
+212.096
+align with cargo 
+-0.0160455	0.0467636
+align with cargo 
+0.536465	-0.250038
+align with cargo 
+0.479701	0.190829
+179.175
+align with cargo 
+0.211073	-0.194291
+190.342
+align with cargo 
+-0.0885496	-0.0573071
+208.602
+align with cargo 
+-0.195458	0.158313
+183.349
+align with cargo 
+0.0480592	-0.196061
+185.003
+align with cargo 
+-0.135982	-0.0695976
+197.85
+align with cargo 
+0.104892	0.108414
+166.605
+align with cargo 
+-0.287776	0.186048
+188.153
+align with cargo 
+-0.0339523	0.155416
+174.104
+align with cargo 
+0.011056	0.193413
+154.609
+align with cargo 
+0.187733	0.0396137
+148.608
+align with cargo 
+-0.0270265	-0.0630508
+146.159
+align with cargo 
+-0.103063	-0.193722
+145.609
+align with cargo 
+-0.0782498	-0.0528672
+172.109
+align with cargo 
+-0.0592271	-0.0406994
+159.067
+align with cargo 
+0.050213	-0.0335356
+129.732
+align with cargo 
+0.127364	0.0481489
+135.356
+align with cargo 
+0.0675492	0.0730934
+150.353
+align with cargo 
+0.120186	0.0511858
+125.811
+align with cargo 
+-0.308217	-0.0745744
+103.768
+align with cargo 
+-0.0353785	-0.00291951
+align with cargo 
+0.578931	-0.393873
+align with cargo 
+0.618624	-0.161827
+228.463
+align with cargo 
+0.271863	0.0732847
+230.107
+align with cargo 
+-0.182423	-0.185403
+241.356
+align with cargo 
+0.0966861	0.0211656
+229.356
+align with cargo 
+-0.0730583	0.104496
+230.607
+align with cargo 
+0.0801594	-0.0445554
+235.862
+align with cargo 
+-0.106977	0.0474042
+262.596
+align with cargo 
+0.0259735	-0.00238165
+261.098
+align with cargo 
+0.0193032	0.208232
+253.101
+align with cargo 
+-0.19831	0.0671975
+252.6
+align with cargo 
+0.0782953	0.0935394
+257.848
+align with cargo 
+-0.0180296	-0.10399
+278.601
+align with cargo 
+-0.0863426	-0.0280173
+291.092
+align with cargo 
+0.106879	-0.000196746
+310.092
+align with cargo 
+-0.165285	0.135632
+316.341
+align with cargo 
+0.067342	0.193941
+317.091
+align with cargo 
+-0.0347756	-0.183584
+346.84
+align with cargo 
+-0.0694081	0.0205399
+391.587
+align with cargo 
+0.117692	-0.0103895
+420.591
+align with cargo 
+0.209746	0.191594
+402.091
+align with cargo 
+-0.038732	0.0732831
+align with cargo 
+0.530281	-0.0988022
+align with cargo 
+0.688567	-0.0695685
+428.089
+align with cargo 
+-0.0489305	0.132622
+420.127
+align with cargo 
+0.0710959	-0.0559783
+561.926
+align with cargo 
+-0.115508	-0.0497296
+501.418
+align with cargo 
+-0.108493	-0.173128
+440.917
+align with cargo 
+-0.0976654	0.189223
+506.249
+align with cargo 
+0.161787	-0.14133
+517.866
+align with cargo 
+-0.104522	0.045692
+498.612
+align with cargo 
+0.0385233	-0.0516508
+514.117
+align with cargo 
+0.131566	0.1518
+445.127
+align with cargo 
+-0.0497806	0.0303333
+477.18
+align with cargo 
+0.0351121	-0.055993
+508.61
+align with cargo 
+0.0658803	0.090177
+503.127
+align with cargo 
+0.0110869	-0.0664445
+518.341
+align with cargo 
+-0.211672	-0.127578
+510.342
+align with cargo 
+0.180044	-0.0228701
+516.949
+align with cargo 
+0.173589	-0.1015
+581.846
+align with cargo 
+0.29271	0.180189
+498.22
+align with cargo 
+0.0104572	0.00367791
+639.252
+align with cargo 
+-0.00698569	0.140533
+571.375
+align with cargo 
+0.0058606	-0.248562
+align with cargo 
+0.700546	0.0275613
+align with cargo 
+0.689162	-0.114726
+605.056
+align with cargo 
+0.133043	-0.0274964
+618.947
+align with cargo 
+0.164201	-0.115736
+605.002
+align with cargo 
+-0.0598667	0.091466
+589.579
+align with cargo 
+0.0542176	-0.151098
+515.735
+align with cargo 
+-0.0420201	-0.0980549
+520.913
+align with cargo 
+0.121343	0.0382997
+459.646
+align with cargo 
+0.0451685	0.028182
+501.096
+align with cargo 
+0.156909	0.0338809
+492.11
+align with cargo 
+-0.0408437	0.017275
+495.798
+align with cargo 
+-0.130478	0.235574
+471.738
+align with cargo 
+0.0295441	-0.190334
+529.848
+align with cargo 
+0.266495	0.120516
+539.777
+align with cargo 
+0.0948725	0.0383462
+518.786
+align with cargo 
+-0.0100017	-0.0373813
+570.323
+align with cargo 
+0.107733	0.0313805
+438.102
+align with cargo 
+0.0749465	0.074601
+361.302
+align with cargo 
+-0.22361	-0.00929772
+353.589
+align with cargo 
+-0.0153593	0.112069
+285.612
+align with cargo 
+-0.194448	-0.162782
+259.079
+align with cargo 
+-0.112294	-0.0655886
+align with cargo 
+0.834631	-0.129248
+align with cargo 
+0.449853	-0.201298
+573.608
+align with cargo 
+0.019055	0.172804
+610.284
+align with cargo 
+-0.0817403	0.0847551
+599.866
+align with cargo 
+0.0378633	0.089071
+570.332
+align with cargo 
+0.0827672	-0.0920441
+564.334
+align with cargo 
+-0.169141	-0.054498
+571.088
+align with cargo 
+0.189433	-0.0774105
+624.761
+align with cargo 
+-0.102878	0.0487986
+730.79
+align with cargo 
+-0.0148608	0.0270545
+710.05
+align with cargo 
+0.0758976	-0.150362
+753.744
+align with cargo 
+-0.0332433	0.07766
+665.371
+align with cargo 
+0.157097	0.123691
+700.081
+align with cargo 
+-0.0579355	-0.181081
+703.971
+align with cargo 
+0.00385734	-0.0579071
+700.041
+align with cargo 
+0.0671471	0.208049
+660.138
+align with cargo 
+-0.0970252	-0.25555
+838.958
+align with cargo 
+-0.108691	-0.0145411
+801.7
+align with cargo 
+0.0415226	-0.229569
+765.704
+align with cargo 
+-0.0747148	-0.327046
+549.43
+align with cargo 
+0.0474811	-0.0109093
+354.123
+align with cargo 
+-0.253906	-0.111438
+align with cargo 
+0.527629	0.155835
+align with cargo 
+0.660716	0.175163
+195.29
+align with cargo 
+-0.0563121	-0.139596
+172.546
+align with cargo 
+0.0689461	0.146202
+142.849
+align with cargo 
+0.0277137	0.0347517
+142.699
+align with cargo 
+0.0695985	0.1375
+132.604
+align with cargo 
+0.0130867	-0.0437206
+125.103
+align with cargo 
+-0.0579877	0.128106
+139.1
+align with cargo 
+-0.153183	0.0179758
+136.953
+align with cargo 
+-0.0385062	-0.105063
+130.508
+align with cargo 
+-0.112148	-0.143056
+120.916
+align with cargo 
+-0.144658	0.0978049
+116.361
+align with cargo 
+-0.0802816	0.0404178
+114.108
+align with cargo 
+0.0449465	0.0359237
+118.608
+align with cargo 
+-0.000403669	0.200223
+125.61
+align with cargo 
+0.132296	-0.0378789
+111.911
+align with cargo 
+-0.0794716	-0.131471
+122.606
+align with cargo 
+-0.0456492	0.0873148
+109.873
+align with cargo 
+-0.0398471	-0.222648
+116.51
+align with cargo 
+0.20634	0.0122647
+125.105
+align with cargo 
+-0.0674517	0.037253
+115.105
+align with cargo 
+-0.0281898	-0.050028
+align with cargo 
+0.562191	0.0183279
+align with cargo 
+1.03715	0.240738
+124.598
+align with cargo 
+0.039284	0.22928
+119.103
+align with cargo 
+-0.0402381	-0.194184
+109.852
+align with cargo 
+0.0569566	-0.0258135
+109.749
+align with cargo 
+-0.0288615	0.061836
+111.852
+align with cargo 
+0.0355293	-0.0524994
+104.6
+align with cargo 
+-0.0167004	-0.0267341
+110.099
+align with cargo 
+-0.113078	0.10266
+108.355
+align with cargo 
+-0.340145	0.21134
+105.102
+align with cargo 
+0.0860158	-0.0155404
+109.349
+align with cargo 
+-0.00302669	0.0109045
+109.6
+align with cargo 
+0.0311373	0.0793216
+119.349
+align with cargo 
+0.0662617	0.0746579
+116.351
+align with cargo 
+0.0869819	0.116173
+118.053
+align with cargo 
+-0.0305028	-0.0470088
+120.098
+align with cargo 
+-0.0670377	0.299196
+106.601
+align with cargo 
+-0.0751807	-0.132973
+109.852
+align with cargo 
+-0.121183	-0.112371
+115.302
+align with cargo 
+-0.051051	0.071218
+114.104
+align with cargo 
+0.073589	0.0109468
+121.352
+align with cargo 
+-0.0591565	0.0089843
+align with cargo 
+0.710337	-0.0982122
+align with cargo 
+0.812142	-0.127337
+133.845
+align with cargo 
+-0.170261	0.0892868
+111.095
+align with cargo 
+0.140923	0.0675855
+108.597
+align with cargo 
+0.158852	0.0223143
+104.349
+align with cargo 
+0.0503548	-0.0672911
+96.0999
+align with cargo 
+0.10623	0.163287
+91.3487
+align with cargo 
+0.0117241	-0.165455
+91.8455
+align with cargo 
+0.0579457	0.0617952
+89.8494
+align with cargo 
+-0.0759277	0.0273537
+88.5997
+align with cargo 
+-0.0299394	0.072371
+83.8526
+align with cargo 
+-0.282001	0.154442
+83.1027
+align with cargo 
+0.140844	0.152094
+91.349
+align with cargo 
+0.00723827	0.0330126
+89.5996
+align with cargo 
+-0.0331851	0.282198
+89.3473
+align with cargo 
+-0.107771	0.0371983
+96.6012
+align with cargo 
+-0.0844311	0.248451
+97.0936
+align with cargo 
+-0.134165	0.125303
+104.592
+align with cargo 
+-0.0180509	0.0604215
+126.343
+align with cargo 
+0.0710513	-0.00482134
+127.392
+align with cargo 
+0.128204	-0.0917166
+100.449
+align with cargo 
+0.00558156	-0.0874611
+align with cargo 
+0.321464	0.00724269
+align with cargo 
+0.646603	-0.176631
+120.003
+align with cargo 
+0.323874	-0.0219781
+131.89
+align with cargo 
+-0.0187585	0.0674833
+127.948
+align with cargo 
+-0.0484441	-0.0456696
+116.349
+align with cargo 
+-0.0163935	-0.184437
+103.852
+align with cargo 
+-0.0766123	-0.245607
+103.104
+align with cargo 
+-0.0135628	-0.129524
+108.102
+align with cargo 
+-0.00337975	0.0491721
+99.8565
+align with cargo 
+0.00486776	0.125955
+96.6064
+align with cargo 
+0.0112432	0.164625
+99.3586
+align with cargo 
+-0.124141	0.0181645
+100.362
+align with cargo 
+-0.06059	0.199003
+98.8619
+align with cargo 
+0.14624	0.0191325
+105.61
+align with cargo 
+-0.225304	0.0974192
+100.359
+align with cargo 
+0.102643	-0.191965
+110.104
+align with cargo 
+-0.0734377	-0.143527
+104.355
+align with cargo 
+-0.107147	0.042486
+100.606
+align with cargo 
+-0.0799503	-0.254669
+100.855
+align with cargo 
+0.137246	-0.209503
+109.107
+align with cargo 
+-0.0338072	0.151131
+119.6
+align with cargo 
+0.0461115	0.0580479
+align with cargo 
+0.528287	-0.0804468
+align with cargo 
+0.629009	-0.17589
+122.853
+align with cargo 
+-0.0469789	0.00223261
+137.351
+align with cargo 
+-0.0761049	-0.118325
+125.844
+align with cargo 
+-0.0305426	-0.0483825
+128.052
+align with cargo 
+0.22352	0.0541281
+125.434
+align with cargo 
+0.110231	0.161651
+117.193
+align with cargo 
+0.0738906	0.0125448
+109.097
+align with cargo 
+-0.151231	0.0164421
+118.847
+align with cargo 
+-0.0104191	-0.252194
+112.244
+align with cargo 
+-0.0869154	-0.0960715
+95.0936
+align with cargo 
+0.00708347	0.0459277
+101.097
+align with cargo 
+0.0803026	0.0964843
+93.3535
+align with cargo 
+-0.198865	-0.00862261
+94.353
+align with cargo 
+-0.126492	0.0223983
+94.6019
+align with cargo 
+-0.0320095	0.0277374
+100.351
+align with cargo 
+-0.00091837	0.0957062
+98.1026
+align with cargo 
+-0.261259	0.0692788
+106.6
+align with cargo 
+0.0479864	-0.111145
+109.403
+align with cargo 
+-0.00591283	0.141302
+110.245
+align with cargo 
+-0.0184105	-0.0991488
+125.553
+align with cargo 
+0.185636	0.175421
+align with cargo 
+0.865959	0.144211
+align with cargo 
+0.778137	0.275114
+108.359
+align with cargo 
+-0.00208489	0.027704
+105.609
+align with cargo 
+0.17069	-0.153168
+104.165
+align with cargo 
+-0.160799	0.0334296
+115.609
+align with cargo 
+-0.291459	-0.240861
+103.608
+align with cargo 
+0.0207505	0.0217764
+93.1035
+align with cargo 
+0.230133	0.0764044
+100.358
+align with cargo 
+0.156021	-0.179991
+115.355
+align with cargo 
+0.119717	-0.144436
+96.602
+align with cargo 
+0.0372175	-0.0163577
+94.1041
+align with cargo 
+-0.0445954	-0.0701332
+91.9552
+align with cargo 
+0.21822	-0.0207382
+98.103
+align with cargo 
+-0.117546	0.0942162
+89.3525
+align with cargo 
+0.10198	-0.34027
+86.7542
+align with cargo 
+0.129097	-0.00209983
+84.0986
+align with cargo 
+0.160409	0.154088
+86.3457
+align with cargo 
+-0.0439229	-0.148719
+83.8436
+align with cargo 
+-0.123204	-0.174914
+87.9008
+align with cargo 
+-0.10972	-0.0608929
+86.8485
+align with cargo 
+-0.0347193	-0.072694
+94.8481
+align with cargo 
+0.0646294	-0.128873
+align with cargo 
+0.800705	-0.198463
+align with cargo 
+0.661242	-0.35234
+87.1484
+align with cargo 
+-0.0668337	-0.0458055
+80.3515
+align with cargo 
+0.00335868	0.161295
+82.6029
+align with cargo 
+0.0441087	-0.0650292
+88.6001
+align with cargo 
+0.152808	0.0138214
+96.8489
+align with cargo 
+-0.157185	-0.104353
+107.597
+align with cargo 
+-0.168529	0.244438
+102.862
+align with cargo 
+0.0158023	0.0930734
+99.3481
+align with cargo 
+-0.10284	0.00359636
+110.844
+align with cargo 
+0.101745	-0.0540678
+100.493
+align with cargo 
+0.0708403	0.015714
+104.846
+align with cargo 
+-0.0797112	-0.00161464
+94.5985
+align with cargo 
+0.0268541	0.153473
+92.8499
+align with cargo 
+0.231204	0.193
+90.5994
+align with cargo 
+0.019182	-0.0286564
+95.5983
+align with cargo 
+0.159224	0.0669196
+100.097
+align with cargo 
+0.182513	-0.0259265
+96.8503
+align with cargo 
+-0.0176175	0.057279
+98.355
+align with cargo 
+-0.020521	-0.0225597
+96.6042
+align with cargo 
+0.0730008	0.000752689
+89.8495
+align with cargo 
+0.0483371	0.0699228
+align with cargo 
+0.931458	-0.0299686
+align with cargo 
+1.12325	-0.269204
+82.3504
+align with cargo 
+0.0453407	0.0412361
+81.8528
+align with cargo 
+-0.0462133	0.218109
+80.103
+align with cargo 
+0.0357467	-0.0577741
+79.1015
+align with cargo 
+-0.0199406	-0.0481327
+82.1027
+align with cargo 
+0.0816528	0.000112976
+84.5991
+align with cargo 
+0.236765	0.13813
+87.3474
+align with cargo 
+-0.114667	-0.12155
+87.3463
+align with cargo 
+0.00890037	0.0982199
+85.5961
+align with cargo 
+-0.00255793	-0.0649199
+87.3464
+align with cargo 
+0.109882	-0.190907
+82.5976
+align with cargo 
+0.135156	0.0245866
+82.848
+align with cargo 
+0.104314	0.135795
+84.1003
+align with cargo 
+-0.0148566	-0.11966
+80.6024
+align with cargo 
+0.0594361	0.18918
+84.8492
+align with cargo 
+0.0629428	0.112011
+85.0985
+align with cargo 
+-0.0119474	0.1127
+82.3512
+align with cargo 
+0.115391	-0.0248144
+82.3542
+align with cargo 
+0.0833568	0.132788
+81.3535
+align with cargo 
+-0.161549	0.0611878
+81.3565
+align with cargo 
+0.056306	-0.0398103
+align with cargo 
+0.412814	0.160425
+align with cargo 
+0.738571	-0.188872
+82.6023
+align with cargo 
+-0.194318	-0.0176226
+83.8523
+align with cargo 
+0.127113	0.0736749
+85.35
+align with cargo 
+-0.046024	0.0774619
+90.3447
+align with cargo 
+-0.104999	0.00849138
+86.8474
+align with cargo 
+0.140348	0.00496429
+88.3481
+align with cargo 
+0.0347444	0.0406858
+94.3487
+align with cargo 
+0.289529	-0.0439332
+94.1015
+align with cargo 
+-0.0803922	-0.198708
+86.853
+align with cargo 
+-0.0645544	0.0657953
+90.8473
+align with cargo 
+0.188981	-0.235661
+95.0959
+align with cargo 
+0.125403	-0.056994
+94.5952
+align with cargo 
+-0.03637	-0.141857
+92.6007
+align with cargo 
+-0.203661	-0.0150531
+91.8463
+align with cargo 
+-0.0444994	-0.0255889
+91.6018
+align with cargo 
+-0.109511	0.199852
+81.3524
+align with cargo 
+0.0564727	0.0482874
+85.601
+align with cargo 
+0.149752	-0.102014
+82.1053
+align with cargo 
+-0.119568	-0.0297373
+87.1052
+align with cargo 
+-0.1956	-0.0731341
+87.3558
+align with cargo 
+0.00711844	0.104082
+align with cargo 
+-0.0390373	-0.0212144
+align with cargo 
+0.55436	-0.0208446
+85.3504
+align with cargo 
+0.118295	-0.139342
+80.0997
+align with cargo 
+0.238477	-0.244118
+83.6061
+align with cargo 
+-0.172792	-0.0625982
+84.5971
+align with cargo 
+0.0177434	0.00951703
+89.3455
+align with cargo 
+0.0413062	0.171629
+96.1025
+align with cargo 
+-0.0123043	-0.115954
+91.6034
+align with cargo 
+0.0665107	0.0827867
+100.351
+align with cargo 
+0.0443293	-0.147821
+92.0968
+align with cargo 
+0.171539	0.00982636
+91.1041
+align with cargo 
+-0.111708	-0.0427883
+92.5978
+align with cargo 
+-0.000791401	0.0882438
+89.1005
+align with cargo 
+-0.0205622	-0.00500527
+95.6017
+align with cargo 
+-0.111438	0.186464
+98.7602
+align with cargo 
+-0.140542	0.162085
+90.8585
+align with cargo 
+0.0332285	-0.0717807
+94.8554
+align with cargo 
+0.0938269	0.204997
+91.6023
+align with cargo 
+-0.0813796	-0.233406
+93.3504
+align with cargo 
+0.0186014	-0.0309688
+79.3524
+align with cargo 
+-0.0906925	0.107666
+78.355
+align with cargo 
+-0.0491956	-0.120755
+align with cargo 
+0.420097	0.000177449
+align with cargo 
+0.62004	-0.20999
+74.1028
+align with cargo 
+-0.184986	0.0738261
+74.3515
+align with cargo 
+-0.0740097	-0.0016499
+78.3503
+align with cargo 
+0.134428	-0.197971
+83.0986
+align with cargo 
+-0.110053	0.0227512
+83.3486
+align with cargo 
+-0.0146133	0.0897598
+84.8513
+align with cargo 
+-0.0376214	-0.124494
+82.8472
+align with cargo 
+0.0648843	-0.101493
+82.3446
+align with cargo 
+-0.174638	0.135916
+77.8455
+align with cargo 
+-0.101753	0.00354238
+77.5978
+align with cargo 
+0.0385431	0.211009
+88.097
+align with cargo 
+-0.131438	0.297914
+81.1008
+align with cargo 
+-0.0825699	-0.0138145
+87.1016
+align with cargo 
+-0.0466421	-0.165685
+85.1022
+align with cargo 
+-0.0464157	-0.107293
+90.1022
+align with cargo 
+-0.0317529	0.0103613
+97.6045
+align with cargo 
+0.0566917	-0.0710428
+110.847
+align with cargo 
+-0.0115956	0.00423411
+104.348
+align with cargo 
+0.0288849	0.173152
+98.099
+align with cargo 
+-0.0567531	0.00107058
+99.3454
+align with cargo 
+-0.136493	0.0456139
+align with cargo 
+0.36936	-0.175192
+align with cargo 
+0.806249	-0.183652
+133.967
+align with cargo 
+-0.103137	-0.0577032
+115.413
+align with cargo 
+-0.227542	-0.0307141
+106.607
+align with cargo 
+0.084519	-0.0175128
+110.352
+align with cargo 
+-0.188176	-0.0278548
+114.851
+align with cargo 
+0.0933678	-0.00840316
+129.608
+align with cargo 
+0.0226749	0.112331
+133.359
+align with cargo 
+-0.0215982	-0.0427785
+143.565
+align with cargo 
+-0.0114331	-0.00759743
+152.358
+align with cargo 
+-0.0719221	0.0457411
+119.387
+align with cargo 
+0.00372262	-0.00267618
+110.851
+align with cargo 
+0.0594785	0.112059
+104.349
+align with cargo 
+0.115625	-0.223582
+108.593
+align with cargo 
+-0.250646	-0.193716
+99.3448
+align with cargo 
+0.0529501	-0.109924
+113.345
+align with cargo 
+0.012122	-0.0828912
+106.094
+align with cargo 
+-0.105205	0.082977
+108.094
+align with cargo 
+0.0798221	0.0648393
+102.096
+align with cargo 
+0.0448279	0.0619694
+89.8669
+align with cargo 
+0.25697	-0.0093989
+90.8451
+align with cargo 
+0.191443	-0.0109616
+align with cargo 
+0.55799	0.2879
+align with cargo 
+0.693634	0.678089
+99.3451
+align with cargo 
+-0.0914681	0.132075
+102.49
+align with cargo 
+0.0892053	-0.0916386
+98.8551
+align with cargo 
+-0.169507	-0.0253607
+89.8515
+align with cargo 
+-0.0472617	0.0524195
+97.6009
+align with cargo 
+-0.0431519	-0.00711258
+107.853
+align with cargo 
+0.0758295	-0.12357
+97.8511
+align with cargo 
+-0.118628	0.0752122
+102.104
+align with cargo 
+-0.138669	-0.0106999
+87.1295
+align with cargo 
+0.0274531	-0.0850499
+67.0566
+align with cargo 
+-0.0356792	0.0487602
+67.6004
+align with cargo 
+0.0553518	0.0610626
+66.6006
+align with cargo 
+-0.0616044	-0.111672
+67.6041
+align with cargo 
+0.176375	-0.0877678
+62.8533
+align with cargo 
+-0.0895073	-0.149112
+62.604
+align with cargo 
+0.0630805	-0.00700088
+54.6028
+align with cargo 
+0.184822	0.100908
+57.8533
+align with cargo 
+0.216841	0.238789
+62.553
+align with cargo 
+0.0326111	-0.124219
+65.9557
+align with cargo 
+0.00316803	-0.0104221
+62.855
+align with cargo 
+-0.105407	0.0393787
+align with cargo 
+0.312974	0.0444616
+align with cargo 
+0.670549	0.31111
+79.354
+align with cargo 
+-0.12643	-0.0770993
+78.1023
+align with cargo 
+-0.0299068	-0.0545075
+75.35
+align with cargo 
+-0.101212	-0.0419899
+77.3522
+align with cargo 
+-0.0267138	0.060317
+82.1016
+align with cargo 
+-0.0366693	-0.0737403
+87.348
+align with cargo 
+0.0342754	0.170607
+99.103
+align with cargo 
+0.166438	0.073906
+93.3454
+align with cargo 
+-0.0540251	-0.111156
+87.3452
+align with cargo 
+0.180618	0.0334588
+96.0976
+align with cargo 
+0.0228828	-0.1288
+91.3495
+align with cargo 
+-0.119853	-0.0916089
+105.349
+align with cargo 
+-0.0623808	0.0969581
+111.603
+align with cargo 
+0.0384018	0.251213
+112.596
+align with cargo 
+0.0453491	-0.140045
+108.348
+align with cargo 
+0.17712	-0.0303705
+85.5411
+align with cargo 
+0.0541267	-0.0835374
+103.602
+align with cargo 
+-0.144373	-0.125976
+97.3498
+align with cargo 
+-0.145353	0.0275383
+80.1028
+align with cargo 
+0.192704	0.117736
+89.6008
+align with cargo 
+-0.0239662	0.0466669
+align with cargo 
+0.721467	-0.0734173
+align with cargo 
+0.737006	-0.113928
+81.7657
+align with cargo 
+-0.0913253	-0.0598829
+110.6
+align with cargo 
+-0.132317	0.0836413
+108.097
+align with cargo 
+-0.0821593	-0.00628312
+103.85
+align with cargo 
+0.0631809	0.11176
+110.849
+align with cargo 
+-0.0541252	0.0403903
+113.101
+align with cargo 
+0.0499894	0.0308549
+112.105
+align with cargo 
+-0.0413085	-0.0514098
+105.353
+align with cargo 
+-0.139358	0.036876
+114.1
+align with cargo 
+-0.0209274	-0.117494
+98.5991
+align with cargo 
+3.65517e-05	-0.0468234
+94.3509
+align with cargo 
+0.084675	0.091687
+89.8949
+align with cargo 
+-0.289901	-0.112568
+86.8532
+align with cargo 
+0.0149263	-0.121635
+80.4099
+align with cargo 
+0.0421963	-0.0236957
+73.8534
+align with cargo 
+-0.129341	0.0454809
+74.1027
+align with cargo 
+0.0327008	-0.00504804
+69.8525
+align with cargo 
+-0.00805505	0.0636041
+70.6076
+align with cargo 
+0.158979	0.121518
+68.8578
+align with cargo 
+-0.144272	0.147659
+70.1045
+align with cargo 
+-0.0452362	8.07633e-05
+align with cargo 
+0.3678	0.228183
+align with cargo 
+0.848004	0.085367
+74.1005
+align with cargo 
+-0.00825811	-0.0240839
+75.1013
+align with cargo 
+0.160207	-0.0442731
+72.6019
+align with cargo 
+-0.0352357	-0.00821729
+70.352
+align with cargo 
+0.0093855	0.124836
+70.6035
+align with cargo 
+0.119651	-0.0884139
+69.8506
+align with cargo 
+-0.214377	-0.0216228
+69.8518
+align with cargo 
+-0.0641714	0.000235585
+74.098
+align with cargo 
+-0.0690394	0.251279
+71.3498
+align with cargo 
+0.0721455	-0.0112784
+70.8494
+align with cargo 
+0.051304	0.128276
+75.847
+align with cargo 
+0.0794217	-0.00295782
+71.3499
+align with cargo 
+-0.0445239	0.154802
+71.3469
+align with cargo 
+0.0772487	-0.0649167
+70.3445
+align with cargo 
+0.10291	-0.1216
+66.597
+align with cargo 
+0.0786057	0.0928396
+71.8436
+align with cargo 
+-0.0238709	-0.0795244
+74.1008
+align with cargo 
+0.0603468	-0.0409336
+72.5973
+align with cargo 
+-0.000477289	-0.0783468
+71.5982
+align with cargo 
+0.0962822	0.165298
+71.8493
+align with cargo 
+0.0420393	0.0449081
+align with cargo 
+0.555318	-0.127384
+align with cargo 
+0.771438	0.306319
+77.0904
+align with cargo 
+0.065322	0.194642
+94.0917
+align with cargo 
+-0.137606	0.111006
+108.341
+align with cargo 
+0.105621	-0.127196
+115.59
+align with cargo 
+0.030588	0.0606319
+95.5971
+align with cargo 
+-0.0719274	0.156177
+93.3485
+align with cargo 
+-0.243265	-0.0364036
+84.346
+align with cargo 
+0.0216466	0.0393845
+85.0961
+align with cargo 
+-0.0729543	0.231115
+93.0952
+align with cargo 
+0.192301	-0.187207
+92.5968
+align with cargo 
+-0.0971798	-0.186385
+97.3466
+align with cargo 
+-0.0931408	0.115653
+95.5969
+align with cargo 
+-0.0677457	0.0103054
+94.0968
+align with cargo 
+0.0683326	-0.0236741
+96.3477
+align with cargo 
+-0.09411	0.165411
+91.3448
+align with cargo 
+0.010349	-0.041044
+90.0956
+align with cargo 
+-0.0635523	0.1998
+88.0965
+align with cargo 
+0.0352594	-0.0283505
+85.0953
+align with cargo 
+0.103219	-0.0722089
+107.093
+align with cargo 
+-0.0454937	-0.0660386
+101.847
+align with cargo 
+0.12162	-0.0672229
+align with cargo 
+0.454553	-0.288479
+align with cargo 
+0.399029	-0.397668
+153.333
+align with cargo 
+0.147458	0.0295611
+129.779
+align with cargo 
+-0.0458548	-0.172595
+133.348
+align with cargo 
+0.0685741	-0.0452975
+132.736
+align with cargo 
+0.0668474	-0.135334
+150.096
+align with cargo 
+0.00270642	-0.0475712
+158.095
+align with cargo 
+0.0478989	-0.178979
+155.09
+align with cargo 
+0.0764284	0.187736
+162.344
+align with cargo 
+-0.0362185	-0.0729097
+145.593
+align with cargo 
+0.136405	0.0178592
+166.346
+align with cargo 
+0.0649938	0.112464
+159.096
+align with cargo 
+-0.0130399	0.128252
+156.334
+align with cargo 
+0.122318	0.0934118
+89.5291
+align with cargo 
+0.0437105	0.117861
+90.6955
+align with cargo 
+-0.0213059	-0.0067671
+88.347
+align with cargo 
+0.00801787	-0.0831374
+88.5981
+align with cargo 
+-0.138586	0.015232
+81.8467
+align with cargo 
+-0.0184849	0.0473367
+75.5972
+align with cargo 
+-0.139912	-0.136862
+77.1011
+align with cargo 
+-0.11738	-0.0475291
+75.3514
+align with cargo 
+-0.0550015	-0.175409
+align with cargo 
+0.377581	-0.0374939
+align with cargo 
+1.04818	-0.0802851
+77.6014
+align with cargo 
+0.00253968	-0.0917943
+77.6003
+align with cargo 
+-0.0123937	-0.0903854
+73.6024
+align with cargo 
+0.112217	-0.0640739
+74.1075
+align with cargo 
+-0.107066	-0.207156
+72.3563
+align with cargo 
+0.0822874	0.20142
+73.1073
+align with cargo 
+0.282691	-0.131073
+71.6593
+align with cargo 
+-0.180197	-0.022631
+70.1065
+align with cargo 
+0.0193201	-0.103781
+71.6033
+align with cargo 
+0.0324891	-0.0765742
+71.8538
+align with cargo 
+0.0114888	-0.00816663
+73.8574
+align with cargo 
+0.109874	-0.156691
+76.1068
+align with cargo 
+0.0953151	0.020485
+75.6042
+align with cargo 
+0.0371031	-0.00232825
+72.3515
+align with cargo 
+0.0101494	-0.00147013
+71.852
+align with cargo 
+0.133424	-0.0932302
+74.6053
+align with cargo 
+0.00362274	0.20225
+71.1069
+align with cargo 
+-0.121137	0.0140746
+70.4044
+align with cargo 
+-0.248419	-0.0999577
+71.6063
+align with cargo 
+-0.0878712	-0.0656922
+73.8519
+align with cargo 
+0.141523	0.111253
+align with cargo 
+0.594421	0.0586318
+align with cargo 
+0.689248	0.0561015
+77.8519
+align with cargo 
+0.286989	0.0103028
+80.8494
+align with cargo 
+-0.210535	-0.0208573
+82.3457
+align with cargo 
+-0.0683365	-0.0108824
+82.8524
+align with cargo 
+-0.126471	-0.00764151
+80.3522
+align with cargo 
+-0.0917207	-0.160228
+80.3503
+align with cargo 
+0.0799117	-0.07007
+72.3527
+align with cargo 
+0.00343603	-0.101022
+81.0981
+align with cargo 
+0.0744387	0.0249212
+75.3534
+align with cargo 
+-0.0282447	-0.0387721
+78.1009
+align with cargo 
+0.0581563	0.0732951
+72.8506
+align with cargo 
+0.124069	-0.00222743
+76.5997
+align with cargo 
+0.107729	-0.140381
+73.1027
+align with cargo 
+0.249601	-0.131032
+74.8561
+align with cargo 
+-0.0229006	-0.0408456
+73.3544
+align with cargo 
+-0.000547736	0.102889
+68.6007
+align with cargo 
+0.0228699	0.11378
+73.3498
+align with cargo 
+0.0283619	-0.0874186
+70.6023
+align with cargo 
+0.0425549	0.225297
+67.104
+align with cargo 
+-0.147145	0.0885555
+66.6031
+align with cargo 
+0.107413	-0.036074
+align with cargo 
+0.402311	-0.0786584
+align with cargo 
+0.50013	-0.0472337
+68.6025
+align with cargo 
+0.166201	-0.162107
+69.6004
+align with cargo 
+0.0337171	-0.32736
+66.8515
+align with cargo 
+0.00178782	0.0424145
+69.1019
+align with cargo 
+-0.0851002	-0.00245115
+68.6009
+align with cargo 
+-0.0463217	0.146293
+75.3486
+align with cargo 
+0.130164	-0.00243206
+76.0976
+align with cargo 
+-0.0299091	-0.0872667
+75.0983
+align with cargo 
+0.0255131	-0.0608115
+79.0981
+align with cargo 
+-0.175289	-0.180862
+77.3523
+align with cargo 
+0.123391	0.0513859
+76.3523
+align with cargo 
+-0.0888935	0.0420465
+80.1027
+align with cargo 
+-0.241546	0.200884
+77.0962
+align with cargo 
+-0.063492	-0.0342516
+72.3538
+align with cargo 
+-0.123066	0.00480573
+71.8514
+align with cargo 
+-0.0531179	0.226743
+73.3487
+align with cargo 
+0.0801887	-0.0127434
+74.1016
+align with cargo 
+0.100092	-0.033803
+67.3549
+align with cargo 
+-0.153686	0.0589291
+67.3509
+align with cargo 
+-0.0374286	-0.0856892
+67.6028
+align with cargo 
+-0.0976044	0.149703
+align with cargo 
+0.378401	0.173779
+align with cargo 
+0.262051	0.176562
+67.0999
+align with cargo 
+0.0664654	0.16516
+75.6005
+align with cargo 
+0.137723	0.136391
+71.8533
+align with cargo 
+-0.0776919	0.0584005
+75.8542
+align with cargo 
+-0.014133	-0.051632
+79.1002
+align with cargo 
+0.158141	-0.0904456
+77.6049
+align with cargo 
+-0.0854252	0.15072
+73.35
+align with cargo 
+-0.296093	-0.091203
+78.3536
+align with cargo 
+-0.00673843	0.149488
+78.6016
+align with cargo 
+0.0956946	0.0721122
+82.3503
+align with cargo 
+-0.0771397	-0.109281
+78.8518
+align with cargo 
+-0.136527	-0.0727092
+79.1046
+align with cargo 
+-0.0899518	0.155633
+77.3551
+align with cargo 
+0.0679408	-0.0908048
+73.6049
+align with cargo 
+0.0608557	-0.0444478
+75.1038
+align with cargo 
+0.224138	-0.0686779
+75.8531
+align with cargo 
+0.0931762	0.127599
+78.857
+align with cargo 
+0.224359	0.118363
+78.8552
+align with cargo 
+0.0106071	0.0201301
+68.1069
+align with cargo 
+-0.0916482	0.0908459
+72.1057
+align with cargo 
+-0.0974902	-0.210535
+align with cargo 
+0.205073	0.0122852
+align with cargo 
+0.252677	0.0160346
+73.6019
+align with cargo 
+0.128522	-0.16302
+70.8517
+align with cargo 
+-0.103866	0.0584343
+74.1033
+align with cargo 
+-0.00848291	-0.266159
+74.1493
+align with cargo 
+-0.107593	0.0560095
+74.9968
+align with cargo 
+-0.171797	0.164569
+73.5999
+align with cargo 
+-0.0876882	-0.11192
+72.0985
+align with cargo 
+0.105359	-0.122397
+72.6028
+align with cargo 
+-0.203995	-0.107675
+80.8513
+align with cargo 
+0.00557757	0.190005
+73.8554
+align with cargo 
+0.0646055	-0.100772
+71.3482
+align with cargo 
+0.0225601	0.0521732
+67.6007
+align with cargo 
+0.0638853	0.0350015
+67.1034
+align with cargo 
+0.0322647	0.1001
+67.8532
+align with cargo 
+-0.03978	-0.0209993
+66.8534
+align with cargo 
+-0.036008	0.179083
+63.1014
+align with cargo 
+0.14138	0.178683
+66.0999
+align with cargo 
+-0.0764452	0.0935433
+67.3487
+align with cargo 
+0.0343742	-0.211019
+65.8505
+align with cargo 
+-0.0450265	-0.163368
+75.8464
+align with cargo 
+0.0550171	-0.124824
+align with cargo 
+0.853307	-0.227478
+align with cargo 
+0.771211	-0.0526224
+78.1043
+align with cargo 
+0.175154	0.117679
+80.0993
+align with cargo 
+0.126832	0.0524017
+79.8493
+align with cargo 
+0.141027	0.0494286
+79.3503
+align with cargo 
+-0.107035	-0.23683
+74.1008
+align with cargo 
+0.108027	-0.05759
+79.3494
+align with cargo 
+0.0522031	-0.0252513
+80.5963
+align with cargo 
+0.0817908	-0.203834
+80.099
+align with cargo 
+0.0492387	-0.0374343
+82.846
+align with cargo 
+0.0515226	-0.000230674
+77.8477
+align with cargo 
+-0.0345038	-0.0753155
+80.853
+align with cargo 
+-0.133702	0.0349946
+80.6023
+align with cargo 
+0.047877	-0.0190332
+77.6016
+align with cargo 
+0.0276353	0.139188
+79.1026
+align with cargo 
+0.208761	0.0152355
+74.6039
+align with cargo 
+0.0983028	-0.0400591
+76.6031
+align with cargo 
+-0.00138329	-0.0225802
+70.6036
+align with cargo 
+-0.0287635	-0.129544
+79.6028
+align with cargo 
+-0.0472592	0.106641
+76.5036
+align with cargo 
+-0.113858	0.0906567
+74.3522
+align with cargo 
+-0.183035	-0.0130017
+align with cargo 
+0.44068	-0.255125
+align with cargo 
+0.543883	-0.293045
+77.8534
+align with cargo 
+-0.00502272	-0.000301464
+76.6019
+align with cargo 
+0.0727349	-0.00975643
+81.103
+align with cargo 
+-0.131757	0.0111187
+82.0971
+align with cargo 
+0.121231	-0.182769
+78.3508
+align with cargo 
+-0.103467	-0.0648707
+78.6
+align with cargo 
+-0.119923	-0.0777817
+79.1026
+align with cargo 
+0.17811	-0.223898
+78.1043
+align with cargo 
+-0.100211	0.154504
+78.1047
+align with cargo 
+-0.106133	0.041149
+79.3528
+align with cargo 
+0.0215908	0.101703
+82.3522
+align with cargo 
+-0.0899523	0.143757
+85.3523
+align with cargo 
+0.0151587	0.0477368
+84.8526
+align with cargo 
+-0.0660846	0.0101509
+88.603
+align with cargo 
+-0.0289888	0.0944735
+85.1029
+align with cargo 
+-0.00318253	-0.122543
+88.8525
+align with cargo 
+0.227858	-0.0890075
+81.5986
+align with cargo 
+-0.00718608	-0.0086848
+100.598
+align with cargo 
+-0.16124	0.242235
+88.352
+align with cargo 
+-0.210031	-0.0839197
+89.2472
+align with cargo 
+0.07388	-0.171169
+align with cargo 
+1.13023	0.223738
+align with cargo 
+1.1515	0.363811
+88.349
+align with cargo 
+-0.146885	-0.146417
+87.1003
+align with cargo 
+-0.446759	-0.0868429
+89.0987
+align with cargo 
+0.339827	0.0525101
+95.3454
+align with cargo 
+-0.102849	-0.0893085
+98.0951
+align with cargo 
+-0.048654	0.0394558
+99.5936
+align with cargo 
+-0.00673853	-0.183288
+101.345
+align with cargo 
+-0.0343406	0.0661671
+86.6507
+align with cargo 
+-0.0289471	-0.0204222
+98.3387
+align with cargo 
+0.117365	0.0610686
+95.3557
+align with cargo 
+-0.0337854	0.0980808
+94.0996
+align with cargo 
+-0.0430776	0.0036606
+101.105
+align with cargo 
+0.133314	0.212057
+96.3575
+align with cargo 
+0.156361	0.185477
+93.6076
+align with cargo 
+0.0604127	0.137466
+101.855
+align with cargo 
+0.0306803	0.140102
+106.855
+align with cargo 
+0.113249	-0.0569589
+102.608
+align with cargo 
+-0.037752	-0.0901857
+90.1058
+align with cargo 
+-0.086901	0.212362
+109.602
+align with cargo 
+0.219307	0.0691996
+112.602
+align with cargo 
+-0.123299	0.147895
+align with cargo 
+0.39411	-0.0165844
+align with cargo 
+0.580551	-0.157604
+97.3524
+align with cargo 
+0.0401826	0.0944331
+99.6044
+align with cargo 
+-0.0192166	-0.12094
+91.8537
+align with cargo 
+0.0257279	0.0364872
+92.3502
+align with cargo 
+-0.0686368	-0.307779
+90.1012
+align with cargo 
+0.001697	-0.304823
+82.1018
+align with cargo 
+0.0410319	0.0963251
+78.3525
+align with cargo 
+0.0241703	-0.139746
+95.3524
+align with cargo 
+-0.0987349	-0.0614495
+93.3512
+align with cargo 
+-0.0867209	-0.0583881
+104.351
+align with cargo 
+-0.117956	0.132157
+98.3511
+align with cargo 
+0.0699724	0.0484818
+86.8536
+align with cargo 
+-0.0863575	-0.0394836
+87.6021
+align with cargo 
+-0.134946	-0.167499
+77.3465
+align with cargo 
+-0.0145016	-0.10053
+89.5983
+align with cargo 
+0.0246443	-0.00180459
+80.601
+align with cargo 
+0.0431366	-0.163341
+76.3519
+align with cargo 
+-0.188414	0.0455243
+80.3502
+align with cargo 
+-0.083224	0.00761153
+76.098
+align with cargo 
+-0.0394167	-0.132439
+85.0978
+align with cargo 
+0.143913	0.150703
+align with cargo 
+0.743554	-0.0160658
+align with cargo 
+0.642626	-0.215736
+79.3569
+align with cargo 
+0.0432807	0.0471181
+80.1022
+align with cargo 
+-0.0161681	0.0611124
+81.5999
+align with cargo 
+0.00344717	0.0111839
+83.8498
+align with cargo 
+0.0312497	-0.0849079
+73.1019
+align with cargo 
+0.0418554	-0.169901
+74.8932
+align with cargo 
+-0.0921046	0.0297226
+74.8501
+align with cargo 
+-0.133667	-0.0913852
+82.1039
+align with cargo 
+0.191054	0.0938038
+81.8531
+align with cargo 
+0.050663	-0.00513369
+77.504
+align with cargo 
+-0.0144435	-0.0188544
+74.1039
+align with cargo 
+-0.0681246	0.100924
+79.8521
+align with cargo 
+0.186484	0.0973387
+86.8475
+align with cargo 
+-0.0591971	-0.304147
+84.0973
+align with cargo 
+0.0985044	-0.222228
+85.3459
+align with cargo 
+-0.0156257	-0.0705272
+82.1004
+align with cargo 
+0.168053	-0.153579
+76.3507
+align with cargo 
+-0.14087	-0.0206826
+73.8046
+align with cargo 
+-0.100516	0.0347882
+71.1014
+align with cargo 
+0.127449	0.00777444
+75.8496
+align with cargo 
+-0.169237	-0.152919
+align with cargo 
+0.556611	0.130939
+align with cargo 
+0.781524	-0.0453545
+74.6021
+align with cargo 
+0.0346368	-0.0776786
+70.3526
+align with cargo 
+0.0735684	0.081759
+71.3518
+align with cargo 
+-0.0185427	-0.0855746
+75.3512
+align with cargo 
+-0.0623955	-0.179777
+76.3539
+align with cargo 
+-0.0301185	0.0985394
+74.8546
+align with cargo 
+-0.0148229	0.139694
+78.6044
+align with cargo 
+0.0270669	0.0816118
+82.3531
+align with cargo 
+-0.0291534	-0.249679
+85.1113
+align with cargo 
+0.0904272	-0.226041
+98.0989
+align with cargo 
+0.00506641	0.00190539
+90.6028
+align with cargo 
+0.0618661	0.0814325
+89.8494
+align with cargo 
+0.0446547	-0.14308
+92.3479
+align with cargo 
+0.0380554	-0.0105802
+95.3396
+align with cargo 
+-0.0768968	-0.145489
+86.089
+align with cargo 
+0.1527	-0.0619736
+85.847
+align with cargo 
+-0.107819	-0.0200005
+83.3409
+align with cargo 
+0.171469	0.0783184
+94.1017
+align with cargo 
+0.156292	-0.160253
+86.3505
+align with cargo 
+-0.0604086	-0.2657
+80.1
+align with cargo 
+0.127174	-0.088645
+align with cargo 
+0.716414	0.116057
+align with cargo 
+0.271855	0.171443
+75.346
+align with cargo 
+0.0034417	0.0120352
+72.5964
+align with cargo 
+-0.0867565	-0.0317714
+69.8526
+align with cargo 
+-0.248318	0.193321
+71.3533
+align with cargo 
+0.0563195	0.0738644
+70.6027
+align with cargo 
+0.00548884	-0.0280577
+74.1013
+align with cargo 
+0.0108594	-0.214816
+72.3491
+align with cargo 
+0.0125241	0.0677155
+70.853
+align with cargo 
+0.146352	0.0682225
+72.3514
+align with cargo 
+0.186606	-0.00219218
+73.8505
+align with cargo 
+-0.00174018	-0.0880359
+72.0969
+align with cargo 
+-0.135854	-0.205292
+79.5944
+align with cargo 
+-0.0613229	0.0801176
+77.0979
+align with cargo 
+0.210296	-0.0186582
+74.8469
+align with cargo 
+-0.312381	0.0433888
+73.3477
+align with cargo 
+0.198729	0.00723578
+74.8471
+align with cargo 
+-0.0965869	0.140502
+78.5982
+align with cargo 
+0.105471	0.148727
+76.6026
+align with cargo 
+0.0803906	-0.0622239
+76.5985
+align with cargo 
+0.0354173	0.0270147
+76.8418
+align with cargo 
+0.0129722	0.223091
+align with cargo 
+0.252647	-0.196983
+align with cargo 
+0.716332	-0.321418
+87.8549
+align with cargo 
+-0.139822	0.0221367
+88.1088
+align with cargo 
+-0.0979544	-0.0262589
+88.1025
+align with cargo 
+-0.0674133	0.0231009
+89.6018
+align with cargo 
+0.179769	-0.0776581
+90.3535
+align with cargo 
+0.0628333	0.0115434
+92.0969
+align with cargo 
+0.0171826	0.109611
+95.0964
+align with cargo 
+-0.0900596	-0.110644
+90.6026
+align with cargo 
+-0.237578	0.0640105
+91.8463
+align with cargo 
+0.00379644	0.106207
+93.3426
+align with cargo 
+-0.0909614	0.0378545
+91.8435
+align with cargo 
+-0.0910027	0.0447519
+88.0959
+align with cargo 
+0.00730938	0.0705969
+90.844
+align with cargo 
+0.120839	0.124102
+88.0957
+align with cargo 
+-0.0662315	-0.00608322
+83.5988
+align with cargo 
+-0.0297694	0.0173629
+93.8494
+align with cargo 
+0.0466125	0.0316659
+92.6076
+align with cargo 
+0.035303	-0.15112
+84.6063
+align with cargo 
+0.0266117	-0.039778
+87.8563
+align with cargo 
+0.037846	0.156458
+85.856
+align with cargo 
+-0.023512	-0.140396
+align with cargo 
+0.690657	-0.0263551
+align with cargo 
+0.795235	0.0484745
+68.1013
+align with cargo 
+-0.0428793	-0.136921
+67.1012
+align with cargo 
+-0.0170152	-0.0275626
+69.8507
+align with cargo 
+-0.0324937	-0.161288
+71.8487
+align with cargo 
+-0.273387	-0.153499
+81.8528
+align with cargo 
+-0.145732	-0.203877
+78.0973
+align with cargo 
+-0.0937163	0.0600854
+77.0967
+align with cargo 
+0.0123835	-0.181015
+82.3487
+align with cargo 
+0.2104	0.0781352
+80.3521
+align with cargo 
+-0.000846576	0.224064
+74.8482
+align with cargo 
+0.103092	0.177917
+69.598
+align with cargo 
+-0.0117553	0.0117005
+72.599
+align with cargo 
+-0.0208759	0.0793748
+71.8451
+align with cargo 
+-0.0833749	0.047176
+80.3527
+align with cargo 
+-0.182272	-0.0653295
+81.85
+align with cargo 
+0.217998	0.0192053
+88.5989
+align with cargo 
+-0.060309	-0.0610782
+98.0989
+align with cargo 
+0.23338	-0.0699181
+94.5977
+align with cargo 
+0.0439687	-0.0588732
+98.5965
+align with cargo 
+-0.0184907	0.003556
+85.8497
+align with cargo 
+0.0089453	0.0236571
+align with cargo 
+0.400429	0.381946
+align with cargo 
+0.529188	0.0174401
+74.1034
+align with cargo 
+-0.0847061	0.271288
+75.603
+align with cargo 
+-0.00385452	0.0847914
+77.1022
+align with cargo 
+0.0329737	-0.097128
+68.0986
+align with cargo 
+-0.131513	-0.107183
+70.8485
+align with cargo 
+-0.181616	0.0088023
+73.3467
+align with cargo 
+-0.041895	0.0933345
+74.0983
+align with cargo 
+0.0302119	0.0487898
+70.3499
+align with cargo 
+-0.0700794	0.140569
+78.3494
+align with cargo 
+-0.0580642	0.108928
+80.8512
+align with cargo 
+-0.0627082	-0.151736
+71.8487
+align with cargo 
+-0.00141994	-0.0589527
+77.5963
+align with cargo 
+0.0371161	0.0781975
+76.5971
+align with cargo 
+0.122768	-0.116379
+71.0965
+align with cargo 
+-0.00201279	-0.0990666
+68.8495
+align with cargo 
+0.136265	0.204213
+75.5986
+align with cargo 
+-0.0787576	-0.137643
+72.6018
+align with cargo 
+-0.021301	0.041921
+70.1019
+align with cargo 
+0.194752	-0.153395
+70.8558
+align with cargo 
+-0.118986	0.0941136
+70.103
+align with cargo 
+-0.0902547	0.110136
+align with cargo 
+0.86599	0.220111
+align with cargo 
+0.837905	-0.127023
+72.0999
+align with cargo 
+-0.00972122	-0.04008
+71.3502
+align with cargo 
+0.146072	0.258081
+77.851
+align with cargo 
+-0.0733253	-0.0150764
+76.8551
+align with cargo 
+-0.0955775	-0.0305944
+71.8501
+align with cargo 
+0.0445239	0.131514
+79.8517
+align with cargo 
+-0.11561	0.267793
+82.3535
+align with cargo 
+-0.110799	-0.187926
+85.8521
+align with cargo 
+-0.206037	0.235018
+85.6053
+align with cargo 
+0.0124841	-0.162259
+98.3534
+align with cargo 
+0.0510127	-0.0761604
+95.3557
+align with cargo 
+0.113058	-0.111583
+89.6077
+align with cargo 
+-0.115324	0.115053
+84.6047
+align with cargo 
+0.0557015	0.0925027
+80.348
+align with cargo 
+-0.158006	0.0866686
+90.5981
+align with cargo 
+-0.0795714	0.161659
+87.0961
+align with cargo 
+0.0957021	0.112593
+99.595
+align with cargo 
+-0.0711054	-0.0585145
+101.342
+align with cargo 
+-0.0122754	-0.0259707
+95.8427
+align with cargo 
+0.0422633	0.136045
+84.5988
+align with cargo 
+0.103085	-0.0802889
+align with cargo 
+0.415703	-0.0162875
+align with cargo 
+0.847169	0.0571075
+73.0963
+align with cargo 
+0.0152868	-0.0924021
+77.3454
+align with cargo 
+-0.00211431	0.0118247
+70.1013
+align with cargo 
+0.108367	0.128403
+73.1008
+align with cargo 
+-0.0314001	0.129208
+70.1026
+align with cargo 
+-0.147674	-0.0748225
+73.5963
+align with cargo 
+0.0232959	0.0167378
+78.8439
+align with cargo 
+-0.165707	0.145746
+76.0982
+align with cargo 
+-0.00297958	0.0118238
+78.8484
+align with cargo 
+-0.134707	-0.0912698
+76.5938
+align with cargo 
+-0.0108869	0.101887
+77.2435
+align with cargo 
+-0.059981	0.0487272
+75.5973
+align with cargo 
+0.0260497	-0.0704027
+83.098
+align with cargo 
+-0.046846	-0.19694
+79.0949
+align with cargo 
+0.0662538	0.0457066
+77.8467
+align with cargo 
+0.0796789	-0.0408069
+75.6003
+align with cargo 
+0.0730217	-0.0944695
+80.3469
+align with cargo 
+-0.00956617	-0.00950379
+78.3478
+align with cargo 
+-0.0996963	0.0048954
+74.8505
+align with cargo 
+-0.128578	0.112221
+70.1024
+align with cargo 
+-0.0599631	0.135033
+align with cargo 
+0.214596	-0.0676149
+align with cargo 
+0.417676	-0.396331
+69.5994
+align with cargo 
+-0.00348683	-0.0815742
+74.3496
+align with cargo 
+0.0195076	-0.0181539
+71.0983
+align with cargo 
+-0.0253795	0.0257176
+66.1001
+align with cargo 
+0.0848348	0.0094432
+67.6019
+align with cargo 
+-0.0941525	-0.124275
+69.8519
+align with cargo 
+0.0978379	-0.189888
+71.6024
+align with cargo 
+0.0697118	0.123842
+69.849
+align with cargo 
+0.0974444	-0.0109488
+68.1
+align with cargo 
+0.0933585	-0.079909
+73.5974
+align with cargo 
+0.214386	-0.00678356
+74.5965
+align with cargo 
+-0.148536	0.0435919
+70.0963
+align with cargo 
+-0.0116532	0.139866
+66.8493
+align with cargo 
+-0.0356395	-0.0853744
+71.8484
+align with cargo 
+-0.015343	0.121214
+73.3473
+align with cargo 
+-0.22889	-0.0495685
+69.8585
+align with cargo 
+-0.0551716	0.192192
+70.357
+align with cargo 
+-0.0676435	0.0211036
+74.1036
+align with cargo 
+0.0252996	-0.018247
+74.101
+align with cargo 
+0.142955	-0.189598
+72.3517
+align with cargo 
+0.0852953	-0.134733
+align with cargo 
+0.835861	-0.171211
+align with cargo 
+0.625288	-0.472723
+77.0033
+align with cargo 
+0.0885373	0.103243
+83.6005
+align with cargo 
+0.173361	0.101915
+84.6012
+align with cargo 
+0.0143329	-0.0532442
+81.3519
+align with cargo 
+0.101905	0.109854
+80.3477
+align with cargo 
+0.195587	0.194935
+82.3931
+align with cargo 
+-0.206496	-0.12319
+75.2421
+align with cargo 
+0.091573	-0.0224052
+88.0473
+align with cargo 
+0.104511	-0.0790273
+88.3476
+align with cargo 
+0.0803331	-0.109451
+73.7459
+align with cargo 
+0.0883844	0.28271
+87.849
+align with cargo 
+-0.0144903	-0.0291947
+96.8513
+align with cargo 
+0.0841474	0.0195963
+93.8476
+align with cargo 
+0.186705	0.0458704
+99.0951
+align with cargo 
+-0.141708	0.0895615
+97.3496
+align with cargo 
+-0.0271523	-0.0469696
+87.4991
+align with cargo 
+0.0168188	-0.114128
+80.505
+align with cargo 
+0.161631	0.180352
+84.1021
+align with cargo 
+0.0790514	-0.0096975
+89.5985
+align with cargo 
+0.163416	-0.0482771
+85.601
+align with cargo 
+-0.026402	0.0462354
+align with cargo 
+0.600902	-0.254476
+align with cargo 
+0.603688	-0.551639
+87.349
+align with cargo 
+0.0773956	-0.00380508
+85.0972
+align with cargo 
+-0.000870508	-0.0973344
+85.8503
+align with cargo 
+-0.107981	0.0600995
+82.1006
+align with cargo 
+-0.0541848	0.0119112
+85.0974
+align with cargo 
+-0.0398823	-0.0239996
+74.8531
+align with cargo 
+-0.0144822	-0.305415
+78.8514
+align with cargo 
+-0.035469	0.0577455
+76.102
+align with cargo 
+0.0667042	0.00344813
+70.3503
+align with cargo 
+-0.0285002	-0.00693626
+72.6024
+align with cargo 
+0.274186	-0.0797858
+75.356
+align with cargo 
+0.0123934	-0.00357426
+66.8494
+align with cargo 
+-0.0356385	0.165282
+80.1053
+align with cargo 
+-0.0286107	-0.143449
+74.1023
+align with cargo 
+0.300079	-0.0452825
+76.657
+align with cargo 
+-0.0577099	0.11122
+71.6017
+align with cargo 
+0.0864416	0.0611033
+66.8535
+align with cargo 
+-0.0393197	-0.230795
+69.3552
+align with cargo 
+-0.164754	0.0827608
+71.1081
+align with cargo 
+0.0213297	0.00272353
+71.1051
+align with cargo 
+0.0795417	0.116044
+align with cargo 
+1.02357	0.0293543
+align with cargo 
+0.961387	-0.0294936
+174.597
+align with cargo 
+0.0735566	-0.160433
+210.097
+align with cargo 
+0.307786	0.14128
+230.848
+align with cargo 
+0.102667	-0.0198598
+259.596
+align with cargo 
+-0.084461	0.145038
+267.341
+align with cargo 
+-0.0551578	-0.105055
+263.601
+align with cargo 
+-0.145695	-0.243582
+266.356
+align with cargo 
+0.00845552	-0.0324563
+289.717
+align with cargo 
+0.0825916	0.11109
+265.914
+align with cargo 
+0.0876966	0.0867756
+241.356
+align with cargo 
+0.0473076	-0.116875
+259.097
+align with cargo 
+-0.176683	0.0342525
+259.851
+align with cargo 
+-0.102335	0.0848954
+253.356
+align with cargo 
+0.0204813	0.00118089
+245.355
+align with cargo 
+0.0699683	-0.197305
+217.063
+align with cargo 
+-0.0568225	-0.103712
+203.871
+align with cargo 
+0.0958626	0.127585
+176.572
+align with cargo 
+0.122616	-0.00632218
+179.344
+align with cargo 
+-0.1174	0.0470394
+168.606
+align with cargo 
+0.0704569	-0.0145908
+147.855
+align with cargo 
+-0.0238224	-0.108072
+align with cargo 
+0.398429	-0.0714523
+align with cargo 
+0.451399	-0.0953682
+119.166
+align with cargo 
+-0.00677458	0.0140327
+129.314
+align with cargo 
+0.250273	-0.0613161
+123.857
+align with cargo 
+-0.122873	0.114753
+130.106
+align with cargo 
+0.0623238	-0.221736
+123.351
+align with cargo 
+0.0403682	0.11894
+132.856
+align with cargo 
+0.120441	0.0412637
+149.359
+align with cargo 
+-0.0680395	-0.160699
+171.357
+align with cargo 
+0.158568	-0.134492
+151.858
+align with cargo 
+0.0430682	0.0545837
+138.353
+align with cargo 
+0.135103	-0.161809
+142.856
+align with cargo 
+0.0853668	0.0885578
+140.106
+align with cargo 
+-0.129091	0.102467
+144.856
+align with cargo 
+-0.0301567	0.0693437
+141.104
+align with cargo 
+-0.134944	-0.00479683
+136.858
+align with cargo 
+0.0474373	0.0194397
+140.853
+align with cargo 
+-0.0451722	0.0467109
+116.605
+align with cargo 
+0.164422	-0.0415799
+144.85
+align with cargo 
+-0.124767	0.125233
+149.853
+align with cargo 
+-0.000991183	-0.0285563
+140.354
+align with cargo 
+-0.187888	0.162185
+align with cargo 
+0.472237	-0.0981243
+align with cargo 
+0.581129	0.0480896
+126.354
+align with cargo 
+-0.0429971	-0.040946
+132.497
+align with cargo 
+-0.130811	-0.049749
+110.38
+align with cargo 
+-0.0510656	-0.0714095
+102.101
+align with cargo 
+0.173395	-0.0518201
+104.597
+align with cargo 
+-0.176253	-0.175564
+129.103
+align with cargo 
+0.107826	-0.183552
+141.353
+align with cargo 
+-0.0104387	-0.00551157
+157.104
+align with cargo 
+-0.0347954	-0.237024
+173.856
+align with cargo 
+0.0190993	0.149155
+147.355
+align with cargo 
+0.197407	0.0388194
+142.601
+align with cargo 
+-0.0181513	0.00401074
+126.352
+align with cargo 
+-0.248728	0.0316946
+127.346
+align with cargo 
+-0.0072882	0.151765
+126.602
+align with cargo 
+0.0548644	0.1195
+128.496
+align with cargo 
+0.123734	0.19071
+126.589
+align with cargo 
+0.252146	-0.0457498
+131.091
+align with cargo 
+0.242207	-0.0565705
+125.353
+align with cargo 
+-0.265381	-0.0105131
+134.093
+align with cargo 
+-0.0589123	0.179992
+137.592
+align with cargo 
+-0.138043	-0.0378831
+align with cargo 
+0.816182	-0.0489352
+align with cargo 
+1.35086	0.194978
+152.844
+align with cargo 
+0.0210411	0.183204
+146.098
+align with cargo 
+0.123068	0.0455233
+131.81
+align with cargo 
+0.0993365	0.0562364
+130.145
+align with cargo 
+-0.0243056	0.0844501
+143.849
+align with cargo 
+0.236122	-0.242545
+127.352
+align with cargo 
+-0.128083	0.298315
+137.102
+align with cargo 
+-0.0257928	0.0159119
+135.846
+align with cargo 
+0.138038	0.0263051
+134.1
+align with cargo 
+0.264199	0.0205299
+130.846
+align with cargo 
+-0.043067	-0.120522
+124.004
+align with cargo 
+-0.232449	-0.0811623
+128.353
+align with cargo 
+0.0594863	-0.0501781
+118.898
+align with cargo 
+0.284045	0.0721779
+120.25
+align with cargo 
+0.12911	0.0484197
+126.107
+align with cargo 
+0.16516	-0.073914
+131.351
+align with cargo 
+0.332418	-0.267343
+119.103
+align with cargo 
+0.185413	0.208973
+124.348
+align with cargo 
+0.167739	0.0833093
+139.103
+align with cargo 
+-0.125052	0.00701447
+132.41
+align with cargo 
+0.0417466	0.0280829
+align with cargo 
+0.607544	0.128683
+align with cargo 
+0.361295	-0.0182299
+147.745
+align with cargo 
+-0.129862	0.164464
+150.597
+align with cargo 
+-0.14072	0.0390452
+140.604
+align with cargo 
+0.0357569	-0.092349
+141.847
+align with cargo 
+0.0769494	0.152941
+144.342
+align with cargo 
+0.132058	0.0321418
+137.297
+align with cargo 
+0.163742	0.0023962
+139.354
+align with cargo 
+0.272162	-0.102923
+136.628
+align with cargo 
+0.0470868	0.18614
+126.492
+align with cargo 
+-0.00610655	-0.0446321
+125.848
+align with cargo 
+0.206822	0.136681
+128.35
+align with cargo 
+-0.0423334	0.0520408
+130.292
+align with cargo 
+0.0452409	-0.0657516
+129.337
+align with cargo 
+-0.0716205	0.0315996
+130.345
+align with cargo 
+0.0708954	0.0614671
+132.352
+align with cargo 
+0.149369	0.025397
+136.851
+align with cargo 
+-0.0958289	-0.0692834
+133.85
+align with cargo 
+0.110322	0.201464
+131.599
+align with cargo 
+0.0382766	-0.0819664
+140.347
+align with cargo 
+0.0257068	0.0235024
+129.107
+align with cargo 
+-0.0913625	0.0807592
+align with cargo 
+0.294446	-0.0372997
+align with cargo 
+0.503417	-0.451211
+120.602
+align with cargo 
+0.0406425	0.0341146
+117.36
+align with cargo 
+-0.0323266	-0.0658971
+114.359
+align with cargo 
+-0.0527988	0.101754
+118.115
+align with cargo 
+-0.0753231	-0.0961108
+112.609
+align with cargo 
+-0.0109103	0.0820857
+114.357
+align with cargo 
+0.0503124	0.0769329
+112.604
+align with cargo 
+0.0376862	0.138856
+109.354
+align with cargo 
+0.0815096	0.0265935
+114.854
+align with cargo 
+0.219583	-0.0400145
+118.097
+align with cargo 
+0.0282492	-0.234047
+119.844
+align with cargo 
+0.0853385	0.084686
+112.85
+align with cargo 
+-0.0766235	-0.1279
+115.851
+align with cargo 
+-0.0288718	0.123315
+117.851
+align with cargo 
+0.12887	0.0219995
+110.86
+align with cargo 
+0.133037	-0.042903
+118.604
+align with cargo 
+-0.176066	-0.0530866
+117.363
+align with cargo 
+-0.168515	0.110914
+115.003
+align with cargo 
+0.217083	-0.117005
+114.504
+align with cargo 
+-0.0123222	0.161519
+115.362
+align with cargo 
+0.0412546	-0.0471167
+align with cargo 
+0.809572	-0.0599375
+align with cargo 
+1.17624	-0.465418
+129.855
+align with cargo 
+-0.019678	0.0492992
+127.095
+align with cargo 
+-0.166356	0.0529528
+128.85
+align with cargo 
+0.0173653	-0.120136
+134.6
+align with cargo 
+0.0500731	0.0940442
+130.849
+align with cargo 
+0.0296657	-0.0423571
+131.61
+align with cargo 
+-0.2132	0.0154221
+126.355
+align with cargo 
+-0.03632	-0.0373831
+140.107
+align with cargo 
+0.24427	0.0203569
+139.609
+align with cargo 
+-0.0121258	0.0331271
+144.359
+align with cargo 
+-0.0452505	-0.0107961
+152.355
+align with cargo 
+0.0886912	-0.0728798
+135.603
+align with cargo 
+-0.0431703	0.0632982
+143.851
+align with cargo 
+-0.0611754	0.0476281
+142.094
+align with cargo 
+-0.152648	0.0205938
+135.603
+align with cargo 
+0.0382873	0.00304665
+136.852
+align with cargo 
+0.068957	-0.0582729
+146.599
+align with cargo 
+-0.0481135	-0.0174395
+138.598
+align with cargo 
+0.0922811	0.107691
+152.251
+align with cargo 
+0.0237087	-0.0491967
+144.854
+align with cargo 
+-0.0305829	-0.0914966
+align with cargo 
+0.492138	0.209197
+align with cargo 
+0.390536	0.0999672
+128.758
+align with cargo 
+0.11636	0.00562097
+127.595
+align with cargo 
+-0.0795775	-0.161915
+123.844
+align with cargo 
+-3.17358e-05	-0.0190508
+129.099
+align with cargo 
+-0.13853	0.0880477
+130.347
+align with cargo 
+0.104186	0.168216
+149.851
+align with cargo 
+-0.214545	0.113679
+135.352
+align with cargo 
+-0.0187814	-0.0986039
+117.144
+align with cargo 
+-0.121294	0.0717999
+115.595
+align with cargo 
+0.144676	-0.138574
+118.348
+align with cargo 
+0.0401152	0.00786009
+110.102
+align with cargo 
+0.133823	-0.00249231
+106.854
+align with cargo 
+0.0752944	0.0604227
+112.107
+align with cargo 
+-0.0266741	0.0374208
+113.606
+align with cargo 
+-0.19633	0.162994
+118.101
+align with cargo 
+0.177238	-0.185042
+107.708
+align with cargo 
+0.0756656	-0.210004
+108.097
+align with cargo 
+-0.023562	-0.238982
+102.854
+align with cargo 
+0.0781861	-0.0193999
+107.356
+align with cargo 
+-0.241472	-0.0608179
+102.603
+align with cargo 
+0.0495142	-0.0987274
+align with cargo 
+0.342721	-0.00543248
+align with cargo 
+0.817277	-0.020035
+113.251
+align with cargo 
+0.247807	0.0318618
+116.244
+align with cargo 
+0.127246	-0.0519926
+121.342
+align with cargo 
+0.0499848	-0.240051
+113.34
+align with cargo 
+-0.138648	0.0175101
+112.098
+align with cargo 
+0.0322058	0.142419
+112.34
+align with cargo 
+0.0700144	-0.0174186
+104.594
+align with cargo 
+-0.0156412	-0.0941307
+104.949
+align with cargo 
+-0.0890115	0.14201
+97.0989
+align with cargo 
+0.133015	0.135844
+105.104
+align with cargo 
+-0.116573	0.183417
+102.349
+align with cargo 
+-0.17262	-0.151669
+102.103
+align with cargo 
+0.0741785	0.15896
+103.595
+align with cargo 
+0.104066	0.0127393
+109.353
+align with cargo 
+-0.00726226	0.0808324
+105.1
+align with cargo 
+0.139509	0.0455686
+102.704
+align with cargo 
+0.0371459	0.0655031
+106.606
+align with cargo 
+-0.0498277	0.0619983
+97.9578
+align with cargo 
+0.0489094	-0.100695
+96.7138
+align with cargo 
+-0.186756	-0.187698
+89.1025
+align with cargo 
+-0.0810471	0.10102
+align with cargo 
+0.71677	0.166197
+align with cargo 
+0.491145	0.154549
+147.997
+align with cargo 
+-0.00221391	0.137785
+154.595
+align with cargo 
+-0.0125117	-0.0841943
+155.102
+align with cargo 
+-0.0257479	0.130935
+108.777
+align with cargo 
+0.0810875	0.0125463
+165.856
+align with cargo 
+-0.00666397	-0.100265
+162.103
+align with cargo 
+0.0666841	-0.0717865
+156.859
+align with cargo 
+0.0942775	-0.0530312
+170.1
+align with cargo 
+0.0458144	0.104063
+152.6
+align with cargo 
+0.066214	-0.132365
+150.351
+align with cargo 
+0.0184228	-0.0331599
+163.603
+align with cargo 
+0.134962	0.00109475
+194.846
+align with cargo 
+0.0748152	0.167987
+186.994
+align with cargo 
+-0.117715	-0.0743552
+174.85
+align with cargo 
+0.072398	-0.0815899
+199.097
+align with cargo 
+-0.217186	-0.0287033
+190.844
+align with cargo 
+0.00926206	0.0366553
+197.343
+align with cargo 
+-0.0856607	0.126914
+190.241
+align with cargo 
+0.0725175	0.272318
+168.345
+align with cargo 
+0.00148722	0.033601
+179.354
+align with cargo 
+0.0369559	0.0154991
+align with cargo 
+0.152872	-0.0895285
+align with cargo 
+0.39297	-0.465824
+191.863
+align with cargo 
+-0.111003	0.0355276
+162.359
+align with cargo 
+-0.174979	0.0674829
+163.102
+align with cargo 
+-0.0533195	-0.0994357
+155.109
+align with cargo 
+-0.122568	0.0244255
+143.603
+align with cargo 
+0.0669128	-0.0443677
+137.606
+align with cargo 
+0.12307	-0.159019
+127.355
+align with cargo 
+0.124	-0.010946
+121.351
+align with cargo 
+0.112838	-0.105651
+128.859
+align with cargo 
+0.0479408	0.24843
+115.985
+align with cargo 
+0.0248116	-0.0723842
+135.855
+align with cargo 
+-0.0558817	0.107503
+130.855
+align with cargo 
+0.217616	-0.195046
+121.353
+align with cargo 
+-0.0293943	-0.0692381
+130.35
+align with cargo 
+-0.138919	-0.0443178
+116.85
+align with cargo 
+0.0313244	0.115638
+116.111
+align with cargo 
+0.0284426	0.11451
+125.108
+align with cargo 
+-0.228032	-0.224554
+134.102
+align with cargo 
+0.0312608	0.0938087
+101.86
+align with cargo 
+0.116629	-0.064385
+105.851
+align with cargo 
+0.113449	-0.20245
+align with cargo 
+0.587983	-0.0796959
+align with cargo 
+0.625864	-0.312978
+107.857
+align with cargo 
+-0.0680128	-0.117019
+104.857
+align with cargo 
+-0.215964	0.0545359
+103.361
+align with cargo 
+0.200709	-0.0467019
+109.109
+align with cargo 
+-0.0575914	0.0370852
+109.354
+align with cargo 
+0.254102	-0.087266
+112.108
+align with cargo 
+-0.0634633	-0.0358244
+105.853
+align with cargo 
+-0.014268	-0.168638
+110.151
+align with cargo 
+0.256388	-0.103162
+104.349
+align with cargo 
+-0.0266073	-0.106527
+98.1036
+align with cargo 
+0.0663551	0.0737462
+105.354
+align with cargo 
+0.018812	0.0388428
+99.2928
+align with cargo 
+0.0839496	0.0329266
+106.098
+align with cargo 
+-0.096327	-0.0793503
+108.604
+align with cargo 
+0.0549907	0.224267
+103.101
+align with cargo 
+0.0116062	0.0197237
+100.854
+align with cargo 
+-0.0955924	-0.127033
+106.104
+align with cargo 
+0.0390858	0.0461514
+105.905
+align with cargo 
+-0.00852357	-0.0733286
+97.5587
+align with cargo 
+-0.0159523	-0.0975538
+98.6049
+align with cargo 
+0.185709	-0.0648253
+align with cargo 
+1.54749	0.014062
+align with cargo 
+1.03616	-0.156489
+115.104
+align with cargo 
+0.0175239	-0.0650717
+126.35
+align with cargo 
+0.0143404	0.0452567
+126.406
+align with cargo 
+0.181682	0.0116677
+127.347
+align with cargo 
+0.0741171	-0.0657275
+130.602
+align with cargo 
+0.0666212	-0.0313962
+122.759
+align with cargo 
+-0.00511354	-0.0124479
+123.01
+align with cargo 
+0.145918	-0.0366887
+125.35
+align with cargo 
+0.0768841	0.213221
+129.853
+align with cargo 
+0.124946	-0.248481
+119.352
+align with cargo 
+-0.0111004	0.0191458
+115.849
+align with cargo 
+-0.0782574	0.000250806
+123.34
+align with cargo 
+0.0727072	0.00652573
+115.593
+align with cargo 
+-0.096779	0.147592
+127.087
+align with cargo 
+-0.0629451	-0.104698
+129.842
+align with cargo 
+0.0624691	0.0204978
+126.34
+align with cargo 
+-0.0688033	0.0197584
+122.595
+align with cargo 
+-0.00155085	-0.00251813
+119.349
+align with cargo 
+-0.249483	0.237726
+119.848
+align with cargo 
+-0.141134	0.0374188
+118.602
+align with cargo 
+0.0950332	0.130452
+align with cargo 
+0.190482	-0.0929301
+align with cargo 
+0.212161	-0.259459
+163.352
+align with cargo 
+-0.104215	-0.101529
+165.346
+align with cargo 
+0.0989149	0.133472
+181.702
+align with cargo 
+0.185095	-0.0993085
+188.35
+align with cargo 
+0.0666348	-0.114806
+232.612
+align with cargo 
+0.0102968	-0.18268
+213.112
+align with cargo 
+0.0303654	-0.0879168
+230.112
+align with cargo 
+-0.0226759	-0.113199
+210.86
+align with cargo 
+0.0889219	-0.0693271
+212.601
+align with cargo 
+-0.0714904	-0.226149
+224.856
+align with cargo 
+0.00209007	0.000720873
+233.602
+align with cargo 
+0.149447	-0.0159141
+237.84
+align with cargo 
+-0.134596	0.210026
+249.84
+align with cargo 
+0.0443184	-0.0392982
+253.845
+align with cargo 
+-0.144183	-0.192599
+243.597
+align with cargo 
+0.133718	-0.0238798
+256.854
+align with cargo 
+-0.157029	-0.101149
+234.336
+align with cargo 
+-0.130463	0.00015099
+282.337
+align with cargo 
+0.168573	-0.10261
+300.177
+align with cargo 
+-0.104603	0.0483938
+378.338
+align with cargo 
+-0.157446	0.118426
+align with cargo 
+0.844495	0.0496238
+align with cargo 
+0.861917	0.0874622
+344.36
+align with cargo 
+0.02766	0.117661
+299.61
+align with cargo 
+0.10205	-0.0288702
+293.111
+align with cargo 
+0.0187061	-0.212256
+287.619
+align with cargo 
+0.0251214	0.207964
+252.863
+align with cargo 
+0.0125669	-0.108422
+188.536
+align with cargo 
+0.0101906	-0.0869347
+143.511
+align with cargo 
+0.0866535	0.174733
+110.362
+align with cargo 
+-0.0425327	-0.0373637
+106.859
+align with cargo 
+0.157005	-0.311862
+106.358
+align with cargo 
+0.0307581	0.057053
+105.108
+align with cargo 
+-0.00768504	-0.0904978
+112.106
+align with cargo 
+-0.0701488	-0.136218
+110.605
+align with cargo 
+0.0735784	-0.104397
+111.008
+align with cargo 
+-0.0475367	0.160266
+102.601
+align with cargo 
+-0.122733	-0.0757451
+104.856
+align with cargo 
+-0.111759	-0.0300494
+100.605
+align with cargo 
+-0.0393774	-0.157001
+93.3537
+align with cargo 
+0.0579686	-0.119621
+96.1032
+align with cargo 
+0.295579	-0.104798
+103.352
+align with cargo 
+-0.0403173	-0.00263568
+align with cargo 
+1.23952	0.0747353
+align with cargo 
+1.66293	-0.0566121
+124.594
+align with cargo 
+0.00607219	0.12996
+132.597
+align with cargo 
+0.0475616	0.131018
+120.205
+align with cargo 
+-0.137897	-0.0406911
+126.095
+align with cargo 
+-0.0942728	0.025962
+112.596
+align with cargo 
+-0.0365435	-0.0494307
+116.349
+align with cargo 
+-0.0523077	-0.0692959
+113.599
+align with cargo 
+-0.101893	0.167656
+122.096
+align with cargo 
+-0.0114718	-0.220602
+128.098
+align with cargo 
+-0.207913	-0.0254606
+119.602
+align with cargo 
+0.135748	-0.0390387
+126.355
+align with cargo 
+-0.044951	0.179011
+139.354
+align with cargo 
+0.065872	0.0733408
+146.306
+align with cargo 
+0.265707	0.0703205
+135.449
+align with cargo 
+-0.0754106	-0.207583
+121.849
+align with cargo 
+0.00902637	0.321673
+116.147
+align with cargo 
+0.0172115	0.100476
+116.101
+align with cargo 
+0.0115756	-0.0121963
+103.356
+align with cargo 
+-0.0922721	-0.0925894
+109.855
+align with cargo 
+0.150038	0.133839
+106.355
+align with cargo 
+0.105046	0.0208906
+align with cargo 
+0.491613	-0.0648386
+align with cargo 
+0.421057	0.161875
+112.343
+align with cargo 
+0.000971233	-0.277433
+112.598
+align with cargo 
+-0.0142247	-0.140792
+108.845
+align with cargo 
+-0.0242139	0.0344213
+103.603
+align with cargo 
+-0.0264775	-0.0577277
+106.351
+align with cargo 
+0.0466085	-0.13068
+103.346
+align with cargo 
+-0.203006	-0.098916
+106.85
+align with cargo 
+0.0514928	0.0213084
+103.602
+align with cargo 
+-0.105788	0.056323
+101.852
+align with cargo 
+0.30786	-0.00910792
+103.104
+align with cargo 
+0.0963963	0.0557531
+97.3532
+align with cargo 
+-0.0749277	0.0310301
+97.5974
+align with cargo 
+-0.0843518	-0.152293
+101.6
+align with cargo 
+0.129185	0.0737919
+109.1
+align with cargo 
+-0.193785	-0.10262
+105.099
+align with cargo 
+-0.214586	-0.252176
+106.102
+align with cargo 
+-0.316305	0.0388991
+106.351
+align with cargo 
+0.0129628	0.0209115
+106.847
+align with cargo 
+0.115525	0.341361
+106.349
+align with cargo 
+-0.137056	-0.185177
+102.352
+align with cargo 
+0.0639273	-0.0417659
+align with cargo 
+0.271864	0.0558182
+align with cargo 
+0.978227	-0.209866
+113.1
+align with cargo 
+0.0288269	-0.076653
+118.348
+align with cargo 
+-0.12173	-0.049318
+110.349
+align with cargo 
+-0.0779794	0.0966812
+124.601
+align with cargo 
+0.240029	-0.0051184
+121.097
+align with cargo 
+0.116098	-0.0461366
+118.547
+align with cargo 
+-0.245294	-0.165175
+116.601
+align with cargo 
+-0.0442685	-0.130893
+114.348
+align with cargo 
+0.0781393	-0.127039
+121.606
+align with cargo 
+-0.00836929	-0.0123192
+117.107
+align with cargo 
+0.00836822	-0.0176918
+120.856
+align with cargo 
+-0.0740459	0.0345324
+113.11
+align with cargo 
+0.156321	-0.0115713
+115.36
+align with cargo 
+-0.0753631	0.0405428
+113.757
+align with cargo 
+0.0862236	-0.00421705
+112.105
+align with cargo 
+-0.0128515	-0.0986367
+114.766
+align with cargo 
+-0.125101	-0.124963
+118.758
+align with cargo 
+-0.0312348	0.0422265
+115.103
+align with cargo 
+0.0240889	-0.0390601
+117.254
+align with cargo 
+0.00376664	-0.0375545
+117.595
+align with cargo 
+-0.101469	-0.0937226
+align with cargo 
+0.518038	0.0772531
+align with cargo 
+0.766889	-0.051648
+110.496
+align with cargo 
+0.0796969	-0.307627
+123.849
+align with cargo 
+-0.160379	0.187937
+112.255
+align with cargo 
+-0.0778851	-0.115525
+123.105
+align with cargo 
+0.0864837	0.0641225
+116.503
+align with cargo 
+0.058434	0.0952753
+120.351
+align with cargo 
+0.184507	0.0757832
+126.602
+align with cargo 
+0.0754572	0.0176524
+115.856
+align with cargo 
+0.0762529	-0.0342695
+112.259
+align with cargo 
+0.149851	-0.111969
+117.262
+align with cargo 
+-0.0693603	-0.172638
+104.608
+align with cargo 
+0.0199714	-0.0452223
+96.6086
+align with cargo 
+0.0805033	-0.143275
+114.11
+align with cargo 
+-0.0878689	-0.0484236
+111.103
+align with cargo 
+-0.0630589	-0.0236618
+115.607
+align with cargo 
+-0.0642546	-0.0345981
+117.853
+align with cargo 
+-0.0416213	-0.0358897
+112.101
+align with cargo 
+-0.106973	-0.0650244
+108.348
+align with cargo 
+0.0343769	-0.176581
+107.847
+align with cargo 
+0.258466	-0.0299311
+113.847
+align with cargo 
+-0.237657	0.132974
+align with cargo 
+0.666564	-0.415356
+align with cargo 
+0.63557	-0.415619
+118.352
+align with cargo 
+0.143966	0.0917658
+117.094
+align with cargo 
+0.127958	0.0566971
+118.349
+align with cargo 
+0.0853555	0.15539
+119.252
+align with cargo 
+-0.211303	-0.211703
+117.995
+align with cargo 
+-0.0662628	0.0543805
+116.355
+align with cargo 
+0.100119	-0.062425
+117.353
+align with cargo 
+-0.159302	-0.160159
+117.344
+align with cargo 
+0.268694	-0.299015
+119.999
+align with cargo 
+0.137657	-0.119773
+129.349
+align with cargo 
+-0.00900071	-0.0846351
+130.602
+align with cargo 
+0.0451591	-0.13889
+140.101
+align with cargo 
+0.261818	0.0350997
+150.141
+align with cargo 
+0.133063	0.109914
+146.508
+align with cargo 
+-0.165449	-0.290876
+148.104
+align with cargo 
+0.0377785	-0.105511
+134.612
+align with cargo 
+-0.0614274	-0.0421692
+147.359
+align with cargo 
+-0.0151546	0.0164538
+139.103
+align with cargo 
+0.0874416	-0.0507784
+127.108
+align with cargo 
+-0.17891	-0.0735638
+134.358
+align with cargo 
+0.0386641	0.00490809
+align with cargo 
+0.410396	-0.386812
+align with cargo 
+0.307444	0.190177
+172.153
+align with cargo 
+-0.122068	-0.0933074
+144.933
+align with cargo 
+0.153961	-0.161683
+131.613
+align with cargo 
+-0.0854345	-0.0333366
+138.611
+align with cargo 
+-0.0150392	0.00382433
+134.362
+align with cargo 
+0.21412	-0.112625
+123.853
+align with cargo 
+0.0361514	-0.229299
+125.104
+align with cargo 
+-0.215693	0.0571033
+129.858
+align with cargo 
+0.144331	-0.193848
+145.606
+align with cargo 
+-0.196894	-0.0738302
+154.852
+align with cargo 
+0.0739357	0.119107
+163.85
+align with cargo 
+0.0139746	0.0120971
+179.844
+align with cargo 
+-0.0925882	0.110969
+170.345
+align with cargo 
+0.00663351	-0.0828588
+170.092
+align with cargo 
+-0.15262	0.0819655
+170.754
+align with cargo 
+0.085553	-0.0566537
+176.097
+align with cargo 
+0.127378	0.0114608
+175.347
+align with cargo 
+-0.155097	-0.118565
+186.846
+align with cargo 
+-0.0142883	-0.249744
+196.093
+align with cargo 
+0.169537	-0.0492129
+184.345
+align with cargo 
+0.0289398	-0.124567
+align with cargo 
+0.658375	-0.107054
+align with cargo 
+0.704495	-0.00499898
+187.352
+align with cargo 
+-0.193973	0.014412
+179.606
+align with cargo 
+-0.0822394	-0.106926
+175.852
+align with cargo 
+0.170122	0.0189303
+152.355
+align with cargo 
+-0.191142	0.23558
+178.6
+align with cargo 
+-0.168757	0.0791085
+160.462
+align with cargo 
+-0.166812	-0.0284687
+175.357
+align with cargo 
+-0.0292898	-0.0553353
+183.101
+align with cargo 
+-0.144468	-0.134581
+182.605
+align with cargo 
+-0.0239538	0.209956
+161.665
+align with cargo 
+0.186908	0.246715
+125.036
+align with cargo 
+-0.0407687	-0.16768
+139.6
+align with cargo 
+0.0810439	0.0718828
+125.501
+align with cargo 
+-0.0921045	-0.181474
+120.351
+align with cargo 
+-0.151309	-0.280873
+132.604
+align with cargo 
+0.0978053	0.057992
+129.853
+align with cargo 
+0.0489771	-0.029768
+129.352
+align with cargo 
+0.0926326	-0.123505
+123.751
+align with cargo 
+-0.0571745	-0.147829
+130.854
+align with cargo 
+-0.138899	-0.0259584
+127.751
+align with cargo 
+-0.227799	0.00184493
+align with cargo 
+0.995831	-0.0136093
+align with cargo 
+0.876377	-0.0570987
+130.356
+align with cargo 
+-0.174829	0.0430426
+130.105
+align with cargo 
+0.229907	0.0648146
+134.352
+align with cargo 
+0.0813356	-0.040232
+137.598
+align with cargo 
+-0.0222841	0.0837769
+132.097
+align with cargo 
+-0.041432	0.14667
+132.845
+align with cargo 
+0.23215	0.173868
+123.6
+align with cargo 
+-0.0316016	-0.0670026
+132.608
+align with cargo 
+-0.00316263	-0.065178
+133.851
+align with cargo 
+-0.1061	0.243572
+132.35
+align with cargo 
+-0.14344	0.0291436
+134.102
+align with cargo 
+0.0535546	-0.121448
+130.604
+align with cargo 
+0.0398661	-0.0409073
+136.852
+align with cargo 
+-0.0120494	0.0695897
+134.6
+align with cargo 
+0.176436	-0.115867
+137.095
+align with cargo 
+-0.0713048	0.114125
+129.753
+align with cargo 
+-0.143587	-0.248542
+118.299
+align with cargo 
+-0.0863499	-0.133918
+112.603
+align with cargo 
+0.00784017	-0.00968771
+113.752
+align with cargo 
+-0.0333284	-0.21178
+117.848
+align with cargo 
+0.0827715	-0.118125

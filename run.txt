@@ -1,5 +1,5 @@
 N
-19
+37
 dim
 2
 radius
@@ -25,7 +25,7 @@ cutoff
 kappa
 50
 seed
-3
+4
 shapeflag
 0
 motionflag
@@ -43,11 +43,11 @@ landmarkdist
 blockcost
 100
 initial config
-hexagon_19p.txt
+config2d.txt
 file tag
 gear
 target config
-hexagon_19p.txt
+hexagon_37p.txt
 
 
 

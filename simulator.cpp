@@ -12,7 +12,7 @@ Simulator::Simulator(std::shared_ptr<Model> model0,std::shared_ptr<Controller> c
     nstep_equilibrate = parameter.equilibrateStep;
 //    motionCycle = parameter.motionCycle;
 //    motionFlag = parameter.motionFlag;
-    motionCycle = 30;
+    motionCycle = 70;
     move_motionStep = 2;
     move_recoverStep = 20;
 }
@@ -99,16 +99,24 @@ void Simulator::cargoTransport_2d(){
     controller->calControl(model->getCurrState(),model->getTargets(),model->getDimP());
     int iter;
     std::cout << totalCost << std::endl;
-    for(int c = 0; c < motionCycle; c++){
-        for (int s = 0; s < move_recoverStep; s++) {
+    
+    
+    // first do a capture 
+    int captureStep = 100;
+     for (int s = 0; s < captureStep; s++) {
+            controller->alignCargo(model->getCurrState(),model->getTargets());
             if ((s + 1) % assignmentFrequency == 0) {
                 totalCost = controller->calAssignment(model->getCurrState(), model->getTargets(), model->getDimP());
                 std::cout << totalCost << std::endl;
             }
             controller->calControl(model->getCurrState(), model->getTargets(), model->getDimP());
             model->run(controlFrequency);
-            controller->alignCargo(model->getCurrState(),model->getTargets());
+
         }
+    
+    
+    for(int c = 0; c < motionCycle; c++){
+
 
 
         for (int s = 0; s < move_motionStep; s++) {
@@ -119,6 +127,16 @@ void Simulator::cargoTransport_2d(){
 //            controller->register_2d(model->getCurrState(),model->getTargets());
         }
         
+        
+        for (int s = 0; s < move_recoverStep; s++) {
+            if ((s + 1) % assignmentFrequency == 0) {
+                totalCost = controller->calAssignment(model->getCurrState(), model->getTargets(), model->getDimP());
+                std::cout << totalCost << std::endl;
+            }
+            controller->calControl(model->getCurrState(), model->getTargets(), model->getDimP());
+            model->run(controlFrequency);
+            controller->alignCargo(model->getCurrState(),model->getTargets());
+        }
     
     }
 }
