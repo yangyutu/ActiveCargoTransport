@@ -314,6 +314,7 @@ void Model::outputTrajectory(std::ostream& os) {
         os << particles[i]->cost<< "\t";
         os << particles[i]->u<< "\t";
         os << particles[i]->targetIdx<< "\t";
+        os << particles[i]->EudDistToTarget<< "\t";
         os << particles[i]->availControl<<"\t";
         os << std::endl;
     }
@@ -325,6 +326,7 @@ void Model::outputOrderParameter(std::ostream& os) {
         os << this->calHausdorff() << "\t";
         os << this->calPsi6() << "\t";
         os << this->calRg() << std::endl;
+        os << this->calEudDeviation() << std::endl;
 }
 
 
@@ -492,6 +494,19 @@ double Model::calRg(){
     
     return rgmean;
 }
+
+double Model::calEudDeviation(){
+    //      calculate Rg
+    double dev = 0;
+    
+    for (int i = 0; i < numP; i++){
+        dev += this->particles[i]->EudDistToTarget;
+    }
+    dev /= numP;
+    
+    return dev;
+}
+
 
 double Model::calPsi6(){
     

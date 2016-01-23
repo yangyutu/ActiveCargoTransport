@@ -9,6 +9,7 @@ struct Parameter{
         int seed;
         int motionFlag, shapeFlag, cargoTransFlag;
         
+        int assignViaEud;
         int landmarkFlag;
         double landmarkLength;
         double landmarkDist;

@@ -22,6 +22,7 @@ public:
     void calControl(Model::state s, Model::state targets, int dimP);
     void calControl2d(Model::state s, Model::state targets);
     double calAssignment2d(Model::state s, Model::state targets);
+    double calAssignmentVisEudCost(Model:: state s, Model::state targets);
     double calSeqAssignment(Model::state s, Model::state targets, int expand);
     void calControl3d(Model::state s, Model::state targets);
     double calAssignment3d(Model::state s, Model::state targets);
@@ -74,7 +75,7 @@ private:
     void calWeightCenter(Model::state s, double center[3],int flag);
     void calInlier(Model::state s);
     void readCostMap();
-
+    void calEudDist(Model::state s);
     void expandTargets();
 
     void constructLandmark();

@@ -75,7 +75,11 @@ void Controller::calControl(Model::state s, Model::state targets, int dim){
 double Controller::calAssignment(Model::state s, Model::state targets, int dim){
     double totalCost;
     if (dim ==2){
-      totalCost = calAssignment2d(s, targets);    
+      if (parameter.assignViaEud){
+          totalCost = this->calAssignmentVisEudCost(s,targets);
+      } else {
+          totalCost = calAssignment2d(s, targets);
+      }
       if (parameter.motionFlag){
 //          totalCost = calAssignment2d
       }
@@ -413,6 +417,41 @@ double Controller::calAssignment2d(Model::state s, Model::state targets) {
     APS.Solve(Cost, assignment);
     for(int i=0; i < numP; i++){
         s[i]->targetIdx = assignment[i];
+        s[i]->targetPos[0] = targets[s[i]->targetIdx]->r[0];
+        s[i]->targetPos[1] = targets[s[i]->targetIdx]->r[1];
+        s[i]->targetPos[2] = targets[s[i]->targetIdx]->r[2];
+        s[i]->cost = Cost[i][assignment[i]];
+        targets[s[i]->targetIdx]->targetIdx = i;
+        totalCost += s[i]->cost;
+    }
+    return totalCost;
+}
+
+
+double Controller::calAssignmentVisEudCost(Model:: state s, Model::state targets){
+    this->calAvoidance2d_simpleCollision(s);
+    
+    vector< vector<double> > Cost(numP, vector<double>(numP));
+    double totalCost = 0.0;
+    for(int i=0; i<numP; i++){
+	for(int j=0; j<numP; j++){
+            double rx = targets[j]->r[0] - s[i]->r[0]/radius ;
+            double ry = targets[j]->r[1] - s[i]->r[1]/radius ;
+            double rz = targets[j]->r[2] - s[i]->r[2]/radius ;
+            double dist = rx*rx + ry*ry + rz*rz;
+            dist = sqrt(dist);
+            
+            Cost[i][j] = dist;
+//            Cost[i][j] = (long)(sqrt(c)*10.0);
+        }
+    }   
+    AssignmentProblemSolver APS;
+    APS.Solve(Cost, assignment);
+    for(int i=0; i < numP; i++){
+        s[i]->targetIdx = assignment[i];
+        s[i]->targetPos[0] = targets[s[i]->targetIdx]->r[0];
+        s[i]->targetPos[1] = targets[s[i]->targetIdx]->r[1];
+        s[i]->targetPos[2] = targets[s[i]->targetIdx]->r[2];
         s[i]->cost = Cost[i][assignment[i]];
         targets[s[i]->targetIdx]->targetIdx = i;
         totalCost += s[i]->cost;
@@ -454,6 +493,20 @@ void Controller::rotate_2d(Model::state s){
     }
 
     
+}
+
+void Controller::calEudDist(Model::state s){
+    double dist;
+    double r[3];
+    for (int i = 0; i < numP; i++) {
+            dist = 0.0;
+            for (int k = 0; k < dimP; k++) {
+                r[k] = s[i]->targetPos[k] - s[i]->r[k] / radius;
+                dist += pow(r[k], 2.0);
+            }
+        dist = sqrt(dist);
+        s[i]->EudDistToTarget;
+    }
 }
 
 void Controller::calWeightCenter(Model::state s, double center[3],int flag) {
@@ -660,6 +713,11 @@ double Controller::calSeqAssignment(Model::state s, Model::state targets, int ex
     for(int i=0; i < numP; i++){
         if(assignment[i] >= 0){
             s[i]->targetIdx = markedIdx[assignment[i]];
+            s[i]->targetPos[0] = targets[s[i]->targetIdx]->r[0];
+            s[i]->targetPos[1] = targets[s[i]->targetIdx]->r[1];
+            s[i]->targetPos[2] = targets[s[i]->targetIdx]->r[2];
+            
+            
             s[i]->cost = Cost[i][assignment[i]];
             targets[markedIdx[assignment[i]]]->targetIdx = i;
             totalCost += s[i]->cost;

@@ -81,6 +81,9 @@ void readParameter(){
     runfile >> parameter.seed;
     getline(runfile, line);
     getline(runfile, line);
+    runfile >> parameter.assignViaEud;
+    getline(runfile, line);
+    getline(runfile, line);
     runfile >> parameter.shapeFlag;
     getline(runfile, line);
     getline(runfile, line);

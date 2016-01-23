@@ -55,6 +55,7 @@ public:
     double calHausdorff();
     double calPsi6();
     double calRg();
+    double calEudDeviation();
 private:
     void calForces();
     void calForcesHelper(int i, int j, double F[3]);

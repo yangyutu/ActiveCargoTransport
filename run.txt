@@ -26,6 +26,8 @@ kappa
 50
 seed
 4
+assignmentViaEuddist
+1
 shapeflag
 0
 motionflag
