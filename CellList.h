@@ -16,6 +16,7 @@ public:
 	~CellList(){}
 	std::vector<int> getNeighbors(double x, double y, double z);
 	int buildList(const Model::state &s);
+        int buildList(const Model::posArray &s);
 	void setup();
         void printCellList() const;
         void printParticleList() const;

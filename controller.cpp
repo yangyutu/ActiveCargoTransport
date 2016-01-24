@@ -14,11 +14,12 @@
 using namespace lemon;
 extern Parameter parameter;
 
-Controller::Controller(Model::state s,Model::state targets){
+Controller::Controller(Model::state s,Model::state targets, Model::posArray obstacles0){
 //    readErrorMap();
 //    initialize targets
     s_ = s;
     targets_ = targets;
+    obstacles = obstacles0;
     radius = parameter.radius;
     numP = parameter.N;
     dimP = parameter.dim;
@@ -50,6 +51,10 @@ Controller::Controller(Model::state s,Model::state targets){
     if (parameter.assignmentMethod == 3){
         this->constructLandmark();
     
+    }
+    
+    if (parameter.obstacleFlag){
+        this->constructObstacles();
     }
             /*
     double R = (int)(dim/2.0/M_PI) * radius;
@@ -929,8 +934,8 @@ void Controller::constructLandmark() {
             nodes_l.push_back(landmarkG.addNode());
 //            Model::particle_ptr p =  std::make_shared<Model::particle>(i*landmarkDist - 0.5 * landmarkLength * landmarkDist,
 //                    j*landmarkDist - 0.5 * landmarkLength * landmarkDist, 0.0);
-            landmarkPos.push_back(Model::pos(i*landmarkDist - 0.5 * landmarkLength * landmarkDist,
-                    j*landmarkDist - 0.5 * landmarkLength * landmarkDist, 0.0));
+            landmarkPos.push_back(Model::pos(i*landmarkDist + parameter.landmarkMin * landmarkDist,
+                    j*landmarkDist + parameter.landmarkMin * landmarkDist, 0.0));
 //            (*landmark_pos)[nodes_l[count]] = std::shared_ptr<Model::particle>(p);
             if (landmarkG.id(nodes_l[count]) != count){
                 std::cerr << "node id inconsistent!" << std::endl;
@@ -966,10 +971,66 @@ void Controller::constructLandmark() {
             }
         }
     }
-    std::cout << "landmark edges count:  " << count << std::endl;
-         
+    std::cout << "landmark edges count:  " << count << std::endl;         
 }
 
+void Controller::constructObstacles(){
+    for (int i = 0; i < obstacles.size(); i++){
+        int x = (int)round(obstacles[i]->r[0]/radius);
+        int y = (int)round(obstacles[i]->r[0]/radius);
+        obstacleSet.insert(CoorPair(x,y));    
+    }
+}
+
+bool Controller::isOverlapObstacle(int x, int y){
+    if (obstacleSet.find(CoorPair(x, y)) != obstacleSet.end()) {
+        return true;
+    }
+    return false;    
+    
+}
+
+bool Controller::isPathIntersectObstacle(double xx, double yy, double newxx, double newyy) {
+
+    int x = (int)round(xx);
+    int y = (int)round(yy);
+    int newx = (int)round(newxx);
+    int newy = (int)round(newyy);
+    int xtemp;
+    int ytemp;
+    if (x == newx && y == newy) {
+        if (isOverlapObstacle(x, y)) return true;
+    } else if (x == newx) {
+        for (int i = 0; i <= abs(newy - y); i++) {
+            xtemp = x;
+            ytemp = (int) round(y + (newy - y) / abs(newy - y) * i);
+            if (isOverlapObstacle(xtemp, ytemp)) return true;
+            if (isOverlapObstacle(xtemp, ytemp)) return true;
+            //				if(obstacleSet.find(CoorPair(xtemp,ytemp))!=obstacleSet.end()) return true;
+        }
+    } else if (y == newy) {
+        for (int i = 0; i <= abs(newx - x); i++) {
+            xtemp = (int) round(x + (newx - x) / abs(newx - x) * i);
+            ytemp = y;
+            if (isOverlapObstacle(xtemp, ytemp)) return true;
+            if (isOverlapObstacle(xtemp, ytemp)) return true;
+            //				if(obstacleSet.find(CoorPair(xtemp,ytemp))!=obstacleSet.end()) return true;
+        }
+    } else {
+        //		double slope=((double)newy-(double)y)/((double)newx-(double)x);
+        double len = sqrt((x - newx)*(x - newx)+(y - newy)*(y - newy));
+        for (int i = 0; i <= len; i++) {
+            xtemp = (int) round(x + i * ((double) newx - (double) x) / len);
+            ytemp = (int) round(y + i * ((double) newy - (double) y) / len);
+
+            if (isOverlapObstacle(xtemp, ytemp)) return true;
+            if (isOverlapObstacle(xtemp, ytemp)) return true;
+            //			if(obstacleSet.find(CoorPair(xtemp,ytemp)) != obstacleSet.end()) return true;
+        }
+    }
+
+    return false;
+}
 void Controller::assignLandmarkIdx(Model::state s, double scale) {
     for (int i = 0; i < numP; i++) {
         s[i]->nbLandmark.clear();
@@ -1030,7 +1091,7 @@ double Controller::calExtraCost(Model::state s, double pos1[3], double scale1,
         }
         
         if (blockCount > parameter.blockThresh){
-            return blockCost;
+            return parameter.blockCost;
         }
            
     }

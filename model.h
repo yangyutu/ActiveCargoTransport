@@ -48,8 +48,7 @@ public:
     typedef std::vector<particle_ptr> state;
     typedef std::vector<std::shared_ptr<pos>> posArray;
    
-    Model(){}
-    Model(cellList_ptr cell);
+    Model();
     ~Model() {trajOs.close();
     opOs.close(); osTarget.close();
     }
@@ -60,6 +59,7 @@ public:
     int getDimP(){return dimP;}
     void setControl(int c);
     state getTargets(){return targets;}
+    posArray getObstacles(){return obstacles;}
     double dt(){return dt_;}
     int np(){return numP;}
     double calHausdorff();
@@ -69,11 +69,13 @@ public:
 private:
     void calForces();
     void calForcesHelper(int i, int j, double F[3]);
+    void calObsForcesHelper(int i, int j, double F[3]);
+    
     bool cellListFlag;
     std::shared_ptr<CellList> cellList, obsCellList;
     int dimP;
     static const double kb, T, vis;
-    int numP;
+    int numP, numObstacles;
     double radius, radius_nm;
     double LJ,rm;
     double Bpp; //2.29 is Bpp/a/kT
@@ -102,6 +104,5 @@ private:
     void readObstacle();
     void getPermutator();
 };
-
 
 

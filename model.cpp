@@ -8,7 +8,7 @@ double const Model::vis = 1e-3;
 
 extern Parameter parameter;
 
-Model::Model(cellList_ptr cell):cellList(cell){
+Model::Model(){
     rand_normal = std::make_shared<std::normal_distribution<double>>(0.0, 1.0);
 
    
@@ -31,13 +31,8 @@ Model::Model(cellList_ptr cell):cellList(cell){
     fileCounter = 0;
     cutoff = parameter.cutoff;
     this->rand_generator.seed(parameter.seed);
-//    double temp= (*rand_normal)(rand_generator);
-//    LJ = 3.0*Model::kb*Model::T/radius;
-//    rm = 2.3;
-//    for(int i = 0; i < numP; i++){
-//        targets.push_back(Model::particle());
-//    } 
-     for(int i = 0; i < numP; i++){
+
+    for(int i = 0; i < numP; i++){
         particles.push_back(particle_ptr(new Model::particle));
         targets.push_back(particle_ptr(new Model::particle));
     }
@@ -46,8 +41,32 @@ Model::Model(cellList_ptr cell):cellList(cell){
     this->getPermutator();
     
     cellListFlag = false;
-    if (cell!=nullptr){
+    if (parameter.particleCellListFlag){
+        this->cellList = std::make_shared<CellList>(parameter.cellListCutoff*radius,
+                parameter.cellListDim,parameter.cellListMaxCount,
+                parameter.cellListBox_x*radius, parameter.cellListBox_y*radius,
+                parameter.cellListBox_z*radius);
         cellListFlag = true;
+    }
+    if (parameter.obstacleCellListFlag){
+        this->obsCellList = std::make_shared<CellList>(parameter.cellListCutoff*radius,
+                parameter.cellListDim,parameter.cellListMaxCount,
+                parameter.cellListBox_x*radius, parameter.cellListBox_y*radius,
+                parameter.cellListBox_z*radius);
+    }
+    
+    if (parameter.obstacleFlag) {
+        this->readObstacle();
+        this->obsCellList = std::make_shared<CellList>(parameter.cellListCutoff*radius,
+                parameter.cellListDim,parameter.cellListMaxCount,
+                parameter.cellListBox_x*radius, parameter.cellListBox_y*radius,
+                parameter.cellListBox_z*radius);
+        int builtCount = this->obsCellList->buildList(obstacles);
+            
+            if (builtCount!=numObstacles){
+                std::cout << "build imcomplete" << std::endl;
+            }
+
     }
     
 }
@@ -58,7 +77,7 @@ void Model::run() {
         this->outputOrderParameter(this->opOs);
     }
     if (cellListFlag){
-            double builtCount = cellList->buildList(particles);
+            int builtCount = cellList->buildList(particles);
             if (builtCount!=numP){
                 std::cout << "build imcomplete" << std::endl;
             }
@@ -173,8 +192,34 @@ void Model::calForcesHelper(int i, int j, double F[3]) {
 
         }
     }
+}
 
 
+void Model::calObsForcesHelper(int i, int j, double F[3]) {
+    double r[dimP], dist;
+
+    dist = 0.0;
+    for (int k = 0; k < dimP; k++) {
+        F[k] = 0.0;
+        r[k] = (obstacles[j]->r[k] - particles[i]->r[k]) / radius;
+        dist += pow(r[k], 2.0);
+    }
+    dist = sqrt(dist);
+    if (dist < 2.0) {
+        std::cerr << "overlap " << i << "\t" << j << "\t"<< this->timeCounter << "dist: " << dist <<std::endl;
+        dist = 2.06;
+    }
+    if (dist < cutoff) {
+//        double Fpp = LJ * (-12.0 * pow((rm / dist), 12) / dist + 12.0 * pow((rm / dist), 7) / dist);
+        double Fpp = -4.0/3.0*
+        Os_pressure*M_PI*(-3.0/4.0*pow(combinedSize,2.0)+3.0*dist*dist/16.0*radius_nm*radius_nm);
+        Fpp += -Bpp * Kappa * exp(-Kappa*(dist-2.0));
+//        Fpp += -9e-13 * exp(-kappa* (dist - 2.0));
+        for (int k = 0; k < dimP; k++) {
+            F[k] = Fpp * r[k] / dist;
+
+        }
+    }
 }
 
 void Model::calForces() {
@@ -186,34 +231,26 @@ void Model::calForces() {
     }
     
     if(!cellListFlag){
-    
-    for (int i = 0; i < numP - 1; i++) {
-        for (int j = i + 1; j < numP; j++) {
-            calForcesHelper(i, j, F);
-            for (int k = 0; k < dimP; k++) {
-                particles[i]->F[k] += F[k];
-                particles[j]->F[k] += -F[k];
+
+        for (int i = 0; i < numP - 1; i++) {
+            for (int j = i + 1; j < numP; j++) {
+                calForcesHelper(i, j, F);
+                for (int k = 0; k < dimP; k++) {
+                    particles[i]->F[k] += F[k];
+                    particles[j]->F[k] += -F[k];
+                }
             }
         }
-    }
-/*    
-    double testSum1 = 0.0;
-    double testSum2 = 0.0;
-        for (int i = 0; i < numP; i++) {
-            testSum1 += particles[i]->F[0];
-            testSum2 += particles[i]->F[1];
-        }
-    std::cout << testSum1 << "\t" << testSum2 << std::endl; 
-*/    
     } else{
         
         for (int i = 0; i < numP; i++) {
-            std::vector<int> mapTable;
-            mapTable.assign(numP,0);
+            //std::vector<int> mapTable;
+            //mapTable.assign(numP,0);
             std::vector<int> nblist = 
             cellList->getNeighbors(particles[i]->r[0],particles[i]->r[1],particles[i]->r[2]);
-            for (int j = 0; j < nblist.size(); j++){
-                mapTable[nblist[j]] = 1;
+            int nblistSize = nblist.size();
+            for (int j = 0; j < nblistSize; j++){
+                //mapTable[nblist[j]] = 1;
                 if (i!=nblist[j]){
                     calForcesHelper(i, nblist[j], F);
                     for (int k = 0; k < dimP; k++) {
@@ -273,6 +310,27 @@ void Model::calForces() {
             }
 */             
         }    
+    }
+    
+    if(parameter.obstacleFlag) {
+        for (int i = 0; i < numP; i++) {
+            //std::vector<int> mapTable;
+            //mapTable.assign(numP,0);
+            std::vector<int> nblist =
+                    obsCellList->getNeighbors(particles[i]->r[0], particles[i]->r[1], particles[i]->r[2]);
+            int nblistSize = nblist.size();
+            for (int j = 0; j < nblistSize; j++) {
+                //mapTable[nblist[j]] = 1;
+                if (i != nblist[j]) {
+                    calObsForcesHelper(i, nblist[j], F);
+                    for (int k = 0; k < dimP; k++) {
+                        particles[i]->F[k] += F[k];
+                    }
+                }
+            }
+
+        }
+    
     }
     
 }
@@ -590,7 +648,8 @@ void Model::readObstacle(){
         linestream >> r[0];
         linestream >> r[1];
         linestream >> r[2];
-        obstacles.push_back(std::make_shared<pos>(r[0],r[1],r[2]));
+        obstacles.push_back(std::make_shared<pos>(r[0]*radius,r[1]*radius,r[2]*radius));
     } 
+    numObstacles = obstacles.size();
     is.close();
 }

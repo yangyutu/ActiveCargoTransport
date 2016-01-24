@@ -6,6 +6,8 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <unordered_set>
+#include "common.h"
 #include "boost/multi_array.hpp"
 #include "model.h"
 #include "lemon/list_graph.h"
@@ -13,7 +15,7 @@
 class Controller {
 public:
 
-    Controller(Model::state s, Model::state targets);
+    Controller(Model::state s, Model::state targets, Model::posArray obstacles0);
     ~Controller() {
     }
     typedef std::vector<int> control;
@@ -93,4 +95,10 @@ private:
     std::vector<int> assignment,availControl;
     Model::state targets_, s_;
     double blockCost;
+    
+    void constructObstacles();
+    bool isOverlapObstacle(int x, int y);
+    bool isPathIntersectObstacle(double x, double y, double newx, double newy);
+    Model::posArray obstacles;
+    std::unordered_set<CoorPair,CoorPairHash,CoorPairEqual> obstacleSet;
 };

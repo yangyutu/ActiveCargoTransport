@@ -93,6 +93,39 @@ int CellList::buildList(const Model::state &s) {
 //    std::cout <<totalCount<< "particle binned" << std::endl;
 }
 
+int CellList::buildList(const Model::posArray &s) {
+    int totalCount = 0;
+//    threeDIdx.clear();
+    for(int i = 0; i < nbin_z; i++){
+        for (int j = 0; j < nbin_y; j++){
+            for(int k = 0; k < nbin_x; k++){
+                (*cellListCount)[i][j][k] = 0;
+        }
+    }
+    }
+    for (int i = 0; i < s.size(); i++) {
+        Idx_3d idx = coordToIdx(s[i]->r[0], s[i]->r[1], s[i]->r[2]);
+
+        int idx_x = std::get<2>(idx);
+        int idx_y = std::get<1>(idx);
+        int idx_z = std::get<0>(idx);
+        
+        if(idx_x >= nbin_x) idx_x=nbin_x-1;
+        if(idx_y >= nbin_y) idx_y=nbin_y-1;
+        if(idx_z >= nbin_z) idx_z=nbin_z-1;
+        if(idx_x < 0 ) idx_x = 0;
+        if(idx_y < 0 ) idx_y = 0;
+        if(idx_z < 0 ) idx_z = 0;
+        
+        
+        (*cellList)[idx_z][idx_y][idx_x][(*cellListCount)[idx_z][idx_y][idx_x]] = i;
+        (*cellListCount)[idx_z][idx_y][idx_x]++;        
+        totalCount++;
+    }
+    return totalCount;
+//    std::cout <<totalCount<< "particle binned" << std::endl;
+}
+
 void CellList::setup() {
 
     std::array<Array4D_type::index, 4> dim1 = {nbin_z, nbin_y, nbin_x, maxCount};

@@ -15,9 +15,9 @@ int main(){
     int N = 85;
     int dim = 2;
     double radius = 1e-6;
-    cellList_ptr cell(new CellList(3.0*radius,2,10,150.0*radius,150.0*radius,50.0*radius));
-    std::shared_ptr<Model> m(new Model(nullptr));
-    std::shared_ptr<Controller> c(new Controller(m->getCurrState(),m->getTargets()));
+//    cellList_ptr cell(new CellList(3.0*radius,2,10,150.0*radius,150.0*radius,50.0*radius));
+    std::shared_ptr<Model> m(new Model());
+    std::shared_ptr<Controller> c(new Controller(m->getCurrState(),m->getTargets(),m->getObstacles()));
     Simulator simulator(m,c);
     if (parameter.shapeFlag == 1){
         simulator.shapeForming();
@@ -29,6 +29,9 @@ int main(){
         simulator.rotate_2d();
     } else if(parameter.cargoTransFlag==1){
         simulator.cargoTransport_2d();
+    } else if (parameter.noControlFlag == 1){
+        m->createInitialState();
+        m->run(parameter.controlStep);
     }
     
     return 0;
@@ -84,6 +87,9 @@ void readParameter(){
     runfile >> parameter.assignmentMethod;
     getline(runfile, line);
     getline(runfile, line);
+    runfile >> parameter.noControlFlag;
+    getline(runfile, line);
+    getline(runfile, line);
     runfile >> parameter.shapeFlag;
     getline(runfile, line);
     getline(runfile, line);
@@ -97,6 +103,7 @@ void readParameter(){
     getline(runfile, line);
     getline(runfile, line);
     runfile >> parameter.landmarkLength;
+    runfile >> parameter.landmarkMin;
     getline(runfile, line);
     getline(runfile, line);
     runfile >> parameter.landmarkDist;
@@ -109,6 +116,13 @@ void readParameter(){
     getline(runfile, line);
     getline(runfile, line);
     runfile >> parameter.obstacleFlag;
+    getline(runfile, line);
+    getline(runfile, line);
+    runfile >> parameter.particleCellListFlag >> parameter.obstacleCellListFlag;
+    getline(runfile, line);
+    getline(runfile, line);
+    runfile >> parameter.cellListCutoff >> parameter.cellListDim >> parameter.cellListMaxCount >>parameter.cellListBox_x
+            >> parameter.cellListBox_y>> parameter.cellListBox_z;
     getline(runfile, line);
     getline(runfile, line);
     getline(runfile, parameter.iniConfig);
