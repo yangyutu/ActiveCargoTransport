@@ -9,7 +9,7 @@ constrol step
 equilibrate step
 0
 dt
-0.001
+0.0001
 diffu_t
 2.145e-13
 diffu_r
@@ -51,7 +51,7 @@ obstacleFlag
 particlecellListFlag, obstaclecellListFlag
 0 1
 cellListcutoff, dim, maxcount, box_x, box_y, box_z
-3.0 2 10 200.0 200.0 50.0
+3.0 2 60 200.0 200.0 50.0
 initial config
 testconfig.txt
 file tag

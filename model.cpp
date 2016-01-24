@@ -211,9 +211,11 @@ void Model::calObsForcesHelper(int i, int j, double F[3]) {
     }
     if (dist < cutoff) {
 //        double Fpp = LJ * (-12.0 * pow((rm / dist), 12) / dist + 12.0 * pow((rm / dist), 7) / dist);
-        double Fpp = -4.0/3.0*
-        Os_pressure*M_PI*(-3.0/4.0*pow(combinedSize,2.0)+3.0*dist*dist/16.0*radius_nm*radius_nm);
-        Fpp += -Bpp * Kappa * exp(-Kappa*(dist-2.0));
+        double Fpp = -Bpp * Kappa * exp(-Kappa*(dist-2.0));
+        
+//        Fpp += -4.0/3.0*
+//        Os_pressure*M_PI*(-3.0/4.0*pow(combinedSize,2.0)+3.0*dist*dist/16.0*radius_nm*radius_nm);
+//        Fpp += 
 //        Fpp += -9e-13 * exp(-kappa* (dist - 2.0));
         for (int k = 0; k < dimP; k++) {
             F[k] = Fpp * r[k] / dist;

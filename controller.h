@@ -98,6 +98,7 @@ private:
     
     void constructObstacles();
     bool isOverlapObstacle(int x, int y);
+    bool isOverlapObstacle(double x, double y);
     bool isPathIntersectObstacle(double x, double y, double newx, double newy);
     Model::posArray obstacles;
     std::unordered_set<CoorPair,CoorPairHash,CoorPairEqual> obstacleSet;

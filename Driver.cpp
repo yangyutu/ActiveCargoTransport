@@ -31,6 +31,7 @@ int main(){
         simulator.cargoTransport_2d();
     } else if (parameter.noControlFlag == 1){
         m->createInitialState();
+        m->getCurrState()[0]->u = 2;
         m->run(parameter.controlStep);
     }
     
