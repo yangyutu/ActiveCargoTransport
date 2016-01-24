@@ -17,7 +17,7 @@ int main(){
     double radius = 1e-6;
     cellList_ptr cell(new CellList(3.0*radius,2,10,150.0*radius,150.0*radius,50.0*radius));
     std::shared_ptr<Model> m(new Model(nullptr));
-    std::shared_ptr<Controller> c(new Controller(m->getTargets()));
+    std::shared_ptr<Controller> c(new Controller(m->getCurrState(),m->getTargets()));
     Simulator simulator(m,c);
     if (parameter.shapeFlag == 1){
         simulator.shapeForming();
@@ -81,7 +81,7 @@ void readParameter(){
     runfile >> parameter.seed;
     getline(runfile, line);
     getline(runfile, line);
-    runfile >> parameter.assignViaEud;
+    runfile >> parameter.assignmentMethod;
     getline(runfile, line);
     getline(runfile, line);
     runfile >> parameter.shapeFlag;
@@ -96,9 +96,6 @@ void readParameter(){
     runfile >> parameter.trajOutputInterval;
     getline(runfile, line);
     getline(runfile, line);
-    runfile >> parameter.landmarkFlag;
-    getline(runfile, line);
-    getline(runfile, line);
     runfile >> parameter.landmarkLength;
     getline(runfile, line);
     getline(runfile, line);
@@ -108,11 +105,18 @@ void readParameter(){
     runfile >> parameter.blockCost;
     getline(runfile, line);
     getline(runfile, line);
+    runfile >> parameter.blockThresh;
+    getline(runfile, line);
+    getline(runfile, line);
+    runfile >> parameter.obstacleFlag;
+    getline(runfile, line);
+    getline(runfile, line);
     getline(runfile, parameter.iniConfig);
     getline(runfile, line);
     getline(runfile, parameter.filetag);
     getline(runfile, line);
     getline(runfile, parameter.targetConfig);
-
+    getline(runfile, line);
+    getline(runfile, parameter.obstacleFilename);
 
 }

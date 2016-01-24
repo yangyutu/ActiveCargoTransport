@@ -14,6 +14,11 @@ struct Parameter{
         double landmarkLength;
         double landmarkDist;
         double blockCost;
+        int blockThresh;
+        int obstacleFlag;
+        std::string obstacleFilename;
+        int assignmentMethod; // 1. single optimal cost based assignment 2. Eud distance based assignment
+        // 3. shortest path landmark method based on assignment
 };
 
 

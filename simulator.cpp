@@ -18,11 +18,10 @@ Simulator::Simulator(std::shared_ptr<Model> model0,std::shared_ptr<Controller> c
 }
 
 void Simulator::shapeForming(){
-    double totalCost;   
+    double totalCost =0.0;   
     model->createInitialState();
     totalCost = controller->calAssignment(model->getCurrState(),model->getTargets(),model->getDimP());
     controller->calControl(model->getCurrState(),model->getTargets(),model->getDimP());
-    int iter;
     std::cout << totalCost << std::endl;
     for(int s=0; s < nstep_control; s++){
         if ((s+1)%assignmentFrequency == 0){

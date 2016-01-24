@@ -574,3 +574,23 @@ void Model::getPermutator() {
         }
     }
 }
+
+
+void Model::readObstacle(){
+    std::ifstream is;
+    is.open(parameter.obstacleFilename);
+
+    std::string line;
+    double dum;
+    double r[3];
+    while (getline(is, line)){
+        std::stringstream linestream(line);
+        
+        linestream >> dum;
+        linestream >> r[0];
+        linestream >> r[1];
+        linestream >> r[2];
+        obstacles.push_back(std::make_shared<pos>(r[0],r[1],r[2]));
+    } 
+    is.close();
+}

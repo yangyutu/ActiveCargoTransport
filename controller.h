@@ -13,8 +13,7 @@
 class Controller {
 public:
 
-
-    Controller(Model::state targets);
+    Controller(Model::state s, Model::state targets);
     ~Controller() {
     }
     typedef std::vector<int> control;
@@ -23,6 +22,7 @@ public:
     void calControl2d(Model::state s, Model::state targets);
     double calAssignment2d(Model::state s, Model::state targets);
     double calAssignmentVisEudCost(Model:: state s, Model::state targets);
+    double calAssignmentViaShortestPath(Model::state s,Model::state targets);
     double calSeqAssignment(Model::state s, Model::state targets, int expand);
     void calControl3d(Model::state s, Model::state targets);
     double calAssignment3d(Model::state s, Model::state targets);
@@ -46,12 +46,14 @@ public:
     };
     
 private:
+    
     lemon::ListGraph targetG, landmarkG;
     std::vector<lemon::ListGraph::Node> nodes_t, nodes_l; 
     std::vector<lemon::ListGraph::Edge> edges_t, edges_l;
     std::shared_ptr<lemon::ListGraph::NodeMap<int>> marked_t,index_t;
-    std::shared_ptr<lemon::ListGraph::NodeMap<Model::particle_ptr>> landmark_pos;
-    std::shared_ptr<lemon::ListGraph::NodeMap<std::array<double,3>>> landmark_pos2;
+    //std::shared_ptr<lemon::ListGraph::NodeMap<Model::particle_ptr>> landmark_pos;
+    std::vector<Model::pos> landmarkPos;
+    //std::shared_ptr<lemon::ListGraph::NodeMap<std::array<double,3>>> landmark_pos2;
 	std::shared_ptr<lemon::ListGraph::EdgeMap<double>> internalLength, length;
     int numMarked,numSurface, landmarkLength, numLandmark;
 	double landmarkDist;
@@ -61,6 +63,8 @@ private:
     std::random_device rd;
     typedef boost::multi_array<double, 2> Array2D_type;
     std::shared_ptr<Array2D_type> maps[3];
+    std::vector<Model::pos> obtacles;
+    
 //    std::uniform_int_distribution<> dis(0,1);
     void calAvoidance2d(Model::state s);
     int dimP, numP;
@@ -78,14 +82,15 @@ private:
     void calEudDist(Model::state s);
     void expandTargets();
 
+    void readObtacle();
     void constructLandmark();
-    void calShortestPathMat(Model::state s, Model::state target);
     void assignLandmarkIdx(Model::state s, double scale);
     double calExtraCost(Model::state s, double r1[3],double scale1, double r2[3], double scale2);
-    double calPathDistViaLandmark(Model::state s, int i, Model::state targets, int j);
-    std::vector<std::vector<double>> shortPathMat;
+    void calShortestPathDistBetweenLandmarks(Model::state s);
+    void calShortestPathDistBetweenST(Model::state s, Model::state targets);
+    std::vector<std::vector<double>> shortestPathDistLandmarkMat, shortestPathDistSTMat;
     std::vector<Model::particle> landmarks;
     std::vector<int> assignment,availControl;
-    Model::state targets_;
+    Model::state targets_, s_;
     double blockCost;
 };
