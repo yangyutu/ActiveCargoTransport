@@ -1,5 +1,5 @@
 N
-1
+7
 dim
 2
 radius
@@ -53,11 +53,11 @@ particlecellListFlag, obstaclecellListFlag
 cellListcutoff, dim, maxcount, box_x, box_y, box_z
 3.0 2 60 200.0 200.0 50.0
 initial config
-testconfig.txt
+configmap10_7p.txt
 file tag
-singlePobstacle
+7Pobstacle
 target config
-testtargetmap10.txt
+targetmap10_7p.txt
 obstaclefilename
 obstacle_map10.txt
 
