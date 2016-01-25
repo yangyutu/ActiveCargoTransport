@@ -5,7 +5,7 @@ dim
 radius
 1e-6
 constrol step
-20000000
+2000
 equilibrate step
 0
 dt
@@ -27,11 +27,11 @@ kappa
 seed
 4
 assignment method
-2
+3
 nocontrolFlag
-1
-shapeflag
 0
+shapeflag
+1
 motionflag
 0
 cargoTransflag
@@ -39,9 +39,9 @@ cargoTransflag
 trajOutputInterval
 5000
 landmarklength, landmarkMin
-10 0
+15 0.4
 landmarkdist
-10
+5
 blockcost
 100
 blockthresh
@@ -55,11 +55,11 @@ cellListcutoff, dim, maxcount, box_x, box_y, box_z
 initial config
 testconfig.txt
 file tag
-diffuseNocontrol
+singlePobstacle
 target config
-testconfig.txt
+testtargetmap10.txt
 obstaclefilename
-obstacle_map3.txt
+obstacle_map10.txt
 
 
 

@@ -119,6 +119,11 @@ double Controller::calAssignmentViaShortestPath(Model::state s,Model::state targ
             s[i]->targetPos[2] = targets[s[i]->targetIdx]->r[2];
         }
         std::cout << "target pos: " << s[i]->targetPos[0] << "\t" << s[i]->targetPos[1] << std::endl;
+        if (s[i]->targetIsLandmark){
+            std::cout << "target is landmark " << std::endl;
+        } else {
+            std::cout << "target is target " << std::endl;
+        }
         s[i]->ShortestPathDistToTarget = this->shortestPathDistSTMat[i][assignment[i]];
         targets[s[i]->targetIdx]->targetIdx = i;
         totalCost += s[i]->ShortestPathDistToTarget;
@@ -935,14 +940,15 @@ void Controller::constructLandmark() {
             double x = i*landmarkDist + parameter.landmarkMin * landmarkDist;
             double y = j*landmarkDist + parameter.landmarkMin * landmarkDist;
             
-            if (parameter.obstacleFlag && (!this->isOverlapObstacle(x,y))) {
+            if (parameter.obstacleFlag){ 
+                if (!this->isOverlapObstacle(x,y)) {
                 nodes_l.push_back(landmarkG.addNode());
-                landmarkPos.push_back(Model::pos(i * landmarkDist + parameter.landmarkMin * landmarkDist,
-                        j * landmarkDist + parameter.landmarkMin * landmarkDist, 0.0));
+                landmarkPos.push_back(Model::pos(x,y, 0.0));
                 if (landmarkG.id(nodes_l[count]) != count) {
                     std::cerr << "node id inconsistent!" << std::endl;
                 }
                 count++;
+                }
             } else {
                 nodes_l.push_back(landmarkG.addNode());
                 landmarkPos.push_back(Model::pos(i * landmarkDist + parameter.landmarkMin * landmarkDist,
@@ -982,13 +988,15 @@ void Controller::constructLandmark() {
            
             double d = sqrt(dx * dx + dy * dy);
             if (d < sqrt(3) * landmarkDist) {
-                if (parameter.obstacleFlag && 
-                        this->isPathIntersectObstacle(landmarkPos[i].r[0],landmarkPos[i].r[1],
+                if (parameter.obstacleFlag){
+                    
+                    if(!this->isPathIntersectObstacle(landmarkPos[i].r[0],landmarkPos[i].r[1],
                         landmarkPos[j].r[0],landmarkPos[j].r[1])){
                     count++;
                     edges_l.push_back(landmarkG.addEdge(nodes_l[i], nodes_l[j]));
                     (*internalLength)[edges_l[edges_l.size() - 1]] = d;
                     (*length)[edges_l[edges_l.size() - 1]] = 0.0;
+                    }
                 } else {
                     count++;
                     edges_l.push_back(landmarkG.addEdge(nodes_l[i], nodes_l[j]));
@@ -1000,12 +1008,22 @@ void Controller::constructLandmark() {
         }
     }
     std::cout << "landmark edges count:  " << count << std::endl;         
+    os.open("landmarkEdges.txt");
+    for (int i = 0; i < numLandmark; i++){
+        for (ListGraph::OutArcIt e(landmarkG,nodes_l[i]); e != INVALID;++e){
+            ListGraph::Node n = landmarkG.oppositeNode(nodes_l[i],e);
+            int id = landmarkG.id(n);
+            os << landmarkPos[i].r[0] << "\t" << landmarkPos[i].r[1] << "\t" <<
+                    landmarkPos[id].r[0] << "\t" <<landmarkPos[id].r[1] << std::endl;
+        }
+    }    
+    os.close();
 }
 
 void Controller::constructObstacles(){
     for (int i = 0; i < obstacles.size(); i++){
         int x = (int)round(obstacles[i]->r[0]/radius);
-        int y = (int)round(obstacles[i]->r[0]/radius);
+        int y = (int)round(obstacles[i]->r[1]/radius);
         obstacleSet.insert(CoorPair(x,y));    
     }
 }
