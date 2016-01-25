@@ -1161,12 +1161,22 @@ void Controller::calShortestPathDistBetweenST(Model::state s, Model::state targe
     for (int i = 0; i < numP; i++) {
         for (int j = 0; j < numP; j++) {
             double r[3];
-            r[0] = s[i]->r[0] / radius - targets[i]->r[0];
-            r[1] = s[i]->r[1] / radius - targets[i]->r[1];
-            r[2] = s[i]->r[2] / radius - targets[i]->r[2];
+            r[0] = s[i]->r[0] / radius - targets[j]->r[0];
+            r[1] = s[i]->r[1] / radius - targets[j]->r[1];
+            r[2] = s[i]->r[2] / radius - targets[j]->r[2];
 //            double directEudDist = sqrt(pow(r[0], 2) + pow(r[1], 2) + pow(r[2], 2)) +
 //                    this->calExtraCost(s, s[i]->r, 1.0, targets[i]->r, radius);
             double directEudDist = sqrt(pow(r[0], 2) + pow(r[1], 2) + pow(r[2], 2));
+//            if (directEudDist < sqrt(2)*landmarkDist){
+            if(!this->isPathIntersectObstacle(s[i]->r[0]/radius,s[i]->r[1]/radius,targets[j]->r[0],targets[j]->r[1])){
+                s[i]->targetIsLandmark = 0;
+                s[i]->targetIsTarget = 1;
+                s[i]->targetIdx = j;
+                shortestPathDistSTMat[i][j] = directEudDist;
+                continue;
+            }
+                shortestPathDistSTMat[i][j] = std::numeric_limits<double>::max();
+/*          
             if (directEudDist < sqrt(2)*landmarkDist){
                 shortestPathDistSTMat[i][j] = directEudDist + this->calExtraCost(s, s[i]->r, 1.0, targets[i]->r, radius);
             } else {
@@ -1175,7 +1185,7 @@ void Controller::calShortestPathDistBetweenST(Model::state s, Model::state targe
             s[i]->targetIsLandmark = 0;
             s[i]->targetIsTarget = 1;
             s[i]->targetIdx = j;
-
+*/
 
             for (int ii = 0; ii < s[i]->nbLandmark.size(); ii++) {
                 for (int jj = 0; jj < targets[j]->nbLandmark.size(); jj++) {
