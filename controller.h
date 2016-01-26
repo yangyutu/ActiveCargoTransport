@@ -7,6 +7,7 @@
 #include <fstream>
 #include <iostream>
 #include <unordered_set>
+#include <set>
 #include "common.h"
 #include "boost/multi_array.hpp"
 #include "model.h"
@@ -36,7 +37,7 @@ public:
     void alignTarget_rt(Model::state s, Model::state targets);
     void translateCargo_2d(double phi, Model::state s);
     void alignCargo(Model::state s,Model::state t);
-    
+    void constructNotReachedSet(Model::state s);
     
     void buildTargetGraph();
     int getNumMarked(){return numMarked;}
@@ -93,6 +94,8 @@ private:
     std::vector<std::vector<double>> shortestPathDistLandmarkMat, shortestPathDistSTMat;
     std::vector<Model::particle> landmarks;
     std::vector<int> assignment,availControl;
+    std::set<int> notReachedSet;
+
     Model::state targets_, s_;
     double blockCost;
     

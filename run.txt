@@ -1,5 +1,5 @@
 N
-7
+37
 dim
 2
 radius
@@ -31,11 +31,15 @@ assignment method
 nocontrolFlag
 0
 shapeflag
-1
+0
 motionflag
 0
+motion cycle, collective move step, collective restore step 
+70 2 20
 cargoTransflag
-0
+1
+cargo capture step
+1500
 trajOutputInterval
 5000
 landmarklength, landmarkMin
@@ -53,11 +57,11 @@ particlecellListFlag, obstaclecellListFlag
 cellListcutoff, dim, maxcount, box_x, box_y, box_z
 3.0 2 60 200.0 200.0 50.0
 initial config
-configmap10_7p.txt
+testconfig37p.txt
 file tag
 7Pobstacle
 target config
-targetmap10_7p.txt
+hexagon_37p.txt
 obstaclefilename
 obstacle_map10.txt
 

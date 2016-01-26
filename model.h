@@ -37,6 +37,7 @@ public:
         std::vector<double> nbLandmarkDist;
         bool targetIsLandmark;
         bool targetIsTarget;
+        bool notReached;
         double EudDistToTarget;
 	double ShortestPathDistToTarget;
         

@@ -6,15 +6,12 @@ extern Parameter parameter;
 Simulator::Simulator(std::shared_ptr<Model> model0,std::shared_ptr<Controller> controller0):
                     model(model0),controller(controller0){
     controlFrequency = 1.0/model->dt();
-//    controlFrequency = 1000;
     assignmentFrequency = 1;
     nstep_control = parameter.controlStep;
     nstep_equilibrate = parameter.equilibrateStep;
-//    motionCycle = parameter.motionCycle;
-//    motionFlag = parameter.motionFlag;
-    motionCycle = 70;
-    move_motionStep = 2;
-    move_recoverStep = 20;
+    motionCycle = parameter.CollectiveMoveCycle;
+    move_motionStep = parameter.collective_MoveStep;
+    move_recoverStep = parameter.collective_RestoreStep;
 }
 
 void Simulator::shapeForming(){
@@ -66,7 +63,6 @@ void Simulator::translate_2d(){
     model->createInitialState();
     totalCost = controller->calAssignment(model->getCurrState(),model->getTargets(),model->getDimP());
     controller->calControl(model->getCurrState(),model->getTargets(),model->getDimP());
-    int iter;
     std::cout << totalCost << std::endl;
     for(int c = 0; c < motionCycle; c++){
         for (int s = 0; s < move_motionStep; s++) {
@@ -74,7 +70,6 @@ void Simulator::translate_2d(){
             controller->translate_2d(0.0, model->getCurrState());
             model->run(controlFrequency);
             controller->alignTarget_rt(model->getCurrState(),model->getTargets());
-//            controller->register_2d(model->getCurrState(),model->getTargets());
         }
         
         for (int s = 0; s < move_recoverStep; s++) {
@@ -94,14 +89,14 @@ void Simulator::translate_2d(){
 void Simulator::cargoTransport_2d(){
     double totalCost;   
     model->createInitialState();
-    totalCost = controller->calAssignment(model->getCurrState(),model->getTargets(),model->getDimP());
-    controller->calControl(model->getCurrState(),model->getTargets(),model->getDimP());
-    int iter;
-    std::cout << totalCost << std::endl;
+//    totalCost = controller->calAssignment(model->getCurrState(),model->getTargets(),model->getDimP());
+//    controller->calControl(model->getCurrState(),model->getTargets(),model->getDimP());
+//    int iter;
+//    std::cout << totalCost << std::endl;
     
     
     // first do a capture 
-    int captureStep = 100;
+    int captureStep = parameter.cargoCaptureStep;
      for (int s = 0; s < captureStep; s++) {
             controller->alignCargo(model->getCurrState(),model->getTargets());
             if ((s + 1) % assignmentFrequency == 0) {
@@ -109,21 +104,15 @@ void Simulator::cargoTransport_2d(){
                 std::cout << totalCost << std::endl;
             }
             controller->calControl(model->getCurrState(), model->getTargets(), model->getDimP());
+            model->getCurrState()[0]->u = 0;
             model->run(controlFrequency);
-
         }
     
-    
     for(int c = 0; c < motionCycle; c++){
-
-
-
-        for (int s = 0; s < move_motionStep; s++) {
-            
+        for (int s = 0; s < move_motionStep; s++) {            
             controller->translateCargo_2d(0.0, model->getCurrState());
             model->run(controlFrequency);
             controller->alignCargo(model->getCurrState(),model->getTargets());
-//            controller->register_2d(model->getCurrState(),model->getTargets());
         }
         
         
@@ -153,8 +142,7 @@ void Simulator::rotate_2d(){
             controller->rotate_2d( model->getCurrState());
             model->run(controlFrequency);
             controller->alignTarget_rt(model->getCurrState(),model->getTargets());
-//            controller->register_2d(model->getCurrState(),model->getTargets());
-        }
+    }
         
         for (int s = 0; s < move_recoverStep; s++) {
             if ((s + 1) % assignmentFrequency == 0) {
@@ -164,7 +152,6 @@ void Simulator::rotate_2d(){
             controller->calControl(model->getCurrState(), model->getTargets(), model->getDimP());
             model->run(controlFrequency);
             controller->alignTarget_rt(model->getCurrState(),model->getTargets());
-//            controller->register_2d(model->getCurrState(),model->getTargets());
         }
     
     }

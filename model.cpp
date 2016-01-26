@@ -383,10 +383,10 @@ void Model::outputTrajectory(std::ostream& os) {
 void Model::outputOrderParameter(std::ostream& os) {
 
     os << this->timeCounter << "\t";
-        os << this->calHausdorff() << "\t";
-        os << this->calPsi6() << "\t";
-        os << this->calRg() << std::endl;
-        os << this->calEudDeviation() << std::endl;
+    os << this->calHausdorff() << "\t";
+    os << this->calPsi6() << "\t";
+    os << this->calRg() << std::endl;
+    os << this->calEudDeviation() << std::endl;
 }
 
 
@@ -558,12 +558,10 @@ double Model::calRg(){
 double Model::calEudDeviation(){
     //      calculate Rg
     double dev = 0;
-    
     for (int i = 0; i < numP; i++){
         dev += this->particles[i]->EudDistToTarget;
     }
     dev /= numP;
-    
     return dev;
 }
 

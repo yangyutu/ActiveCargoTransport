@@ -6,6 +6,7 @@
 #include<fstream>
 #include "common.h"
 #include <lemon/dijkstra.h>
+#include <lemon/bfs.h>
 
 //#include "icpPointToPoint.h"
 //#include "icpPointToPlane.h"
@@ -53,21 +54,10 @@ Controller::Controller(Model::state s,Model::state targets, Model::posArray obst
     }    
     if (parameter.assignmentMethod == 3){
         this->constructLandmark();
+        this->constructNotReachedSet(s_);
     
     }
     
-
-            /*
-    double R = (int)(dim/2.0/M_PI) * radius;
-    double d_theta = 2.0*M_PI/dim;
-    R= 10;
-    for(int i = 0; i < dim; i++){
-        targets.push_back(Model::particle());
-        targets[i].r[0] = R*cos(d_theta*i);
-        targets[i].r[1] = R*sin(d_theta*i);
-    }
-    
-*/
 }
 
 void Controller::calControl(Model::state s, Model::state targets, int dim){
@@ -99,6 +89,8 @@ double Controller::calAssignment(Model::state s, Model::state targets, int dim){
 double Controller::calAssignmentViaShortestPath(Model::state s,Model::state targets){
     this->calAvoidance2d_simpleCollision(s);
     
+   
+    
     double totalCost;
     this->assignLandmarkIdx(s, radius);
     this->assignLandmarkIdx(targets, 1.0);
@@ -106,27 +98,51 @@ double Controller::calAssignmentViaShortestPath(Model::state s,Model::state targ
     this->calShortestPathDistBetweenST(s,targets);
     
     AssignmentProblemSolver APS;
-    APS.Solve(this->shortestPathDistSTMat, assignment);
+    std::vector<int> activeTargets;
+    for (int i = 0; i < numP; i++){
+        if(!targets[i]->notReached){
+            activeTargets.push_back(i);
+        }
+    }
+    
+    std::cout << "active target number: " << activeTargets.size() << std::endl;
+    
+    vector< vector<double> > Cost(numP, vector<double>(activeTargets.size()));
+    for (int i = 0; i < numP; i++){
+        for (int j = 0; j < activeTargets.size(); j++){
+            Cost[i][j] = this->shortestPathDistSTMat[i][activeTargets[j]];
+        }
+    }
+    
+    APS.Solve(Cost, assignment);
     for(int i=0; i < numP; i++){
-        s[i]->targetIdx = assignment[i];        
+        if (assignment[i] >= 0){
+        int asIdx = activeTargets[assignment[i]];
+        s[i]->targetIdx = asIdx;
         if (s[i]->targetIsLandmark){
-            s[i]->targetPos[0] = landmarkPos[s[i]->landmarkIdx[assignment[i]]].r[0];
-            s[i]->targetPos[1] = landmarkPos[s[i]->landmarkIdx[assignment[i]]].r[1];
-            s[i]->targetPos[2] = landmarkPos[s[i]->landmarkIdx[assignment[i]]].r[2];
+            s[i]->targetPos[0] = landmarkPos[s[i]->landmarkIdx[asIdx]].r[0];
+            s[i]->targetPos[1] = landmarkPos[s[i]->landmarkIdx[asIdx]].r[1];
+            s[i]->targetPos[2] = landmarkPos[s[i]->landmarkIdx[asIdx]].r[2];
         } else {
             s[i]->targetPos[0] = targets[s[i]->targetIdx]->r[0];
             s[i]->targetPos[1] = targets[s[i]->targetIdx]->r[1];
             s[i]->targetPos[2] = targets[s[i]->targetIdx]->r[2];
         }
-        std::cout << "target pos: " << s[i]->targetPos[0] << "\t" << s[i]->targetPos[1] << std::endl;
-        if (s[i]->targetIsLandmark){
-            std::cout << "target is landmark " << std::endl;
-        } else {
-            std::cout << "target is target " << std::endl;
-        }
+//        std::cout << "target pos: " << s[i]->targetPos[0] << "\t" << s[i]->targetPos[1] << std::endl;
+//        if (s[i]->targetIsLandmark){
+//            std::cout << "target is landmark " << std::endl;
+//        } else {
+//            std::cout << "target is target " << std::endl;
+//        }
         s[i]->ShortestPathDistToTarget = this->shortestPathDistSTMat[i][assignment[i]];
         targets[s[i]->targetIdx]->targetIdx = i;
         totalCost += s[i]->ShortestPathDistToTarget;
+        } else {
+            s[i]->targetIdx = -1;
+        }
+        
+        
+        
     }
     return totalCost;
     
@@ -135,6 +151,7 @@ double Controller::calAssignmentViaShortestPath(Model::state s,Model::state targ
 void Controller::calControl2d(Model::state s, Model::state targets){
 //    Controller::control control;
     for(int i=0; i < numP; i++){
+        s[i]->u = 0;
         int t_idx = s[i]->targetIdx;
         if (t_idx >=0){
             double rx = s[i]->targetPos[0] - s[i]->r[0]/radius ;
@@ -598,80 +615,6 @@ void Controller::alignTarget_t(Model::state s, Model::state targets){
     }
 }
 
-/*
-void Controller::register_2d(Model::state s, Model::state targets){
-  // define a 3 dim problem with 10000 model points
-  // and 10000 template points:
-  int32_t dim = 2;
-  int32_t num = numP;
-
-  // allocate model and template memory
-  double* M = (double*)calloc(dim*num,sizeof(double));
-  double* T = (double*)calloc(dim*num,sizeof(double));
-
-  // set model and template points
-  for (int i = 0; i < numP; i++){
-      T[i*dim+0] = targets[i]->r[0];
-      T[i*dim+1] = targets[i]->r[1];
-  
-      M[i*dim+0] = s[i]->r[0]/radius;
-      M[i*dim+1] = s[i]->r[1]/radius;
-  }
-  // start with identity as initial transformation
-  // in practice you might want to use some kind of prediction here
-  Matrix R = Matrix::eye(2);
-  Matrix t(2,1);
-  
-  
-      double center_target[3], center_s[3];
-        
-    this->calWeightCenter(targets,center_target,0);
-    for (int k = 0; k < 3; k++){
-        
-        std::cout << "center_target: " << center_target[k] << std::endl;
-    }
-
-    this->calWeightCenter(s,center_s,1);
-    for (int k = 0; k < 3; k++){
-        center_s[k] /= (radius);
-        std::cout << "center_s: " << center_s[k] << std::endl;
-        
-    }
-
-    // for do the shift
-    for (int i = 0; i < numP; i++) {
-        for (int k = 0; k < 3; k++) {
-            t(0,0)= -center_s[0] + center_target[0];
-            t(1,0)= -center_s[1] + center_target[1];
-        }
-    }
-  
-
-  // run point-to-plane ICP (-1 = no outlier threshold)
-  cout << endl << "Running ICP (point-to-point, no outliers)" << endl;
-  IcpPointToPoint icp(M,num,dim);
-  icp.fit(T,num,R,t,2.5);
-
-  // results
-  cout << endl << "Transformation results:" << endl;
-  cout << "R:" << endl << R << endl << endl;
-  cout << "t:" << endl << t << endl << endl;
-
-  // free memory
-  free(M);
-  free(T);
-
-  for (int i = 0; i < numP; i++){
-      targets[i]->r[0] -= t(0,0) ;
-      targets[i]->r[1] -= t(1,0);
-      targets[i]->r[0] = R(0,0)*targets[i]->r[0] + R(0,1)*targets[i]->r[1];
-      targets[i]->r[1] = R(1,0)*targets[i]->r[0] + R(1,1)*targets[i]->r[1];      
-  }
-  
-  
-  
-}
-*/
 void Controller::calInlier(Model::state s){
 
     double r[3],dist;
@@ -779,7 +722,6 @@ void Controller::alignTarget_rt(Model::state s, Model::state targets){
     int size = s.size();
     
     this->calInlier(s);
-//    NRmatrix<double> b(2, 2);
     arma::mat cov(2,2);
     double center_s[3], center_target[3];
     
@@ -850,6 +792,10 @@ void Controller::alignCargo(Model::state s,Model::state targets){
     t[0] = s[0]->r[0]/radius - targets[0]->r[0];
     t[1] = s[0]->r[1]/radius - targets[0]->r[1];
     t[2] = s[0]->r[2]/radius - targets[0]->r[2];
+    
+    std::cout << "target location: " << s[0]->r[0]/radius 
+            <<"\t" << s[0]->r[1]/radius << "\t" << s[0]->r[2]/radius << std::endl;  
+    
     
     std::cout << "align with cargo " << std::endl;
     std::cout << t[0] << "\t" << t[1] << std::endl;
@@ -1091,16 +1037,16 @@ void Controller::assignLandmarkIdx(Model::state s, double scale) {
         s[i]->nbLandmark.clear();
         s[i]->nbLandmarkDist.clear();
         for (int j = 0; j < numLandmark; j++) {
-    //        double dx = (*landmark_pos)[nodes_l[j]]->r[0] - s[i]->r[0] / scale;
-    //        double dy = (*landmark_pos)[nodes_l[j]]->r[1] - s[i]->r[1] / scale;
             double dx = landmarkPos[j].r[0] - s[i]->r[0] / scale;
             double dy = landmarkPos[j].r[1] - s[i]->r[1] / scale;
            
             double d = sqrt(dx * dx + dy * dy);
             if (abs(dx) <= (landmarkDist + 1e-6) && abs(dy) <= (landmarkDist + 1e-6)){
 //            if (d <= (sqrt(2) * landmarkDist + 1e-6)) {
-                s[i]->nbLandmark.push_back(j);
-                s[i]->nbLandmarkDist.push_back(d);
+                if (notReachedSet.find(j)==notReachedSet.end()){
+                    s[i]->nbLandmark.push_back(j);
+                    s[i]->nbLandmarkDist.push_back(d);
+                }
 //                std::cout << d << std::endl;
             }
         }
@@ -1157,9 +1103,23 @@ double Controller::calExtraCost(Model::state s, double pos1[3], double scale1,
 // based on the shortest path dist between landmarks, we calculate the shortest path dist between ST
 void Controller::calShortestPathDistBetweenST(Model::state s, Model::state targets) {
 
+    for (int i = 0; i < numP; i++){
+        if( s[i]->nbLandmark.size() ==0){
+            std::cerr << "source not reachable! Error" << std::endl;
+            exit(10);
+        }
+        
+         if (targets[i]->nbLandmark.size() > 0) {
+            targets[i]->notReached = false;
+         } else {
+            targets[i]->notReached = true;
+         }
+    }
+    
 
     for (int i = 0; i < numP; i++) {
         for (int j = 0; j < numP; j++) {
+            if (!targets[j]->notReached){
             double r[3];
             r[0] = s[i]->r[0] / radius - targets[j]->r[0];
             r[1] = s[i]->r[1] / radius - targets[j]->r[1];
@@ -1177,36 +1137,69 @@ void Controller::calShortestPathDistBetweenST(Model::state s, Model::state targe
             }
                 shortestPathDistSTMat[i][j] = std::numeric_limits<double>::max();
 /*          
-            if (directEudDist < sqrt(2)*landmarkDist){
-                shortestPathDistSTMat[i][j] = directEudDist + this->calExtraCost(s, s[i]->r, 1.0, targets[i]->r, radius);
-            } else {
-                shortestPathDistSTMat[i][j] = std::numeric_limits<double>::max();
-            }
-            s[i]->targetIsLandmark = 0;
-            s[i]->targetIsTarget = 1;
-            s[i]->targetIdx = j;
-*/
+                        if (directEudDist < sqrt(2)*landmarkDist){
+                            shortestPathDistSTMat[i][j] = directEudDist + this->calExtraCost(s, s[i]->r, 1.0, targets[i]->r, radius);
+                        } else {
+                            shortestPathDistSTMat[i][j] = std::numeric_limits<double>::max();
+                        }
+                        s[i]->targetIsLandmark = 0;
+                        s[i]->targetIsTarget = 1;
+                        s[i]->targetIdx = j;
+             */
+                for (int ii = 0; ii < s[i]->nbLandmark.size(); ii++) {
+                    for (int jj = 0; jj < targets[j]->nbLandmark.size(); jj++) {
+                        int idx1 = s[i]->nbLandmark[ii];
+                        int idx2 = targets[j]->nbLandmark[jj];
+                        double pathDistTemp = s[i]->nbLandmarkDist[ii] + targets[j]->nbLandmarkDist[jj] +
+                                shortestPathDistLandmarkMat[idx1][idx2];
+                        if (shortestPathDistSTMat[i][j] > pathDistTemp) {
+                            s[i]->targetIsLandmark = 1;
+                            s[i]->targetIsTarget = 0;
+                            shortestPathDistSTMat[i][j] = pathDistTemp;
+                            s[i]->ShortestPathDistToTarget = pathDistTemp;
+                            s[i]->landmarkIdx[j] = idx1;
+                        }
 
-            for (int ii = 0; ii < s[i]->nbLandmark.size(); ii++) {
-                for (int jj = 0; jj < targets[j]->nbLandmark.size(); jj++) {
-                    int idx1 = s[i]->nbLandmark[ii];
-                    int idx2 = targets[j]->nbLandmark[jj];
-                    double pathDistTemp = s[i]->nbLandmarkDist[ii] + targets[j]->nbLandmarkDist[jj] +
-                            shortestPathDistLandmarkMat[idx1][idx2];
-                    if (shortestPathDistSTMat[i][j] > pathDistTemp) {
-                        s[i]->targetIsLandmark = 1;
-                        s[i]->targetIsTarget = 0;
-                        shortestPathDistSTMat[i][j] = pathDistTemp;
-                        s[i]->ShortestPathDistToTarget = pathDistTemp;
-                        s[i]->landmarkIdx[j] = idx1;
                     }
-
                 }
+
             }
 
         }
     }
 }
+
+void Controller::constructNotReachedSet(Model::state s){
+// only consider landmark nearby
+    
+    this->assignLandmarkIdx(s,radius);
+    std::set<int> nearSourceLandmarks;
+    for (int i = 0; i < numP; i++){
+        nearSourceLandmarks.insert(s[i]->nbLandmark.begin(),s[i]->nbLandmark.end());
+        for (int j=0; j < s[i]->nbLandmark.size(); j++) {
+            int jj = s[i]->nbLandmark[j];
+//            std::cout << "landmarkPos: " << landmarkPos[jj].r[0] << "\t";
+//            std::cout <<  landmarkPos[jj].r[1] << std::endl;
+        }
+    }
+
+
+    for (int i : nearSourceLandmarks) {
+        Bfs<ListGraph> bfs(landmarkG);
+        bfs.run(nodes_l[i]);
+        for (int j = 0; j < numLandmark; j++) {
+            if (!bfs.reached(nodes_l[j])) {
+                notReachedSet.insert(j);
+            }
+        }
+        //  
+    }
+    std::cout << "not reached set size: " << notReachedSet.size() << std::endl;
+
+    
+
+}
+
 void Controller::calShortestPathDistBetweenLandmarks(Model::state s){
 // only consider landmark nearby
     std::set<int> nearSourceLandmarks;
@@ -1228,6 +1221,8 @@ void Controller::calShortestPathDistBetweenLandmarks(Model::state s){
             (*length)[e] = (*internalLength)[e] + extraCost;
         }
     }
+
+    
 // use Dijkstra algorithm to calculate the shortest path between landmark points
 // this algorithm can be make more efficient by consider source point that is near a particle or a target
     Dijkstra<ListGraph, ListGraph::EdgeMap<double>> dij(landmarkG, *length);
@@ -1235,7 +1230,7 @@ void Controller::calShortestPathDistBetweenLandmarks(Model::state s){
         dij.run(nodes_l[i]);
         for (int j = 0; j < numLandmark; j++) {
             shortestPathDistLandmarkMat[i][j] = dij.dist(nodes_l[j]);
-//            std::cout << "shortest path dist between landmark " << i << 
+//              std::cout << "shortest path dist between landmark " << i << 
 //                    "\t" << j << "\t" << shortestPathDistLandmarkMat[i][j] << std::endl;
         }
     }

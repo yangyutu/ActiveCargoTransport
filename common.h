@@ -10,6 +10,8 @@ struct Parameter{
         int motionFlag, shapeFlag, cargoTransFlag;
         int particleCellListFlag, obstacleCellListFlag, noControlFlag;
         
+        int collective_MoveStep, collective_RestoreStep, CollectiveMoveCycle;
+        int cargoCaptureStep;
         double cellListCutoff, cellListBox_x, cellListBox_y, cellListBox_z;
         int cellListDim, cellListMaxCount;
         int assignViaEud;
