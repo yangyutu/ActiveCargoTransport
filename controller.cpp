@@ -89,9 +89,9 @@ double Controller::calAssignment(Model::state s, Model::state targets, int dim){
 double Controller::calAssignmentViaShortestPath(Model::state s,Model::state targets){
     this->calAvoidance2d_simpleCollision(s);
     
-   
-    
     double totalCost;
+    this->calInlier(s);
+    this->constructDynamicObstacles(s);
     this->assignLandmarkIdx(s, radius);
     this->assignLandmarkIdx(targets, 1.0);
     this->calShortestPathDistBetweenLandmarks(s);
@@ -937,11 +937,11 @@ void Controller::constructLandmark() {
                 if (parameter.obstacleFlag){
                     
                     if(!this->isPathIntersectObstacle(landmarkPos[i].r[0],landmarkPos[i].r[1],
-                        landmarkPos[j].r[0],landmarkPos[j].r[1])){
-                    count++;
-                    edges_l.push_back(landmarkG.addEdge(nodes_l[i], nodes_l[j]));
-                    (*internalLength)[edges_l[edges_l.size() - 1]] = d;
-                    (*length)[edges_l[edges_l.size() - 1]] = 0.0;
+                        landmarkPos[j].r[0],landmarkPos[j].r[1],Controller::staticObs)){
+                        count++;
+                        edges_l.push_back(landmarkG.addEdge(nodes_l[i], nodes_l[j]));
+                        (*internalLength)[edges_l[edges_l.size() - 1]] = d;
+                        (*length)[edges_l[edges_l.size() - 1]] = 0.0;
                     }
                 } else {
                     count++;
@@ -974,8 +974,27 @@ void Controller::constructObstacles(){
     }
 }
 
+void Controller::constructDynamicObstacles(Model::state s){
+    dynamicObstacleSet.clear();
+    for (int i = 0; i < numP; i++){
+        if (s[i]->nbcount >= 3){
+            int x = (int)round(s[i]->r[0]/radius);
+            int y = (int)round(s[i]->r[1]/radius);
+            dynamicObstacleSet.insert(CoorPair(x,y));    
+        }
+    }
+    std::cout << "number of dynamic obstacles: " << dynamicObstacleSet.size() << std::endl;
+}
+
 bool Controller::isOverlapObstacle(int x, int y){
     if (obstacleSet.find(CoorPair(x, y)) != obstacleSet.end()) {
+        return true;
+    }
+    return false;      
+}
+
+bool Controller::isOverlapDynamicObstacle(int x, int y){
+    if (dynamicObstacleSet.find(CoorPair(x, y)) != obstacleSet.end()) {
         return true;
     }
     return false;      
@@ -991,7 +1010,7 @@ bool Controller::isOverlapObstacle(double xx, double yy){
     return false;      
 }
 
-bool Controller::isPathIntersectObstacle(double xx, double yy, double newxx, double newyy) {
+bool Controller::isPathIntersectObstacle(double xx, double yy, double newxx, double newyy, obstacleType obsType) {
 
     int x = (int)round(xx);
     int y = (int)round(yy);
@@ -1005,18 +1024,22 @@ bool Controller::isPathIntersectObstacle(double xx, double yy, double newxx, dou
         for (int i = 0; i <= abs(newy - y); i++) {
             xtemp = x;
             ytemp = (int) round(y + (newy - y) / abs(newy - y) * i);
-            if (isOverlapObstacle(xtemp, ytemp)) return true;
-            if (isOverlapObstacle(xtemp, ytemp)) return true;
+            if (obsType == staticObs){
+                if (isOverlapObstacle(xtemp, ytemp)) return true;
+            } else {
+                if (isOverlapDynamicObstacle(xtemp, ytemp)) return true;
+            }
             //				if(obstacleSet.find(CoorPair(xtemp,ytemp))!=obstacleSet.end()) return true;
         }
     } else if (y == newy) {
         for (int i = 0; i <= abs(newx - x); i++) {
             xtemp = (int) round(x + (newx - x) / abs(newx - x) * i);
             ytemp = y;
-            if (isOverlapObstacle(xtemp, ytemp)) return true;
-            if (isOverlapObstacle(xtemp, ytemp)) return true;
-            //				if(obstacleSet.find(CoorPair(xtemp,ytemp))!=obstacleSet.end()) return true;
-        }
+            if (obsType == staticObs){
+                if (isOverlapObstacle(xtemp, ytemp)) return true;
+            } else {
+                if (isOverlapDynamicObstacle(xtemp, ytemp)) return true;
+            }        }
     } else {
         //		double slope=((double)newy-(double)y)/((double)newx-(double)x);
         double len = sqrt((x - newx)*(x - newx)+(y - newy)*(y - newy));
@@ -1024,9 +1047,11 @@ bool Controller::isPathIntersectObstacle(double xx, double yy, double newxx, dou
             xtemp = (int) round(x + i * ((double) newx - (double) x) / len);
             ytemp = (int) round(y + i * ((double) newy - (double) y) / len);
 
-            if (isOverlapObstacle(xtemp, ytemp)) return true;
-            if (isOverlapObstacle(xtemp, ytemp)) return true;
-            //			if(obstacleSet.find(CoorPair(xtemp,ytemp)) != obstacleSet.end()) return true;
+            if (obsType == staticObs){
+                if (isOverlapObstacle(xtemp, ytemp)) return true;
+            } else {
+                if (isOverlapDynamicObstacle(xtemp, ytemp)) return true;
+            }        
         }
     }
 
@@ -1045,6 +1070,11 @@ void Controller::assignLandmarkIdx(Model::state s, double scale) {
 //            if (d <= (sqrt(2) * landmarkDist + 1e-6)) {
                 if (notReachedSet.find(j)==notReachedSet.end()){
                     s[i]->nbLandmark.push_back(j);
+                    double extraCost = 0.0;
+                    if (this->isPathIntersectObstacle(landmarkPos[j].r[0],landmarkPos[j].r[1],s[i]->r[0] / scale,s[i]->r[1] / scale, Controller::dynamicObs))
+                    {
+                        extraCost = parameter.blockCost;
+                    }
                     s[i]->nbLandmarkDist.push_back(d);
                 }
 //                std::cout << d << std::endl;
@@ -1128,12 +1158,17 @@ void Controller::calShortestPathDistBetweenST(Model::state s, Model::state targe
 //                    this->calExtraCost(s, s[i]->r, 1.0, targets[i]->r, radius);
             double directEudDist = sqrt(pow(r[0], 2) + pow(r[1], 2) + pow(r[2], 2));
 //            if (directEudDist < sqrt(2)*landmarkDist){
-            if(!this->isPathIntersectObstacle(s[i]->r[0]/radius,s[i]->r[1]/radius,targets[j]->r[0],targets[j]->r[1])){
+            if(!this->isPathIntersectObstacle(s[i]->r[0]/radius,s[i]->r[1]/radius,targets[j]->r[0],targets[j]->r[1],Controller::staticObs)){
                 s[i]->targetIsLandmark = 0;
                 s[i]->targetIsTarget = 1;
                 s[i]->targetIdx = j;
                 shortestPathDistSTMat[i][j] = directEudDist;
                 continue;
+            } else if(this->isPathIntersectObstacle(s[i]->r[0]/radius,s[i]->r[1]/radius,targets[j]->r[0],targets[j]->r[1],Controller::staticObs)){
+                s[i]->targetIsLandmark = 0;
+                s[i]->targetIsTarget = 1;
+                s[i]->targetIdx = j;
+                shortestPathDistSTMat[i][j] = directEudDist + parameter.blockCost;
             }
                 shortestPathDistSTMat[i][j] = std::numeric_limits<double>::max();
 /*          
@@ -1201,7 +1236,7 @@ void Controller::constructNotReachedSet(Model::state s){
 }
 
 void Controller::calShortestPathDistBetweenLandmarks(Model::state s){
-// only consider landmark nearby
+// only consider landmark nearby, calculate nearby landmarks
     std::set<int> nearSourceLandmarks;
     for (int i = 0; i < numP; i++){
         nearSourceLandmarks.insert(s[i]->nbLandmark.begin(),s[i]->nbLandmark.end());
@@ -1212,13 +1247,17 @@ void Controller::calShortestPathDistBetweenLandmarks(Model::state s){
         }
     }
     
-    
 // first construct the length matrix with consideration of particles
     for (int i = 0; i < numLandmark; i++){
         for (ListGraph::OutArcIt e(landmarkG,nodes_l[i]); e != INVALID;++e){
             ListGraph::Node n = landmarkG.oppositeNode(nodes_l[i],e);
-            double extraCost = calExtraCost(s,landmarkPos[i].r,radius,landmarkPos[landmarkG.id(n)].r,radius);
+            int idx = landmarkG.id(n);
+            double extraCost = 0;
+            if (this->isPathIntersectObstacle(landmarkPos[i].r[0],landmarkPos[i].r[1],landmarkPos[idx].r[0],landmarkPos[idx].r[1],Controller::dynamicObs)){
+                double extraCost = parameter.blockCost;
+            } 
             (*length)[e] = (*internalLength)[e] + extraCost;
+            
         }
     }
 

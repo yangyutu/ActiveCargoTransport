@@ -20,6 +20,9 @@ public:
     ~Controller() {
     }
     typedef std::vector<int> control;
+    enum obstacleType{
+      staticObs, dynamicObs
+    };
     double calAssignment(Model::state s, Model::state targets,int dimP);
     void calControl(Model::state s, Model::state targets, int dimP);
     void calControl2d(Model::state s, Model::state targets);
@@ -66,7 +69,6 @@ private:
     std::random_device rd;
     typedef boost::multi_array<double, 2> Array2D_type;
     std::shared_ptr<Array2D_type> maps[3];
-    std::vector<Model::pos> obtacles;
     
 //    std::uniform_int_distribution<> dis(0,1);
     void calAvoidance2d(Model::state s);
@@ -100,9 +102,12 @@ private:
     double blockCost;
     
     void constructObstacles();
+    void constructDynamicObstacles(Model::state s);
     bool isOverlapObstacle(int x, int y);
+    bool isOverlapDynamicObstacle(int x, int y);
     bool isOverlapObstacle(double x, double y);
-    bool isPathIntersectObstacle(double x, double y, double newx, double newy);
+    bool isPathIntersectObstacle(double x, double y, double newx, double newy, Controller::obstacleType obsType);
     Model::posArray obstacles;
     std::unordered_set<CoorPair,CoorPairHash,CoorPairEqual> obstacleSet;
+    std::unordered_set<CoorPair,CoorPairHash,CoorPairEqual> dynamicObstacleSet;
 };
