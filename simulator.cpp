@@ -101,7 +101,7 @@ void Simulator::cargoTransport_2d(){
             controller->alignCargo(model->getCurrState(),model->getTargets());
             if ((s + 1) % assignmentFrequency == 0) {
                 totalCost = controller->calAssignment(model->getCurrState(), model->getTargets(), model->getDimP());
-                std::cout << totalCost << std::endl;
+                std::cout << "capture step: "<< s  << "\t" <<totalCost << std::endl;
             }
             controller->calControl(model->getCurrState(), model->getTargets(), model->getDimP());
             model->getCurrState()[0]->u = 0;
@@ -110,7 +110,8 @@ void Simulator::cargoTransport_2d(){
     
     for(int c = 0; c < motionCycle; c++){
         for (int s = 0; s < move_motionStep; s++) {            
-            controller->translateCargo_2d(0.0, model->getCurrState());
+//            controller->translateCargo_2d(0.0, model->getCurrState());
+            controller->translateCargoFollowPath_2d(model->getCurrState());
             model->run(controlFrequency);
             controller->alignCargo(model->getCurrState(),model->getTargets());
         }
@@ -119,7 +120,7 @@ void Simulator::cargoTransport_2d(){
         for (int s = 0; s < move_recoverStep; s++) {
             if ((s + 1) % assignmentFrequency == 0) {
                 totalCost = controller->calAssignment(model->getCurrState(), model->getTargets(), model->getDimP());
-                std::cout << totalCost << std::endl;
+                std::cout << "recover step:" << "\t" <<totalCost << std::endl;
             }
             controller->calControl(model->getCurrState(), model->getTargets(), model->getDimP());
             model->run(controlFrequency);

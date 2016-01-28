@@ -39,6 +39,7 @@ public:
 //    void alignTarget_r(Model::state s, Model::state targets);
     void alignTarget_rt(Model::state s, Model::state targets);
     void translateCargo_2d(double phi, Model::state s);
+    void translateCargoFollowPath_2d(Model::state s);
     void alignCargo(Model::state s,Model::state t);
     void constructNotReachedSet(Model::state s);
     

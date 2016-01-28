@@ -786,6 +786,25 @@ void Controller::translateCargo_2d(double phi, Model::state s){
     // the cargo just diffuse
     s[0]->u = 0;
 }
+
+void Controller::translateCargoFollowPath_2d(Model::state s){
+    int x = (int)round(s[0]->r[0]/radius);
+    int y = (int)round(s[0]->r[1]/radius);
+    
+    if (y > 30 && x < 45){
+        this->translateCargo_2d(0,s);
+    }else if (x >= 45 && y >15){
+        this->translateCargo_2d(3*M_PI/2.0,s);
+    } else if (y > 15 && x < 45){
+        this->translateCargo_2d(3*M_PI/2.0,s);    
+    } else {
+        this->translateCargo_2d(-M_PI,s);
+    
+    }
+    // the cargo just diffuse
+    s[0]->u = 0;
+}
+
 void Controller::alignCargo(Model::state s,Model::state targets){
     double t[3];
   //  s[0] is the cargo, targets[0] is the center of the template
@@ -793,7 +812,7 @@ void Controller::alignCargo(Model::state s,Model::state targets){
     t[1] = s[0]->r[1]/radius - targets[0]->r[1];
     t[2] = s[0]->r[2]/radius - targets[0]->r[2];
     
-    std::cout << "target location: " << s[0]->r[0]/radius 
+    std::cout << "target/cargo location: " << s[0]->r[0]/radius 
             <<"\t" << s[0]->r[1]/radius << "\t" << s[0]->r[2]/radius << std::endl;  
     
     

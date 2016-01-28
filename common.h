@@ -7,7 +7,7 @@ struct Parameter{
 	int controlStep, equilibrateStep;
 	std::string iniConfig, filetag, targetConfig;
         int seed;
-        int motionFlag, shapeFlag, cargoTransFlag;
+        int motionFlag, shapeFlag, cargoTransFlag; //1 move horizontally 2 vertically 3 following a path
         int particleCellListFlag, obstacleCellListFlag, noControlFlag;
         
         int collective_MoveStep, collective_RestoreStep, CollectiveMoveCycle;
