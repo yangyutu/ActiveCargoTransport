@@ -376,6 +376,9 @@ void Model::outputTrajectory(std::ostream& os) {
         os << particles[i]->targetIdx<< "\t";
         os << particles[i]->EudDistToTarget<< "\t";
         os << particles[i]->availControl<<"\t";
+        os << particles[i]->targetPos[0]<< "\t";
+        os << particles[i]->targetPos[1]<< "\t";
+        os << particles[i]->targetPos[2]<<"\t";
         os << std::endl;
     }
 }

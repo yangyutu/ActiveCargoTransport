@@ -39,14 +39,24 @@ void Simulator::shapeForming_seq(){
     double totalCost;   
     model->createInitialState();
     controller->buildTargetGraph();
-    totalCost = controller->calSeqAssignment(model->getCurrState(),model->getTargets(),0);
-    controller->calControl(model->getCurrState(),model->getTargets(),model->getDimP());
+    if (parameter.assignmentMethod == 1){
+        totalCost = controller->calSeqAssignment(model->getCurrState(),model->getTargets(),0);
+    } else  if (parameter.assignmentMethod == 3){
+        totalCost = controller->calAssignmentSeqViaShortestPath(model->getCurrState(),model->getTargets(),0);
+    }
+        controller->calControl(model->getCurrState(),model->getTargets(),model->getDimP());
     int iter;
     std::cout << totalCost << std::endl;
     for(int s=0; s < nstep_control; s++){
         if ((s+1)%assignmentFrequency == 0){
-            totalCost = controller->calSeqAssignment(model->getCurrState(),model->getTargets(),1);
-            std::cout << s << "\t" <<totalCost <<"\t" << controller->getNumMarked()<<"\t" <<controller->getDeviation()<< std::endl;
+            if (parameter.assignmentMethod == 1){
+                totalCost = controller->calSeqAssignment(model->getCurrState(),model->getTargets(),1);
+            } else if (parameter.assignmentMethod == 3){
+                totalCost = controller->calAssignmentSeqViaShortestPath(model->getCurrState(),model->getTargets(),1);
+    
+            }
+            std::cout << s << "\t totalCost  " <<totalCost <<"\t number of current targets: " << controller->getNumMarked()
+                    <<"\t current average deviations:  " <<controller->getDeviation()<< std::endl;
         }
         controller->calControl(model->getCurrState(),model->getTargets(),model->getDimP());        
         model->run(controlFrequency);

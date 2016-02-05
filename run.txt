@@ -1,11 +1,11 @@
 N
-37
+6
 dim
 2
 radius
 1e-6
 constrol step
-2000
+1000
 equilibrate step
 0
 dt
@@ -31,19 +31,19 @@ assignment method
 nocontrolFlag
 0
 shapeflag
-0
+1
 motionflag
 0
 motion cycle, collective move step, collective restore step 
 300 3 20
 cargoTransflag
-1
+0
 cargo capture step
 1500
 trajOutputInterval
 5000
 landmarklength, landmarkMin
-15 0.4
+36 -18
 landmarkdist
 5
 blockcost
@@ -51,19 +51,19 @@ blockcost
 blockthresh
 4
 obstacleFlag
-1
+0
 particlecellListFlag, obstaclecellListFlag
 0 1
 cellListcutoff, dim, maxcount, box_x, box_y, box_z
 3.0 2 60 200.0 200.0 50.0
 initial config
-testconfig37p.txt
+testconfig6p.txt
 file tag
-7Pobstacle
+sixPtest
 target config
-hexagon_37p.txt
+target_6p.txt
 obstaclefilename
-obstacle_map10.txt
+boundingBox_size150.txt
 
 
 

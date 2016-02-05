@@ -23,6 +23,7 @@ Controller::Controller(Model::state s,Model::state targets, Model::posArray obst
     obstacles = obstacles0;
     radius = parameter.radius;
     numP = parameter.N;
+    numTargets = targets.size();
     dimP = parameter.dim;
     
     colliInfo.vSet[0] = 0.0;
@@ -86,17 +87,21 @@ double Controller::calAssignment(Model::state s, Model::state targets, int dim){
     return totalCost;
 }
 
-double Controller::calAssignmentViaShortestPath(Model::state s,Model::state targets){
-    this->calAvoidance2d_simpleCollision(s);
-    
-    double totalCost;
+void Controller::calShortestPathHelper(Model::state s, Model::state targets){
+
     this->calInlier(s);
     this->constructDynamicObstacles(s);
     this->assignLandmarkIdx(s, radius);
     this->assignLandmarkIdx(targets, 1.0);
     this->calShortestPathDistBetweenLandmarks(s);
     this->calShortestPathDistBetweenST(s,targets);
+}
+
+double Controller::calAssignmentViaShortestPath(Model::state s,Model::state targets){
+    this->calAvoidance2d_simpleCollision(s);
     
+    this->calShortestPathHelper(s,targets);
+    double totalCost = 0.0;   
     AssignmentProblemSolver APS;
     std::vector<int> activeTargets;
     for (int i = 0; i < numP; i++){
@@ -134,7 +139,7 @@ double Controller::calAssignmentViaShortestPath(Model::state s,Model::state targ
 //        } else {
 //            std::cout << "target is target " << std::endl;
 //        }
-        s[i]->ShortestPathDistToTarget = this->shortestPathDistSTMat[i][assignment[i]];
+        s[i]->ShortestPathDistToTarget = this->shortestPathDistSTMat[i][asIdx];
         targets[s[i]->targetIdx]->targetIdx = i;
         totalCost += s[i]->ShortestPathDistToTarget;
         } else {
@@ -145,9 +150,87 @@ double Controller::calAssignmentViaShortestPath(Model::state s,Model::state targ
         
     }
     return totalCost;
-    
-
 }
+
+double Controller::calAssignmentSeqViaShortestPath(Model::state s,Model::state targets, int expandFlag){
+
+    if (expandFlag) {
+        deviation = 0.0;
+        double r[3];
+        for (int i = 0; i < numP; i++) {
+            if (targets[i]->marked) {
+
+                r[0] = targets[i]->r[0] - s[targets[i]->targetIdx]->r[0] / radius;
+                r[1] = targets[i]->r[1] - s[targets[i]->targetIdx]->r[1] / radius;
+                r[2] = targets[i]->r[2] - s[targets[i]->targetIdx]->r[2] / radius;
+                deviation += sqrt(pow(r[0], 2) + pow(r[1], 2) + pow(r[2], 2));
+            }
+            
+        }
+        deviation /= numMarked;
+
+        if (deviation < 1.0) {
+            this->expandTargets();
+        }
+    }
+    this->calAvoidance2d_simpleCollision(s);
+//  now I am trying to do some alignment bwteen targets and states
+    if (numMarked > 500){
+        Model::state partialTargets, partialState;
+        for (int i = 0; i < numMarked; i++){
+            partialTargets.push_back(targets[markedIdx[i]]);
+            partialState.push_back(s[targets[markedIdx[i]]->targetIdx]);
+        }
+        this->alignTarget_rt(partialState,partialTargets);
+    }
+    
+    if (numMarked == numP){
+        this->alignTarget_rt(s, targets);
+    }
+
+    this->calShortestPathHelper(s,targets);
+        
+    vector< vector<double> > Cost(numP, vector<double>(numMarked));
+    for (int i = 0; i < numP; i++){
+        for (int j = 0; j < numMarked; j++){
+            Cost[i][j] = this->shortestPathDistSTMat[i][markedIdx[j]];
+        }
+    }
+    double totalCost = 0.0;
+    AssignmentProblemSolver APS;
+    APS.Solve(Cost, assignment);
+    for(int i=0; i < numP; i++){
+        if (assignment[i] >= 0){
+        int asIdx = markedIdx[assignment[i]];
+        s[i]->targetIdx = asIdx;
+        if (s[i]->targetIsLandmark){
+            s[i]->targetPos[0] = landmarkPos[s[i]->landmarkIdx[asIdx]].r[0];
+            s[i]->targetPos[1] = landmarkPos[s[i]->landmarkIdx[asIdx]].r[1];
+            s[i]->targetPos[2] = landmarkPos[s[i]->landmarkIdx[asIdx]].r[2];
+        } else {
+            s[i]->targetPos[0] = targets[s[i]->targetIdx]->r[0];
+            s[i]->targetPos[1] = targets[s[i]->targetIdx]->r[1];
+            s[i]->targetPos[2] = targets[s[i]->targetIdx]->r[2];
+        }
+//        std::cout << "target pos: " << s[i]->targetPos[0] << "\t" << s[i]->targetPos[1] << std::endl;
+//        if (s[i]->targetIsLandmark){
+//            std::cout << "target is landmark " << std::endl;
+//        } else {
+//            std::cout << "target is target " << std::endl;
+//        }
+        s[i]->ShortestPathDistToTarget = this->shortestPathDistSTMat[i][asIdx];
+        targets[s[i]->targetIdx]->targetIdx = i;
+        totalCost += s[i]->ShortestPathDistToTarget;
+        } else {
+            s[i]->targetIdx = -1;
+        }
+        
+    }
+    return totalCost;
+    
+}
+
+
 void Controller::calControl2d(Model::state s, Model::state targets){
 //    Controller::control control;
     for(int i=0; i < numP; i++){
@@ -556,7 +639,8 @@ void Controller::rotate_2d(Model::state s){
 void Controller::calEudDist(Model::state s){
     double dist;
     double r[3];
-    for (int i = 0; i < numP; i++) {
+    int size = s.size();
+    for (int i = 0; i < size; i++) {
             dist = 0.0;
             for (int k = 0; k < dimP; k++) {
                 r[k] = s[i]->targetPos[k] - s[i]->r[k] / radius;
@@ -568,19 +652,20 @@ void Controller::calEudDist(Model::state s){
 }
 
 void Controller::calWeightCenter(Model::state s, double center[3],int flag) {
+    int size = s.size();
     if (flag == 0) {
         for (int k = 0; k < 3; k++) {
             center[k] = 0;
-            for (int i = 0; i < numP; i++) {
+            for (int i = 0; i < size; i++) {
                 center[k] += s[i]->r[k];
             }
-            center[k] /= numP;
+            center[k] /= size;
         }
     } else {
         for (int k = 0; k < 3; k++) {
             center[k] = 0;
             double weight_sum = 0.0;
-            for (int i = 0; i < numP; i++) {
+            for (int i = 0; i < size; i++) {
                 double weight = s[i]->inlier;
                 center[k] += s[i]->r[k] * weight;
                 weight_sum += weight;
@@ -593,7 +678,8 @@ void Controller::calWeightCenter(Model::state s, double center[3],int flag) {
 void Controller::alignTarget_t(Model::state s, Model::state targets){
 
     double center_target[3], center_s[3];
-        
+    
+    int size = s.size();
     this->calWeightCenter(targets,center_target,0);
     for (int k = 0; k < 3; k++){
         
@@ -608,7 +694,7 @@ void Controller::alignTarget_t(Model::state s, Model::state targets){
     }
 
     // for do the shift
-    for (int i = 0; i < numP; i++) {
+    for (int i = 0; i < size; i++) {
         for (int k = 0; k < 3; k++) {
             targets[i]->r[k] += center_s[k] - center_target[k];
         }
@@ -646,6 +732,8 @@ void Controller::calInlier(Model::state s){
     }
     
 }
+
+
 
 double Controller::calSeqAssignment(Model::state s, Model::state targets, int expandFlag){
 
@@ -819,7 +907,9 @@ void Controller::alignCargo(Model::state s,Model::state targets){
     std::cout << "align with cargo " << std::endl;
     std::cout << t[0] << "\t" << t[1] << std::endl;
     
-    for (int i = 0; i < numP; i++){
+    int size = targets.size();
+    
+    for (int i = 0; i < size; i++){
         targets[i]->r[0] += t[0];
         targets[i]->r[1] += t[1]; 
         targets[i]->r[2] += t[2]; 
@@ -833,7 +923,7 @@ void Controller::buildTargetGraph(){
     
     marked_t = std::make_shared<lemon::ListGraph::NodeMap<int>>(targetG);
     index_t = std::make_shared<lemon::ListGraph::NodeMap<int>>(targetG);
-    for (int i = 0; i < numP; i++){
+    for (int i = 0; i < numTargets; i++){
         nodes_t.push_back(targetG.addNode());
         (*marked_t)[nodes_t[i]] = targets_[i]->marked;
        (*index_t)[nodes_t[i]] = i;
@@ -864,7 +954,7 @@ void Controller::buildTargetGraph(){
     }
    std::cout << "target graph info:" << std::endl;
    std::cout << "nodes: " << countNodes(targetG) << std::endl;
-   std::cout << "nodes: " << countArcs(targetG) << std::endl;
+   std::cout << "edge: " << countArcs(targetG) << std::endl;
    
 }
 

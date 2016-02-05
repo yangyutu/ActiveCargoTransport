@@ -29,6 +29,7 @@ public:
     double calAssignment2d(Model::state s, Model::state targets);
     double calAssignmentVisEudCost(Model:: state s, Model::state targets);
     double calAssignmentViaShortestPath(Model::state s,Model::state targets);
+    double calAssignmentSeqViaShortestPath(Model::state s,Model::state targets, int expand);
     double calSeqAssignment(Model::state s, Model::state targets, int expand);
     void calControl3d(Model::state s, Model::state targets);
     double calAssignment3d(Model::state s, Model::state targets);
@@ -62,8 +63,8 @@ private:
     std::vector<Model::pos> landmarkPos;
     //std::shared_ptr<lemon::ListGraph::NodeMap<std::array<double,3>>> landmark_pos2;
 	std::shared_ptr<lemon::ListGraph::EdgeMap<double>> internalLength, length;
-    int numMarked,numSurface, landmarkLength, numLandmark;
-	double landmarkDist;
+    int numMarked,numSurface, landmarkLength, numLandmark, numTargets;
+    double landmarkDist;
     double deviation;
     std::vector<int> markedIdx;
     ColliInfo colliInfo;
@@ -94,6 +95,8 @@ private:
     double calExtraCost(Model::state s, double r1[3],double scale1, double r2[3], double scale2);
     void calShortestPathDistBetweenLandmarks(Model::state s);
     void calShortestPathDistBetweenST(Model::state s, Model::state targets);
+    void calShortestPathHelper(Model::state s, Model::state targets);
+  
     std::vector<std::vector<double>> shortestPathDistLandmarkMat, shortestPathDistSTMat;
     std::vector<Model::particle> landmarks;
     std::vector<int> assignment,availControl;

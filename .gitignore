@@ -28,3 +28,9 @@
 *.app
 
 *~
+*xyz*
+*.nb
+*.tiff
+*.tif
+*.pdf
+*.pptx
