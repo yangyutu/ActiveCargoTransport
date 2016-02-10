@@ -1267,18 +1267,26 @@ void Controller::calShortestPathDistBetweenST(Model::state s, Model::state targe
 //                    this->calExtraCost(s, s[i]->r, 1.0, targets[i]->r, radius);
             double directEudDist = sqrt(pow(r[0], 2) + pow(r[1], 2) + pow(r[2], 2));
 //            if (directEudDist < sqrt(2)*landmarkDist){
-            if(!this->isPathIntersectObstacle(s[i]->r[0]/radius,s[i]->r[1]/radius,targets[j]->r[0],targets[j]->r[1],Controller::staticObs)){
+            if(!this->isPathIntersectObstacle(s[i]->r[0]/radius,s[i]->r[1]/radius,targets[j]->r[0],targets[j]->r[1],Controller::staticObs)
+                    && !this->isPathIntersectObstacle(s[i]->r[0]/radius,s[i]->r[1]/radius,targets[j]->r[0],targets[j]->r[1],Controller::dynamicObs)){
+                
                 s[i]->targetIsLandmark = 0;
                 s[i]->targetIsTarget = 1;
                 s[i]->targetIdx = j;
                 shortestPathDistSTMat[i][j] = directEudDist;
+                // if straight line path is not blocked by either static or dynamic obstacles, then directly take the straight line path
                 continue;
-            } else if(this->isPathIntersectObstacle(s[i]->r[0]/radius,s[i]->r[1]/radius,targets[j]->r[0],targets[j]->r[1],Controller::staticObs)){
-                s[i]->targetIsLandmark = 0;
-                s[i]->targetIsTarget = 1;
-                s[i]->targetIdx = j;
-                shortestPathDistSTMat[i][j] = directEudDist + parameter.blockCost;
             }
+            
+//            if(this->isPathIntersectObstacle(s[i]->r[0]/radius,s[i]->r[1]/radius,targets[j]->r[0],targets[j]->r[1],Controller::dynamicObs)){
+                // if the straight line path is not blocked by static obstalces, then we need to consider 
+                //whether there are dynamic obstacles blocking the straight line path 
+//                s[i]->targetIsLandmark = 0;
+//                s[i]->targetIsTarget = 1;
+//                s[i]->targetIdx = j;
+//                shortestPathDistSTMat[i][j] = directEudDist + parameter.blockCost;
+//            }
+            // if the straight line path is blocked by obstacles, we consider non-straight pathway
                 shortestPathDistSTMat[i][j] = std::numeric_limits<double>::max();
 /*          
                         if (directEudDist < sqrt(2)*landmarkDist){
@@ -1294,6 +1302,8 @@ void Controller::calShortestPathDistBetweenST(Model::state s, Model::state targe
                     for (int jj = 0; jj < targets[j]->nbLandmark.size(); jj++) {
                         int idx1 = s[i]->nbLandmark[ii];
                         int idx2 = targets[j]->nbLandmark[jj];
+                        // note here that the nblandmarkdist already consider the dynamic obstacle cost
+                        
                         double pathDistTemp = s[i]->nbLandmarkDist[ii] + targets[j]->nbLandmarkDist[jj] +
                                 shortestPathDistLandmarkMat[idx1][idx2];
                         if (shortestPathDistSTMat[i][j] > pathDistTemp) {
