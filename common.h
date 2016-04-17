@@ -4,10 +4,11 @@
 struct Parameter{
 	int N, dim, trajOutputInterval;
 	double radius, dt, diffu_t, diffu_r, Bpp, Os_pressure, L_dep, cutoff,kappa;
-	int controlStep, equilibrateStep;
+	int controlStep, equilibrateStep,nCycles;
 	std::string iniConfig, filetag, targetConfig;
         int seed;
-        int motionFlag, shapeFlag, cargoTransFlag; //1 move horizontally 2 vertically 3 following a path
+        int motionFlag,  cargoTransFlag; //1 move horizontally 2 vertically 3 following a path
+        int shapeFlag; // 1 normal shape formation 2 sequential shape formation
         int particleCellListFlag, obstacleCellListFlag, noControlFlag;
         
         int collective_MoveStep, collective_RestoreStep, CollectiveMoveCycle;
@@ -24,6 +25,10 @@ struct Parameter{
         std::string obstacleFilename;
         int assignmentMethod; // 1. single optimal cost based assignment 2. Eud distance based assignment
         // 3. shortest path landmark method based on assignment
+        int dynamicTargetFlag;
+        double controlTimeInterval, targetDiffuseRatio,  targetVelocityRatio;
+        double maxVelocity, velocityChangePoint;
+        int selfAvoidanceFlag;
 };
 class CoorPair{
 public:

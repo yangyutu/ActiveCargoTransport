@@ -5,7 +5,7 @@ extern Parameter parameter;
 
 Simulator::Simulator(std::shared_ptr<Model> model0,std::shared_ptr<Controller> controller0):
                     model(model0),controller(controller0){
-    controlFrequency = 1.0/model->dt();
+    controlFrequency = parameter.controlTimeInterval/model->dt();
     assignmentFrequency = 1;
     nstep_control = parameter.controlStep;
     nstep_equilibrate = parameter.equilibrateStep;
@@ -118,25 +118,28 @@ void Simulator::cargoTransport_2d(){
             model->run(controlFrequency);
         }
     
+    if (parameter.motionFlag){
     for(int c = 0; c < motionCycle; c++){
         for (int s = 0; s < move_motionStep; s++) {            
 //            controller->translateCargo_2d(0.0, model->getCurrState());
             controller->translateCargoFollowPath_2d(model->getCurrState());
             model->run(controlFrequency);
             controller->alignCargo(model->getCurrState(),model->getTargets());
+            std::cout << "cargo move step: " << "cycle: " << c << "step: " << s << std::endl;
         }
         
         
         for (int s = 0; s < move_recoverStep; s++) {
             if ((s + 1) % assignmentFrequency == 0) {
                 totalCost = controller->calAssignment(model->getCurrState(), model->getTargets(), model->getDimP());
-                std::cout << "recover step:" << "\t" <<totalCost << std::endl;
+                std::cout << "cargo recover step: " << "cycle: " << c << "step: " << s << "\t" <<totalCost << std::endl;
             }
             controller->calControl(model->getCurrState(), model->getTargets(), model->getDimP());
             model->run(controlFrequency);
             controller->alignCargo(model->getCurrState(),model->getTargets());
         }
     
+    }
     }
 }
 

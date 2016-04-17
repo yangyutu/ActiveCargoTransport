@@ -25,14 +25,8 @@ public:
     };
     double calAssignment(Model::state s, Model::state targets,int dimP);
     void calControl(Model::state s, Model::state targets, int dimP);
-    void calControl2d(Model::state s, Model::state targets);
-    double calAssignment2d(Model::state s, Model::state targets);
-    double calAssignmentVisEudCost(Model:: state s, Model::state targets);
-    double calAssignmentViaShortestPath(Model::state s,Model::state targets);
-    double calAssignmentSeqViaShortestPath(Model::state s,Model::state targets, int expand);
-    double calSeqAssignment(Model::state s, Model::state targets, int expand);
-    void calControl3d(Model::state s, Model::state targets);
-    double calAssignment3d(Model::state s, Model::state targets);
+    
+
     void getErrorDist();
     void translate_2d(double phi,Model::state s);
     void rotate_2d(Model::state s);
@@ -43,7 +37,9 @@ public:
     void translateCargoFollowPath_2d(Model::state s);
     void alignCargo(Model::state s,Model::state t);
     void constructNotReachedSet(Model::state s);
-    
+    double calSeqAssignment(Model::state s, Model::state targets, int expand);
+    double calAssignmentSeqViaShortestPath(Model::state s,Model::state targets, int expand);
+ 
     void buildTargetGraph();
     int getNumMarked(){return numMarked;}
     double getDeviation(){return deviation;}
@@ -114,4 +110,12 @@ private:
     Model::posArray obstacles;
     std::unordered_set<CoorPair,CoorPairHash,CoorPairEqual> obstacleSet;
     std::unordered_set<CoorPair,CoorPairHash,CoorPairEqual> dynamicObstacleSet;
+    
+    
+    double calAssignment2d(Model::state s, Model::state targets);
+    double calAssignmentVisEudCost(Model:: state s, Model::state targets);
+    double calAssignmentViaShortestPath(Model::state s,Model::state targets);
+   void calControl3d(Model::state s, Model::state targets);
+    double calAssignment3d(Model::state s, Model::state targets);
+    void calControl2d(Model::state s, Model::state targets);
 };

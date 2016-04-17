@@ -1,19 +1,27 @@
 N
-6
+1
 dim
 2
 radius
 1e-6
+ncycles
+3
 constrol step
 1000
 equilibrate step
 0
 dt
-0.0001
+0.001
+control time interval (s)
+1.0
 diffu_t
 2.145e-13
 diffu_r
 0.161
+maximum speed for particle m/s
+5.0e-6
+velocity change position point
+2.5
 Bpp
 2.29
 Os_pressure
@@ -26,44 +34,49 @@ kappa
 50
 seed
 4
-assignment method
-3
+self-avoidance between multiple particles flag
+0
+assignment method  1. single optimal cost based assignment 2. Eud distance based assignment 3. shortest path landmark method based on assignment
+2
 nocontrolFlag
 0
-shapeflag
+shapeflag(this is for static target)
 1
-motionflag
+motionflag (for collective motion)
 0
 motion cycle, collective move step, collective restore step 
 300 3 20
-cargoTransflag
+cargoTransflag (this is for dynamic target)
 0
 cargo capture step
 1500
 trajOutputInterval
 5000
-landmarklength, landmarkMin
-36 -18
+landmarknumber in each dimension, landmarkMin
+20 0.5
 landmarkdist
 5
 blockcost
 100
-blockthresh
-4
 obstacleFlag
 0
+target dynamic flag (whether target will do Brownian motion and drift motion)
+1
+target diffusion coefficent ratio, target velocity ratio
+1.0 0.125
 particlecellListFlag, obstaclecellListFlag
 0 1
 cellListcutoff, dim, maxcount, box_x, box_y, box_z
 3.0 2 60 200.0 200.0 50.0
 initial config
-testconfig6p.txt
+map12bit/config1p_tracking_map12.txt
 file tag
-sixPtest
+singlep_
 target config
-target_6p.txt
+map12bit/targetTracking_1p_map12.txt
 obstaclefilename
-boundingBox_size150.txt
+map12bit/map12bit.txtwalldata.txt
+
 
 
 

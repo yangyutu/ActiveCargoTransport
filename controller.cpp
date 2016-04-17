@@ -52,6 +52,7 @@ Controller::Controller(Model::state s,Model::state targets, Model::posArray obst
     
     if (parameter.obstacleFlag){
         this->constructObstacles();
+        std::cout << "obstacle number: " << this->obstacles.size() << std::endl;
     }    
     if (parameter.assignmentMethod == 3){
         this->constructLandmark();
@@ -98,7 +99,13 @@ void Controller::calShortestPathHelper(Model::state s, Model::state targets){
 }
 
 double Controller::calAssignmentViaShortestPath(Model::state s,Model::state targets){
-    this->calAvoidance2d_simpleCollision(s);
+    if (parameter.selfAvoidanceFlag){
+        this->calAvoidance2d_simpleCollision(s);
+    } else {
+        for (int i=0; i < numP; i++){
+        availControl[i] = 2;
+    }
+    }
     
     this->calShortestPathHelper(s,targets);
     double totalCost = 0.0;   
@@ -232,17 +239,35 @@ double Controller::calAssignmentSeqViaShortestPath(Model::state s,Model::state t
 
 
 void Controller::calControl2d(Model::state s, Model::state targets){
-//    Controller::control control;
+// here calculate the control option given the targets
     for(int i=0; i < numP; i++){
         s[i]->u = 0;
         int t_idx = s[i]->targetIdx;
         if (t_idx >=0){
-            double rx = s[i]->targetPos[0] - s[i]->r[0]/radius ;
-            double ry = s[i]->targetPos[1] - s[i]->r[1]/radius ;
+            double rx, ry;
+            if (parameter.dynamicTargetFlag){
+                // if the target is dynamic, then we track its next mean position
+                rx = s[i]->targetPos[0]+parameter.maxVelocity*parameter.targetVelocityRatio/radius
+                        - s[i]->r[0]/radius ;
+                ry = s[i]->targetPos[1] - s[i]->r[1]/radius ;            
+            }else{
+                rx = s[i]->targetPos[0]- s[i]->r[0]/radius ;
+                ry = s[i]->targetPos[1] - s[i]->r[1]/radius ;            
+            }
+                
+             
+
             double dot_prod = cos(s[i]->phi)*rx + sin(s[i]->phi)*ry;
             if (dot_prod < 0) {
                 s[i]->u = 0;
             } else {
+                if (dot_prod < parameter.velocityChangePoint) {
+                    s[i]->u = 0;                    
+                } else {
+                    s[i]->u = 2;
+                }
+                               
+/* this is for three state strategy                
                 if (dot_prod < 1) {
                     s[i]->u = 0;                    
                 } else if (dot_prod < 3.7) {
@@ -250,6 +275,7 @@ void Controller::calControl2d(Model::state s, Model::state targets){
                 } else {
                     s[i]->u = 2;
                 }
+*/  
             }
 
             if (s[i]->u > availControl[i]) {
@@ -531,7 +557,16 @@ void Controller::calControl3d(Model::state s, Model::state targets){
 
 
 double Controller::calAssignment2d(Model::state s, Model::state targets) {
+    
+    std::cerr << "this assignment method is depreciated, do not use this one" << std::endl;
+    
+    if (parameter.selfAvoidanceFlag){
     this->calAvoidance2d_simpleCollision(s);
+    } else {
+        for (int i=0; i < numP; i++){
+        availControl[i] = 2;
+    }
+    }
     
     vector< vector<double> > Cost(numP, vector<double>(numP));
     double totalCost = 0.0;
@@ -570,8 +605,14 @@ double Controller::calAssignment2d(Model::state s, Model::state targets) {
 
 
 double Controller::calAssignmentVisEudCost(Model:: state s, Model::state targets){
-    this->calAvoidance2d_simpleCollision(s);
     
+    if (parameter.selfAvoidanceFlag){
+    this->calAvoidance2d_simpleCollision(s);
+    } else {
+        for (int i=0; i < numP; i++){
+        availControl[i] = 2;
+    }
+    }
     vector< vector<double> > Cost(numP, vector<double>(numP));
     double totalCost = 0.0;
     for(int i=0; i<numP; i++){
@@ -594,6 +635,7 @@ double Controller::calAssignmentVisEudCost(Model:: state s, Model::state targets
         s[i]->targetPos[1] = targets[s[i]->targetIdx]->r[1];
         s[i]->targetPos[2] = targets[s[i]->targetIdx]->r[2];
         s[i]->cost = Cost[i][assignment[i]];
+        s[i]->ShortestPathDistToTarget = Cost[i][assignment[i]];
         targets[s[i]->targetIdx]->targetIdx = i;
         totalCost += s[i]->cost;
     }
@@ -1244,6 +1286,8 @@ void Controller::calShortestPathDistBetweenST(Model::state s, Model::state targe
 
     for (int i = 0; i < numP; i++){
         if( s[i]->nbLandmark.size() ==0){
+            std::cerr << "particle idx: " << i << std::endl;
+             std::cerr << "particle pox: " << s[i]->r[0]/radius <<"\t"<< s[i]->r[1]/radius<< std::endl;
             std::cerr << "source not reachable! Error" << std::endl;
             exit(10);
         }

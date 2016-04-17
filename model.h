@@ -85,7 +85,9 @@ private:
     double L_dep; // 0.2 of radius size, i.e. 200 nm
     double combinedSize;
     double eps[3][3][3];
-    std::vector<double> velocity={0.0,2.0e-6,5.0e-6};
+    std::vector<double> velocity={0.0,5.0e-6,5.0e-6}; // here is for simpication of binary actuation
+//    std::vector<double> velocity={0.0, 5.0e-6};
+    int numControl;
     state particles, targets;
     posArray obstacles; 
     std::vector<int> control;

@@ -19,22 +19,24 @@ int main(){
     std::shared_ptr<Model> m(new Model());
     std::shared_ptr<Controller> c(new Controller(m->getCurrState(),m->getTargets(),m->getObstacles()));
     Simulator simulator(m,c);
-    if (parameter.shapeFlag == 1){
-        simulator.shapeForming();
-    } else if(parameter.shapeFlag == 2){
-        simulator.shapeForming_seq();
-    }else if(parameter.motionFlag==1){
-        simulator.translate_2d();
-    } else if(parameter.motionFlag==2){
-        simulator.rotate_2d();
-    } else if(parameter.cargoTransFlag==1){
-        simulator.cargoTransport_2d();
-    } else if (parameter.noControlFlag == 1){
-        m->createInitialState();
-        m->getCurrState()[0]->u = 2;
-        m->run(parameter.controlStep);
-    }
     
+    for (int i = 0; i < parameter.nCycles; i++) {
+        if (parameter.shapeFlag == 1) {
+            simulator.shapeForming();
+        } else if (parameter.shapeFlag == 2) {
+            simulator.shapeForming_seq();
+        } else if (parameter.motionFlag == 1) {
+            simulator.translate_2d();
+        } else if (parameter.motionFlag == 2) {
+            simulator.rotate_2d();
+        } else if (parameter.cargoTransFlag == 1) {
+            simulator.cargoTransport_2d();
+        } else if (parameter.noControlFlag == 1) {
+            m->createInitialState();
+            m->getCurrState()[0]->u = 2;
+            m->run(parameter.controlStep);
+        }
+    }
     return 0;
 }
 
@@ -52,6 +54,9 @@ void readParameter(){
     runfile >> parameter.radius;
     getline(runfile, line);
     getline(runfile, line);
+    runfile >> parameter.nCycles;
+    getline(runfile, line);
+    getline(runfile, line);
     runfile >> parameter.controlStep;
     getline(runfile, line);
     getline(runfile, line);
@@ -61,10 +66,19 @@ void readParameter(){
     runfile >> parameter.dt;
     getline(runfile, line);
     getline(runfile, line);
+    runfile >> parameter.controlTimeInterval;
+    getline(runfile, line);
+    getline(runfile, line);
     runfile >> parameter.diffu_t;    
     getline(runfile, line);
     getline(runfile, line);
     runfile >> parameter.diffu_r;
+    getline(runfile, line);
+    getline(runfile, line);
+    runfile >> parameter.maxVelocity;
+    getline(runfile, line);
+    getline(runfile, line);
+    runfile >> parameter.velocityChangePoint;
     getline(runfile, line);
     getline(runfile, line);
     runfile >> parameter.Bpp;
@@ -83,6 +97,9 @@ void readParameter(){
     getline(runfile, line);
     getline(runfile, line);
     runfile >> parameter.seed;
+    getline(runfile, line);
+    getline(runfile, line);
+    runfile >> parameter.selfAvoidanceFlag;
     getline(runfile, line);
     getline(runfile, line);
     runfile >> parameter.assignmentMethod;
@@ -118,10 +135,13 @@ void readParameter(){
     runfile >> parameter.blockCost;
     getline(runfile, line);
     getline(runfile, line);
-    runfile >> parameter.blockThresh;
-    getline(runfile, line);
-    getline(runfile, line);
     runfile >> parameter.obstacleFlag;
+    getline(runfile, line);
+    getline(runfile, line);
+    runfile >> parameter.dynamicTargetFlag;
+    getline(runfile, line);
+    getline(runfile, line);
+    runfile >> parameter.targetDiffuseRatio >> parameter.targetVelocityRatio;
     getline(runfile, line);
     getline(runfile, line);
     runfile >> parameter.particleCellListFlag >> parameter.obstacleCellListFlag;

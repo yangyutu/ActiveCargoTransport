@@ -30,13 +30,14 @@ Model::Model(){
     trajOutputInterval = parameter.trajOutputInterval;
     fileCounter = 0;
     cutoff = parameter.cutoff;
+    numControl = this->velocity.size();
     this->rand_generator.seed(parameter.seed);
 
     for(int i = 0; i < numP; i++){
         particles.push_back(particle_ptr(new Model::particle));
         targets.push_back(particle_ptr(new Model::particle));
     }
-    this->readTarget(parameter.targetConfig);
+    
     
     this->getPermutator();
     
@@ -83,14 +84,8 @@ void Model::run() {
             }
     }
     calForces();
-/*    
-    particles[0]->phi = 0.0;
-    particles[1]->phi = -M_PI;
-    particles[0]->u = 2;
-    particles[1]->u = 2;
-    particles[0]->r[1] = 0.0;
-    particles[1]->r[1] = 0.0;
-*/    
+
+    
     if (dimP == 2){
         for (int i = 0; i < numP; i++) {
 
@@ -102,7 +97,24 @@ void Model::run() {
                     +   sqrt(2.0 * diffusivity_t * dt_) * (*rand_normal)(rand_generator);
         
             particles[i]->phi += sqrt(2.0 * diffusivity_r * dt_) * (*rand_normal)(rand_generator);
+            
         }
+        
+        
+        if (parameter.dynamicTargetFlag){
+            double randDist[2];
+            randDist[0] = (*rand_normal)(rand_generator);
+            randDist[1] = (*rand_normal)(rand_generator);
+            for (int i = 0; i < numP; i++) {
+
+            targets[i]->r[0] += (parameter.targetVelocityRatio*velocity.back()*dt_ + 
+                    sqrt(2.0 * diffusivity_t*parameter.targetDiffuseRatio * dt_) * randDist[0]) / radius;
+            targets[i]->r[1] += sqrt(2.0 * diffusivity_t*parameter.targetDiffuseRatio * dt_) * randDist[1] / radius;
+            
+        }
+            
+    
+        }   
     } else if(dimP == 3){
         for (int i = 0; i < numP; i++) {
             for(int j = 0; j < dimP; j++){
@@ -155,7 +167,7 @@ void Model::readTarget(std::string filename){
         linestream >> targets[i]->marked;
     }
     
-    osTarget.open("target.txt");
+    osTarget.open(filetag +"target.txt");
 /*    
     for(int i = 0; i < numP; i++){
         osTarget << i << "\t";
@@ -342,6 +354,7 @@ void Model::calForces() {
 void Model::createInitialState(){
 
     this->readxyz(iniFile);
+    this->readTarget(parameter.targetConfig);
     std::stringstream ss;
     std::cout << "model initialize at round " << fileCounter << std::endl;
     ss << this->fileCounter++;
@@ -374,11 +387,12 @@ void Model::outputTrajectory(std::ostream& os) {
         os << particles[i]->cost<< "\t";
         os << particles[i]->u<< "\t";
         os << particles[i]->targetIdx<< "\t";
-        os << particles[i]->EudDistToTarget<< "\t";
+        os << particles[i]->ShortestPathDistToTarget<< "\t";
         os << particles[i]->availControl<<"\t";
-        os << particles[i]->targetPos[0]<< "\t";
-        os << particles[i]->targetPos[1]<< "\t";
-        os << particles[i]->targetPos[2]<<"\t";
+        os << targets[i]->r[0]<< "\t";
+        os << targets[i]->r[1]<< "\t";
+        os << targets[i]->r[2]<<"\t";
+        os << this->timeCounter*this->dt_ << "\t";
         os << std::endl;
     }
 }
