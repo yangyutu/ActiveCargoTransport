@@ -147,6 +147,9 @@ void readParameter(){
     runfile >> parameter.particleCellListFlag >> parameter.obstacleCellListFlag;
     getline(runfile, line);
     getline(runfile, line);
+    runfile >> parameter.binaryVelocityFlag;
+    getline(runfile, line);
+    getline(runfile, line);
     runfile >> parameter.cellListCutoff >> parameter.cellListDim >> parameter.cellListMaxCount >>parameter.cellListBox_x
             >> parameter.cellListBox_y>> parameter.cellListBox_z;
     getline(runfile, line);

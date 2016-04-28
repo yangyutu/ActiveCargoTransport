@@ -90,10 +90,10 @@ void Model::run() {
         for (int i = 0; i < numP; i++) {
 
             particles[i]->r[0] += mobility * particles[i]->F[0] * dt_ +
-                        velocity[particles[i]->u] * cos(particles[i]->phi) * dt_
+                        parameter.maxVelocity*particles[i]->u * cos(particles[i]->phi) * dt_
                     +   sqrt(2.0 * diffusivity_t * dt_) * (*rand_normal)(rand_generator);
             particles[i]->r[1] += mobility * particles[i]->F[1] * dt_ +
-                        velocity[particles[i]->u] * sin(particles[i]->phi) * dt_ 
+                        parameter.maxVelocity*particles[i]->u * sin(particles[i]->phi) * dt_ 
                     +   sqrt(2.0 * diffusivity_t * dt_) * (*rand_normal)(rand_generator);
         
             particles[i]->phi += sqrt(2.0 * diffusivity_r * dt_) * (*rand_normal)(rand_generator);
@@ -107,7 +107,7 @@ void Model::run() {
             randDist[1] = (*rand_normal)(rand_generator);
             for (int i = 0; i < numP; i++) {
 
-            targets[i]->r[0] += (parameter.targetVelocityRatio*velocity.back()*dt_ + 
+            targets[i]->r[0] += (parameter.targetVelocityRatio*parameter.maxVelocity*dt_ + 
                     sqrt(2.0 * diffusivity_t*parameter.targetDiffuseRatio * dt_) * randDist[0]) / radius;
             targets[i]->r[1] += sqrt(2.0 * diffusivity_t*parameter.targetDiffuseRatio * dt_) * randDist[1] / radius;
             
@@ -116,6 +116,8 @@ void Model::run() {
     
         }   
     } else if(dimP == 3){
+        std::cerr << "3d equation of motion is depreciated in the moment!" << std::endl;
+        exit(3);
         for (int i = 0; i < numP; i++) {
             for(int j = 0; j < dimP; j++){
                 particles[i]->r[j] += mobility * particles[i]->F[j] * dt_ +

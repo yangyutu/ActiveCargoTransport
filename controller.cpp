@@ -261,11 +261,22 @@ void Controller::calControl2d(Model::state s, Model::state targets){
             if (dot_prod < 0) {
                 s[i]->u = 0;
             } else {
-                if (dot_prod < parameter.velocityChangePoint) {
-                    s[i]->u = 0;                    
+                
+               if (parameter.binaryVelocityFlag) { 
+                if (dot_prod > (parameter.velocityChangePoint/2)) {
+                    s[i]->u = 1;                    
                 } else {
-                    s[i]->u = 2;
+                    s[i]->u = 0;
                 }
+               } else {
+                    if (dot_prod > parameter.velocityChangePoint) {
+                        s[i]->u = 1;                    
+                    } else {
+                        s[i]->u = dot_prod/parameter.velocityChangePoint;
+                    }
+               
+               
+               }
                                
 /* this is for three state strategy                
                 if (dot_prod < 1) {

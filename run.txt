@@ -5,7 +5,7 @@ dim
 radius
 1e-6
 ncycles
-3
+1
 constrol step
 1000
 equilibrate step
@@ -21,7 +21,7 @@ diffu_r
 maximum speed for particle m/s
 5.0e-6
 velocity change position point
-2.5
+5
 Bpp
 2.29
 Os_pressure
@@ -66,6 +66,8 @@ target diffusion coefficent ratio, target velocity ratio
 1.0 0.125
 particlecellListFlag, obstaclecellListFlag
 0 1
+binary velocity flag
+0
 cellListcutoff, dim, maxcount, box_x, box_y, box_z
 3.0 2 60 200.0 200.0 50.0
 initial config

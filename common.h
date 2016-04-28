@@ -29,6 +29,7 @@ struct Parameter{
         double controlTimeInterval, targetDiffuseRatio,  targetVelocityRatio;
         double maxVelocity, velocityChangePoint;
         int selfAvoidanceFlag;
+        int binaryVelocityFlag;
 };
 class CoorPair{
 public:

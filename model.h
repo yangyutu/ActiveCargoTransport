@@ -24,7 +24,7 @@ public:
         double r[3],F[3],ori_vec[3][3];
         double phi;
         double theta;
-        int u;
+        double u;
         int targetIdx;
         double cost;
         int availControl;
