@@ -492,7 +492,7 @@ void Controller::calAvoidance2d_simpleCollision(Model::state s){
                     if (parameter.binaryVelocityFlag){
                         availControl[i] = 0.0;
                     } else {
-                        availControl[i] = availControl[i] * t;
+                        availControl[i] = availControl[i] * t/parameter.controlTimeInterval;
                     }
                 } 
             

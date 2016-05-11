@@ -7,19 +7,19 @@ radius
 ncycles
 1
 constrol step
-50000
+100000
 equilibrate step
 0
 dt
 0.0001
 control time interval (s)
-0.1
+0.05
 diffu_t
 2.145e-13
 diffu_r
 0.161
 maximum speed for particle m/s
-5.0e-12
+5.0e-6
 velocity change position point (this parameter is depreciated, currently is calculated automatically in the program)
 5
 Bpp
