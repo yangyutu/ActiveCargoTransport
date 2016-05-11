@@ -78,6 +78,7 @@ private:
     void readPolicyMap();
     void readTargets();
     void calAvoidance2d_simpleCollision(Model::state s);
+    void calAvoidance2d_simpleCollision_continousV(Model::state s);
     double getCostFromMap(double x,double y, double z, int mapIndex);
     void calWeightCenter(Model::state s, double center[3],int flag);
     void calInlier(Model::state s);
@@ -95,7 +96,8 @@ private:
   
     std::vector<std::vector<double>> shortestPathDistLandmarkMat, shortestPathDistSTMat;
     std::vector<Model::particle> landmarks;
-    std::vector<int> assignment,availControl;
+    std::vector<int> assignment;
+    std::vector<double> availControl;
     std::set<int> notReachedSet;
 
     Model::state targets_, s_;

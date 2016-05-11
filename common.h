@@ -30,6 +30,10 @@ struct Parameter{
         double maxVelocity, velocityChangePoint;
         int selfAvoidanceFlag;
         int binaryVelocityFlag;
+        int cargoInteractingFlag;
+        double targetCenter[3];
+        double setConstantV;
+        int setConstantVFlag;
 };
 class CoorPair{
 public:
@@ -59,4 +63,5 @@ typedef struct
 		return (CP1.x==CP2.x)&&(CP1.y==CP2.y);
 	}
 }CoorPairEqual;
+
 

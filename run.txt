@@ -1,5 +1,5 @@
 N
-1
+6
 dim
 2
 radius
@@ -7,25 +7,25 @@ radius
 ncycles
 1
 constrol step
-1000
+50000
 equilibrate step
 0
 dt
-0.001
+0.0001
 control time interval (s)
-1.0
+0.1
 diffu_t
 2.145e-13
 diffu_r
 0.161
 maximum speed for particle m/s
-5.0e-6
-velocity change position point
+5.0e-12
+velocity change position point (this parameter is depreciated, currently is calculated automatically in the program)
 5
 Bpp
 2.29
-Os_pressure
-5.8e-8
+Os_pressure (kT nm^3) 5.8e-8
+16.8e-8
 L_dep
 0.2
 cutoff
@@ -35,18 +35,18 @@ kappa
 seed
 4
 self-avoidance between multiple particles flag
-0
+1
 assignment method  1. single optimal cost based assignment 2. Eud distance based assignment 3. shortest path landmark method based on assignment
 2
 nocontrolFlag
 0
-shapeflag(this is for static target)
+shapeformationflag/cargocaptureFlag(this is for capture/goingto target)
 1
 motionflag (for collective motion)
 0
 motion cycle, collective move step, collective restore step 
 300 3 20
-cargoTransflag (this is for dynamic target)
+cargo Translation flag (this is for doing transport the target/cargo, it will contain collective move and restore)
 0
 cargo capture step
 1500
@@ -62,25 +62,30 @@ obstacleFlag
 0
 target dynamic flag (whether target will do Brownian motion and drift motion)
 1
-target diffusion coefficent ratio, target velocity ratio
-1.0 0.125
+target diffusion coefficent ratio, target velocity ratio, will target interacting with other objects? 
+1.0 0.0 1
+target center position
+0 0 0
 particlecellListFlag, obstaclecellListFlag
 0 1
 binary velocity flag
 0
+set constant propulsion  velocity flag and value ratio within [0,1](this will override all the control policy and set every motor with the same velocity)
+0 0.0
 cellListcutoff, dim, maxcount, box_x, box_y, box_z
 3.0 2 60 200.0 200.0 50.0
 initial config
-map12bit/config1p_tracking_map12.txt
+freespaceLocking/target_and_config/target_6pd=2.14.txt
 file tag
-singlep_
+freespaceLocking/traj/test/dynamic/multi6p_
 target config
-map12bit/targetTracking_1p_map12.txt
+freespaceLocking/target_and_config/target_6pd=2.14.txt
 obstaclefilename
-map12bit/map12bit.txtwalldata.txt
+freespaceLocking/target_and_config/map12bit.txtwalldata.txt
 
 
 
 
+freespaceLocking/target_and_config/config_forlocking.txt
 
 

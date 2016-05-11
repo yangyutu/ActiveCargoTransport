@@ -102,16 +102,23 @@ void Model::run() {
         
         
         if (parameter.dynamicTargetFlag){
-            double randDist[2];
+            double randDist[2], disp[2];
             randDist[0] = (*rand_normal)(rand_generator);
             randDist[1] = (*rand_normal)(rand_generator);
-            for (int i = 0; i < numP; i++) {
-
-            targets[i]->r[0] += (parameter.targetVelocityRatio*parameter.maxVelocity*dt_ + 
-                    sqrt(2.0 * diffusivity_t*parameter.targetDiffuseRatio * dt_) * randDist[0]) / radius;
-            targets[i]->r[1] += sqrt(2.0 * diffusivity_t*parameter.targetDiffuseRatio * dt_) * randDist[1] / radius;
             
-        }
+            disp[0] = parameter.targetDiffuseRatio*mobility * targetCenter.F[0] * dt_ 
+                    + (parameter.targetVelocityRatio*parameter.maxVelocity*dt_ + 
+                    sqrt(2.0 * diffusivity_t*parameter.targetDiffuseRatio * dt_) * randDist[0]);
+            disp[1] = parameter.targetDiffuseRatio*mobility * targetCenter.F[1] * dt_ 
+                    +sqrt(2.0 * diffusivity_t*parameter.targetDiffuseRatio * dt_) * randDist[1];
+            
+            targetCenter.r[0] += disp[0];
+            targetCenter.r[1] += disp[1];
+            
+            for (int i = 0; i < numP; i++) {
+                targets[i]->r[0] += disp[0] / radius;
+                targets[i]->r[1] += disp[1] / radius;
+            }
             
     
         }   
@@ -167,27 +174,24 @@ void Model::readTarget(std::string filename){
         linestream >> dum;
         linestream >> dum;
         linestream >> targets[i]->marked;
+        // now do the target shift respect to the target center
+        targets[i]->r[0] += parameter.targetCenter[0];
+        targets[i]->r[1] += parameter.targetCenter[1];
+        targets[i]->r[2] += parameter.targetCenter[2];
+        
     }
     
-    osTarget.open(filetag +"target.txt");
-/*    
-    for(int i = 0; i < numP; i++){
-        osTarget << i << "\t";
-        osTarget << targets[i]->r[0] << "\t";
-        osTarget << targets[i]->r[1] << "\t";
-        osTarget << targets[i]->r[2] << "\t";
-        osTarget << targets[i]->marked << std::endl;
-    }  
-*/
+
  }
 
-void Model::calForcesHelper(int i, int j, double F[3]) {
+// this force calculation includes double layer repulsion and depletion attraction 
+void Model::calForcesHelper_DLAO(double ri[3], double rj[3], double F[3],int i,int j) {
     double r[dimP], dist;
 
     dist = 0.0;
     for (int k = 0; k < dimP; k++) {
         F[k] = 0.0;
-        r[k] = (particles[j]->r[k] - particles[i]->r[k]) / radius;
+        r[k] = (rj[k] - ri[k]) / radius;
         dist += pow(r[k], 2.0);
     }
     dist = sqrt(dist);
@@ -196,11 +200,9 @@ void Model::calForcesHelper(int i, int j, double F[3]) {
         dist = 2.06;
     }
     if (dist < cutoff) {
-//        double Fpp = LJ * (-12.0 * pow((rm / dist), 12) / dist + 12.0 * pow((rm / dist), 7) / dist);
         double Fpp = -4.0/3.0*
         Os_pressure*M_PI*(-3.0/4.0*pow(combinedSize,2.0)+3.0*dist*dist/16.0*radius_nm*radius_nm);
         Fpp += -Bpp * Kappa * exp(-Kappa*(dist-2.0));
-//        Fpp += -9e-13 * exp(-kappa* (dist - 2.0));
         for (int k = 0; k < dimP; k++) {
             F[k] = Fpp * r[k] / dist;
 
@@ -208,32 +210,26 @@ void Model::calForcesHelper(int i, int j, double F[3]) {
     }
 }
 
-
-void Model::calObsForcesHelper(int i, int j, double F[3]) {
+// this force calculation only includes double layer repulsion 
+void Model::calForcesHelper_DL(double ri[3], double rj[3], double F[3],int i, int j) {
     double r[dimP], dist;
 
     dist = 0.0;
     for (int k = 0; k < dimP; k++) {
         F[k] = 0.0;
-        r[k] = (obstacles[j]->r[k] - particles[i]->r[k]) / radius;
+        r[k] = (rj[k] - ri[k]) / radius;
         dist += pow(r[k], 2.0);
     }
     dist = sqrt(dist);
     if (dist < 2.0) {
-        std::cerr << "overlap " << i << "\t" << j << "\t"<< this->timeCounter << "dist: " << dist <<std::endl;
+        std::cerr << "overlap " << i << "\t with " << j << "\t"<< this->timeCounter << "dist: " << dist <<std::endl;
         dist = 2.06;
     }
     if (dist < cutoff) {
-//        double Fpp = LJ * (-12.0 * pow((rm / dist), 12) / dist + 12.0 * pow((rm / dist), 7) / dist);
-        double Fpp = -Bpp * Kappa * exp(-Kappa*(dist-2.0));
+        double Fpp = -Bpp * Kappa * exp(-Kappa*(dist-1.9));
         
-//        Fpp += -4.0/3.0*
-//        Os_pressure*M_PI*(-3.0/4.0*pow(combinedSize,2.0)+3.0*dist*dist/16.0*radius_nm*radius_nm);
-//        Fpp += 
-//        Fpp += -9e-13 * exp(-kappa* (dist - 2.0));
         for (int k = 0; k < dimP; k++) {
             F[k] = Fpp * r[k] / dist;
-
         }
     }
 }
@@ -250,101 +246,72 @@ void Model::calForces() {
 
         for (int i = 0; i < numP - 1; i++) {
             for (int j = i + 1; j < numP; j++) {
-                calForcesHelper(i, j, F);
+                calForcesHelper_DLAO(particles[i]->r, particles[j]->r, F,i, j);
                 for (int k = 0; k < dimP; k++) {
                     particles[i]->F[k] += F[k];
                     particles[j]->F[k] += -F[k];
                 }
             }
         }
+        
+        if (parameter.cargoInteractingFlag){
+            // Note here we treat the target center as the cargo
+            for (int k = 0; k < dimP; k++) {
+                targetCenter.F[k] = 0.0;
+            }
+            
+            for (int j = 0; j < numP; j++) {
+                calForcesHelper_DL(targetCenter.r, particles[j]->r, F,-1, j);
+                for (int k = 0; k < dimP; k++) {
+                    targetCenter.F[k] += F[k];
+                    particles[j]->F[k] += -F[k];
+                }
+            }
+        
+        }
+        
     } else{
         
+        std::cerr << "this force calculation using cellList is depreciated in this repo! " << std::endl;
+        exit(6);
         for (int i = 0; i < numP; i++) {
-            //std::vector<int> mapTable;
-            //mapTable.assign(numP,0);
             std::vector<int> nblist = 
             cellList->getNeighbors(particles[i]->r[0],particles[i]->r[1],particles[i]->r[2]);
             int nblistSize = nblist.size();
             for (int j = 0; j < nblistSize; j++){
-                //mapTable[nblist[j]] = 1;
                 if (i!=nblist[j]){
-                    calForcesHelper(i, nblist[j], F);
+                    calForcesHelper_DLAO(particles[i]->r, particles[nblist[j]]->r, F,i, nblist[j]);
                     for (int k = 0; k < dimP; k++) {
                         particles[i]->F[k] += F[k];
                     }
                 }
-            }
-/*           
-            for (int j = 0; j < numP; j++){
-                if (mapTable[j]!=1){
-                        double r[3], dist;
-                        dist = 0.0;
-                        for (int k = 0; k < dimP; k++) {
-
-                            r[k] = (particles[j]->r[k] - particles[i]->r[k]) / radius;
-                            dist += pow(r[k], 2.0);
-                        }
-                        dist = sqrt(dist);
-                        if (dist < cutoff) {
-                            std::cout << "particle: " << j <<"uncovered! " << dist <<std::endl;
-                            int idx1[3],idx2[3];
-                            cellList->getParticleIdx(particles[i]->r[0],particles[i]->r[1],particles[i]->r[2],idx1);
-                            cellList->getParticleIdx(particles[j]->r[0],particles[j]->r[1],particles[j]->r[2],idx2);
-                            
-                            std::cout << "particle i idx: " << idx1[0] << "\t" << idx1[1] << "\t"<<idx1[2]<<std::endl;
-                            std::cout << "particle j idx: " << idx2[0] << "\t" << idx2[1] << "\t" <<idx2[2]<<std::endl;
-                            cellList->printCellContent(idx1);
-                            cellList->printCellContent(idx2);
-                            cellList->buildList(particles);
-                            cellList->printCellContent(idx1);
-                            cellList->printCellContent(idx2);
-                            
-                        }   
-                    
-                }
-            }         
-            
-            
-            double F2[3], diff[3];
-            diff[0]=0.0;
-            diff[1]=0.0;
-            diff[2]=0.0;
-            for (int j = 0; j < numP; j++){
-                if (i!=j){
-                    calForcesHelper(i, j, F2);
-                    for (int k = 0; k < dimP; k++) {
-                        diff[k] += F2[k];
-                    }
-                    
-                }
-            }              
-            
-            std::cout << "particle: " << i << std::endl; 
-                    std::cout << diff[0] - particles[i]->F[0] << std::endl;                    
-                    std::cout << diff[1] - particles[i]->F[1] << std::endl;
-                    std::cout << diff[2] - particles[i]->F[2] << std::endl;
-            }
-*/             
+            } 
         }    
     }
     
     if(parameter.obstacleFlag) {
         for (int i = 0; i < numP; i++) {
-            //std::vector<int> mapTable;
-            //mapTable.assign(numP,0);
             std::vector<int> nblist =
                     obsCellList->getNeighbors(particles[i]->r[0], particles[i]->r[1], particles[i]->r[2]);
             int nblistSize = nblist.size();
             for (int j = 0; j < nblistSize; j++) {
-                //mapTable[nblist[j]] = 1;
-                if (i != nblist[j]) {
-                    calObsForcesHelper(i, nblist[j], F);
-                    for (int k = 0; k < dimP; k++) {
-                        particles[i]->F[k] += F[k];
-                    }
+                calForcesHelper_DL(particles[i]->r, obstacles[nblist[j]]->r, F, i, nblist[j]);
+                for (int k = 0; k < dimP; k++) {
+                    particles[i]->F[k] += F[k];
                 }
             }
 
+        }
+        
+        // Note here we treat the target center as the cargo
+        std::vector<int> nblist =
+                    obsCellList->getNeighbors(targetCenter.r[0], targetCenter.r[1], targetCenter.r[2]);
+        int nblistSize = nblist.size();
+        for (int j = 0; j < nblistSize; j++) {
+            calForcesHelper_DL(targetCenter.r, obstacles[nblist[j]]->r, F, -1, nblist[j]);
+            for (int k = 0; k < dimP; k++) {
+                targetCenter.F[k] += F[k];
+            }
         }
     
     }
@@ -357,14 +324,19 @@ void Model::createInitialState(){
 
     this->readxyz(iniFile);
     this->readTarget(parameter.targetConfig);
+    this->targetCenter.r[0] = parameter.targetCenter[0]*radius;
+    this->targetCenter.r[1] = parameter.targetCenter[1]*radius;
+    this->targetCenter.r[2] = parameter.targetCenter[2]*radius;
     std::stringstream ss;
     std::cout << "model initialize at round " << fileCounter << std::endl;
     ss << this->fileCounter++;
     if (trajOs.is_open()) trajOs.close();
     if (opOs.is_open()) opOs.close();
-
+    if (osCargo.is_open()) osCargo.close();
     this->trajOs.open(filetag + "xyz_" + ss.str() + ".txt");
     this->opOs.open(filetag + "op" + ss.str() + ".txt");
+    this->osTarget.open(filetag +"target"+ss.str() + ".txt");
+    this->osCargo.open(filetag +"cargo"+ss.str() + ".txt");
     this->timeCounter = 0;
 
 }
@@ -397,14 +369,19 @@ void Model::outputTrajectory(std::ostream& os) {
         os << this->timeCounter*this->dt_ << "\t";
         os << std::endl;
     }
+    for (int j = 0; j < 3; j++){
+        this->osCargo << targetCenter.r[j]/radius << "\t";
+    }
+    this->osCargo << std::endl;
+    
 }
 
 void Model::outputOrderParameter(std::ostream& os) {
 
     os << this->timeCounter << "\t";
-    os << this->calHausdorff() << "\t";
-    os << this->calPsi6() << "\t";
-    os << this->calRg() << std::endl;
+//    os << this->calHausdorff() << "\t";
+//    os << this->calPsi6() << "\t";
+    os << this->calRg() << "\t";
     os << this->calEudDeviation() << std::endl;
 }
 
@@ -554,22 +531,22 @@ double Model::calRg(){
     double zmean = 0;
 
     for (int i = 0; i < numP; i++) {
-        xmean = xmean + particles[i]->r[0];
-        ymean = ymean + particles[i]->r[1];
-        zmean = zmean + particles[i]->r[2];
+        xmean = xmean + particles[i]->r[0]/radius;
+        ymean = ymean + particles[i]->r[1]/radius;
+        zmean = zmean + particles[i]->r[2]/radius;
     }
     xmean /= numP;
     ymean /= numP;
-
-    double rgmean = 0;
+    zmean /= numP;
+    double rgmean = 0.0;
     for (int i = 0; i < numP; i++) {
         rgmean = rgmean + (particles[i]->r[0] - xmean)*(particles[i]->r[0] - xmean);
-        rgmean = rgmean + (particles[i]->r[1] - ymean)*(particles[i]->r[1] - xmean);
-        rgmean = rgmean + (particles[i]->r[2] - ymean)*(particles[i]->r[2] - xmean);
+        rgmean = rgmean + (particles[i]->r[1] - ymean)*(particles[i]->r[1] - ymean);
+        rgmean = rgmean + (particles[i]->r[2] - zmean)*(particles[i]->r[2] - zmean);
     }
     rgmean /= numP;
 
-    rgmean = sqrt(rgmean)/radius;
+    rgmean = sqrt(rgmean);
     
     return rgmean;
 }
@@ -672,3 +649,4 @@ void Model::readObstacle(){
     numObstacles = obstacles.size();
     is.close();
 }
+

@@ -242,6 +242,11 @@ void Controller::calControl2d(Model::state s, Model::state targets){
 // here calculate the control option given the targets
     for(int i=0; i < numP; i++){
         s[i]->u = 0;
+        // check if we want to set every particle to the same constant velocity
+        if (parameter.setConstantVFlag){
+            s[i]->u = parameter.setConstantV;
+            continue;
+        }
         int t_idx = s[i]->targetIdx;
         if (t_idx >=0){
             double rx, ry;
@@ -262,31 +267,23 @@ void Controller::calControl2d(Model::state s, Model::state targets){
                 s[i]->u = 0;
             } else {
                 
+               double disp_limit =  parameter.controlTimeInterval*parameter.maxVelocity/radius;
                if (parameter.binaryVelocityFlag) { 
-                if (dot_prod > (parameter.velocityChangePoint/2)) {
+                if (dot_prod > (disp_limit/2)) {
                     s[i]->u = 1;                    
                 } else {
                     s[i]->u = 0;
                 }
                } else {
-                    if (dot_prod > parameter.velocityChangePoint) {
+                    if (dot_prod > disp_limit) {
                         s[i]->u = 1;                    
                     } else {
-                        s[i]->u = dot_prod/parameter.velocityChangePoint;
+                        s[i]->u = dot_prod/disp_limit;
                     }
                
                
                }
-                               
-/* this is for three state strategy                
-                if (dot_prod < 1) {
-                    s[i]->u = 0;                    
-                } else if (dot_prod < 3.7) {
-                    s[i]->u = 1;
-                } else {
-                    s[i]->u = 2;
-                }
-*/  
+ 
             }
 
             if (s[i]->u > availControl[i]) {
@@ -411,9 +408,11 @@ void Controller::calAvoidance2d(Model::state s){
                 
 }
 */
+
+/*this is old implementation
 void Controller::calAvoidance2d_simpleCollision(Model::state s){
     for (int i=0; i < numP; i++){
-        availControl[i] = 2;
+        availControl[i] = 1;
     }
     
     for (int i=0; i < numP; i++){
@@ -430,11 +429,7 @@ void Controller::calAvoidance2d_simpleCollision(Model::state s){
             double dist = r[0]*r[0]+r[1]*r[1]+r[2]*r[2];
             dist = sqrt(dist);             
             if (dist > colliInfo.colliThresh) continue;
-            int totalControl = availControl[i];
-            int iter = 0;
-            while (iter < totalControl){
-                iter++;
-                // assume the second particle is static
+                 // assume the second particle is static
                 v[0] = colliInfo.vSet[availControl[i]]*cos(s[i]->phi) - 0.0;
                 v[1] = colliInfo.vSet[availControl[i]]*sin(s[i]->phi) - 0.0;
                 v[2] = 0;
@@ -446,11 +441,61 @@ void Controller::calAvoidance2d_simpleCollision(Model::state s){
                 // if collision can happen
                 double t = (-b - sqrt(delta)) / v_sq;
                 if (t < 1.0) {
-                    availControl[i]--;   
+                    availControl[i] = 0;   
                 } else {
                     break;
                 }
             }
+            }
+        }
+    }
+    for (int i=0; i < numP; i++){
+        s[i]->availControl=availControl[i];
+//        std::cout << i << "\t" << s[i]->availControl << std::endl;
+    }
+}
+*/
+// the collision formula is from textbook computer simulation of liquid p102
+void Controller::calAvoidance2d_simpleCollision(Model::state s){
+    for (int i=0; i < numP; i++){
+        availControl[i] = 1.0;
+    }
+    
+    double distThresh = parameter.maxVelocity*parameter.controlTimeInterval/radius;
+    double maxV = parameter.maxVelocity / radius;
+    for (int i=0; i < numP; i++){
+        for (int j = 0; j < numP; j++){
+            //if one is diffuse only
+//            std::cout << j << "\t";
+            if (i != j){
+            if (availControl[i] <= 1e-6) break;
+            double r[3];
+            double v[3];
+            r[0] = (s[i]->r[0] - s[j]->r[0])/radius;
+            r[1] = (s[i]->r[1] - s[j]->r[1])/radius;
+            r[2] = (s[i]->r[2] - s[j]->r[2])/radius;
+            double dist = r[0]*r[0]+r[1]*r[1]+r[2]*r[2];
+            dist = sqrt(dist);             
+            if (dist > distThresh) continue;
+                // assume the second particle is static
+                v[0] = maxV * cos(s[i]->phi) - 0.0;
+                v[1] = maxV * sin(s[i]->phi) - 0.0;
+                v[2] = 0;
+                double v_sq = v[0] * v[0] + v[1] * v[1] + v[2] * v[2];
+                double b = r[0] * v[0] + r[1] * v[1] + r[2] * v[2];
+                if (b > 0) break; // collision cannot happen at this speed
+                double delta = b * b - v_sq * (dist * dist - 4.0);
+                if (delta < 0) break; // collision cannot happen at this speed
+                // if collision can happen
+                double t = (-b - sqrt(delta)) / v_sq;
+                if (t < parameter.controlTimeInterval) {
+                    if (parameter.binaryVelocityFlag){
+                        availControl[i] = 0.0;
+                    } else {
+                        availControl[i] = availControl[i] * t;
+                    }
+                } 
+            
             }
         }
     }

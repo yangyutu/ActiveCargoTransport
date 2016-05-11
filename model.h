@@ -27,7 +27,7 @@ public:
         double u;
         int targetIdx;
         double cost;
-        int availControl;
+        double availControl;
         int nbcount;
         int inlier;
         int marked;
@@ -69,8 +69,8 @@ public:
     double calEudDeviation();
 private:
     void calForces();
-    void calForcesHelper(int i, int j, double F[3]);
-    void calObsForcesHelper(int i, int j, double F[3]);
+    void calForcesHelper_DLAO(double ri[3], double rj[3], double F[3],int i, int j);
+    void calForcesHelper_DL(double ri[3], double rj[3], double F[3],int i, int j);
     
     bool cellListFlag;
     std::shared_ptr<CellList> cellList, obsCellList;
@@ -88,6 +88,7 @@ private:
     std::vector<double> velocity={0.0,5.0e-6,5.0e-6}; // here is for simpication of binary actuation
 //    std::vector<double> velocity={0.0, 5.0e-6};
     int numControl;
+    particle targetCenter;
     state particles, targets;
     posArray obstacles; 
     std::vector<int> control;
@@ -97,7 +98,7 @@ private:
     std::shared_ptr<std::normal_distribution<double>> rand_normal;
     int trajOutputInterval;
     int timeCounter,fileCounter;
-    std::ofstream trajOs, opOs, osTarget;
+    std::ofstream trajOs, opOs, osTarget, osCargo;
     std::string filetag;
     void outputTrajectory(std::ostream& os);
     void outputOrderParameter(std::ostream& os);
@@ -107,5 +108,6 @@ private:
     void readObstacle();
     void getPermutator();
 };
+
 
 

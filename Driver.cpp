@@ -141,13 +141,19 @@ void readParameter(){
     runfile >> parameter.dynamicTargetFlag;
     getline(runfile, line);
     getline(runfile, line);
-    runfile >> parameter.targetDiffuseRatio >> parameter.targetVelocityRatio;
+    runfile >> parameter.targetDiffuseRatio >> parameter.targetVelocityRatio >> parameter.cargoInteractingFlag;
+    getline(runfile, line);
+    getline(runfile, line);
+    runfile >> parameter.targetCenter[0] >> parameter.targetCenter[1] >> parameter.targetCenter[2];
     getline(runfile, line);
     getline(runfile, line);
     runfile >> parameter.particleCellListFlag >> parameter.obstacleCellListFlag;
     getline(runfile, line);
     getline(runfile, line);
     runfile >> parameter.binaryVelocityFlag;
+    getline(runfile, line);
+    getline(runfile, line);
+    runfile >> parameter.setConstantVFlag >> parameter.setConstantV;
     getline(runfile, line);
     getline(runfile, line);
     runfile >> parameter.cellListCutoff >> parameter.cellListDim >> parameter.cellListMaxCount >>parameter.cellListBox_x
@@ -163,3 +169,4 @@ void readParameter(){
     getline(runfile, parameter.obstacleFilename);
 
 }
+
