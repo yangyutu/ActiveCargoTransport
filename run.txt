@@ -1,5 +1,5 @@
 N
-6
+36
 dim
 2
 radius
@@ -7,13 +7,13 @@ radius
 ncycles
 1
 constrol step
-100000
+10000
 equilibrate step
 0
 dt
 0.0001
 control time interval (s)
-0.05
+0.1
 diffu_t
 2.145e-13
 diffu_r
@@ -25,7 +25,7 @@ velocity change position point (this parameter is depreciated, currently is calc
 Bpp
 2.29
 Os_pressure (kT nm^3) 5.8e-8
-16.8e-8
+0e-8:
 L_dep
 0.2
 cutoff
@@ -72,14 +72,16 @@ binary velocity flag
 0
 set constant propulsion  velocity flag and value ratio within [0,1](this will override all the control policy and set every motor with the same velocity)
 0 0.0
+targetHistoryFlag, targetHistorySaveInterval, targetHistoryLength
+1 100 1000
 cellListcutoff, dim, maxcount, box_x, box_y, box_z
 3.0 2 60 200.0 200.0 50.0
 initial config
-freespaceLocking/target_and_config/target_6pd=2.14.txt
+freespaceLocking/target_and_config/target_36pd=2.25.txt
 file tag
-freespaceLocking/traj/test/dynamic/multi6p_
+freespaceLocking/traj/test/adaptive/multi36p_
 target config
-freespaceLocking/target_and_config/target_6pd=2.14.txt
+freespaceLocking/target_and_config/target_36pd=2.25.txt
 obstaclefilename
 freespaceLocking/target_and_config/map12bit.txtwalldata.txt
 

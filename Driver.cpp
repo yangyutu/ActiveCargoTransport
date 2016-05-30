@@ -156,6 +156,9 @@ void readParameter(){
     runfile >> parameter.setConstantVFlag >> parameter.setConstantV;
     getline(runfile, line);
     getline(runfile, line);
+    runfile >> parameter.targetHistoryFlag >> parameter.targetHistorySaveInterval >> parameter.targetHistoryLength;
+    getline(runfile, line);
+    getline(runfile, line);
     runfile >> parameter.cellListCutoff >> parameter.cellListDim >> parameter.cellListMaxCount >>parameter.cellListBox_x
             >> parameter.cellListBox_y>> parameter.cellListBox_z;
     getline(runfile, line);

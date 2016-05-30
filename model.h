@@ -7,7 +7,7 @@
 #include <sstream>
 #include <fstream>
 //#include "CellList.h"
-
+#include <armadillo>
 class CellList; 
 typedef std::shared_ptr<CellList> cellList_ptr;
 class Model {
@@ -88,8 +88,10 @@ private:
     std::vector<double> velocity={0.0,5.0e-6,5.0e-6}; // here is for simpication of binary actuation
 //    std::vector<double> velocity={0.0, 5.0e-6};
     int numControl;
-    particle targetCenter;
-    state particles, targets;
+    particle targetCenter, targetCenter_avg;
+    state particles, targets,initialDistToCenter;
+    arma::mat targetCenter_history;
+    long long targetCenter_historyCounter;
     posArray obstacles; 
     std::vector<int> control;
     std::string iniFile;
@@ -97,7 +99,7 @@ private:
     std::default_random_engine rand_generator;
     std::shared_ptr<std::normal_distribution<double>> rand_normal;
     int trajOutputInterval;
-    int timeCounter,fileCounter;
+    long long timeCounter,fileCounter;
     std::ofstream trajOs, opOs, osTarget, osCargo;
     std::string filetag;
     void outputTrajectory(std::ostream& os);

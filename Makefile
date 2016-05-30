@@ -32,7 +32,7 @@ test_cell.exe:$(OBJ2)
 	$(CXX) -o $@ $^ $(LDFLAG) 
 
 %.o:%.cpp
-	$(CXX) -c $(CXXFLAGS) $(RELEASEFLAG) $^
+	$(CXX) -c $(CXXFLAGS) $(DEBUGFLAG) $^
 
 clean:
 	rm *.o *.exe

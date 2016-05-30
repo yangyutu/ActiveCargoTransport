@@ -77,6 +77,9 @@ void Model::run() {
         this->outputTrajectory(this->trajOs);
         this->outputOrderParameter(this->opOs);
     }
+    
+
+    
     if (cellListFlag){
             int builtCount = cellList->buildList(particles);
             if (builtCount!=numP){
@@ -102,6 +105,10 @@ void Model::run() {
         
         
         if (parameter.dynamicTargetFlag){
+            
+
+            
+            
             double randDist[2], disp[2];
             randDist[0] = (*rand_normal)(rand_generator);
             randDist[1] = (*rand_normal)(rand_generator);
@@ -112,14 +119,37 @@ void Model::run() {
             disp[1] = parameter.targetDiffuseRatio*mobility * targetCenter.F[1] * dt_ 
                     +sqrt(2.0 * diffusivity_t*parameter.targetDiffuseRatio * dt_) * randDist[1];
             
+            
+            // disp is in the unit of m
             targetCenter.r[0] += disp[0];
             targetCenter.r[1] += disp[1];
+            
+            
+                  
             
             for (int i = 0; i < numP; i++) {
                 targets[i]->r[0] += disp[0] / radius;
                 targets[i]->r[1] += disp[1] / radius;
             }
             
+            if (parameter.targetHistoryFlag){// whether to use target history based tracking
+                
+                // first we need to update our target history buffer
+                if ( (this->timeCounter + 1) % parameter.targetHistorySaveInterval == 0){
+                    int idx = this->targetCenter_historyCounter++%parameter.targetHistoryLength;
+                    this->targetCenter_history(idx,0) = targetCenter.r[0];
+                    this->targetCenter_history(idx,1) = targetCenter.r[1];
+                }
+                
+                arma::mat avg = arma::mean(targetCenter_history);// here calculate the average target position
+                this->targetCenter_avg.r[0] = avg(0,0);
+                this->targetCenter_avg.r[1] = avg(0,1);
+                this->targetCenter_avg.r[2] = avg(0,2);
+                for (int i = 0; i < numP; i++) {
+                    targets[i]->r[0] = (parameter.targetCenter[0] + initialDistToCenter[i]->r[0]) + avg(0,1)/radius;
+                    targets[i]->r[1] = (parameter.targetCenter[1] + initialDistToCenter[i]->r[1]) + avg(0,2)/radius;
+                }
+            }
     
         }   
     } else if(dimP == 3){
@@ -181,7 +211,6 @@ void Model::readTarget(std::string filename){
         
     }
     
-
  }
 
 // this force calculation includes double layer repulsion and depletion attraction 
@@ -327,6 +356,28 @@ void Model::createInitialState(){
     this->targetCenter.r[0] = parameter.targetCenter[0]*radius;
     this->targetCenter.r[1] = parameter.targetCenter[1]*radius;
     this->targetCenter.r[2] = parameter.targetCenter[2]*radius;
+    
+    for (int i = 0; i < numP; i++){
+        initialDistToCenter.push_back(particle_ptr(new Model::particle));
+        initialDistToCenter[i]->r[0] = this->targets[i]->r[0] - parameter.targetCenter[0];
+        initialDistToCenter[i]->r[1] = this->targets[i]->r[1] - parameter.targetCenter[1];
+        initialDistToCenter[i]->r[2] = this->targets[i]->r[2] - parameter.targetCenter[2];
+    }
+    
+//  initialize target history 
+    this->targetCenter_historyCounter = 0;
+    this->targetCenter_history.set_size(parameter.targetHistoryLength,3);
+    for (int i = 0; i < parameter.targetHistoryLength; i++){
+        for (int j = 0; j < 3; j++){
+            this->targetCenter_history(i,j) = this->targetCenter.r[j];
+        
+        }
+    }
+    
+    
+    
+    
+    
     std::stringstream ss;
     std::cout << "model initialize at round " << fileCounter << std::endl;
     ss << this->fileCounter++;
@@ -372,6 +423,9 @@ void Model::outputTrajectory(std::ostream& os) {
     for (int j = 0; j < 3; j++){
         this->osCargo << targetCenter.r[j]/radius << "\t";
     }
+    for (int j = 0; j < 3; j++){
+        this->osCargo << targetCenter_avg.r[j]/radius << "\t";
+    }
     this->osCargo << std::endl;
     
 }
@@ -382,7 +436,9 @@ void Model::outputOrderParameter(std::ostream& os) {
 //    os << this->calHausdorff() << "\t";
 //    os << this->calPsi6() << "\t";
     os << this->calRg() << "\t";
-    os << this->calEudDeviation() << std::endl;
+    os << this->calEudDeviation() << "\t";
+    os << parameter.totalCost << "\t";
+    os << parameter.totalCost/parameter.N << std::endl;
 }
 
 
@@ -531,9 +587,9 @@ double Model::calRg(){
     double zmean = 0;
 
     for (int i = 0; i < numP; i++) {
-        xmean = xmean + particles[i]->r[0]/radius;
-        ymean = ymean + particles[i]->r[1]/radius;
-        zmean = zmean + particles[i]->r[2]/radius;
+        xmean = xmean + particles[i]->r[0];
+        ymean = ymean + particles[i]->r[1];
+        zmean = zmean + particles[i]->r[2];
     }
     xmean /= numP;
     ymean /= numP;
@@ -546,7 +602,7 @@ double Model::calRg(){
     }
     rgmean /= numP;
 
-    rgmean = sqrt(rgmean);
+    rgmean = sqrt(rgmean)/radius;
     
     return rgmean;
 }
@@ -555,7 +611,7 @@ double Model::calEudDeviation(){
     //      calculate Rg
     double dev = 0;
     for (int i = 0; i < numP; i++){
-        dev += this->particles[i]->EudDistToTarget;
+        dev += this->particles[i]->ShortestPathDistToTarget;
     }
     dev /= numP;
     return dev;

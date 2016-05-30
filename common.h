@@ -34,6 +34,10 @@ struct Parameter{
         double targetCenter[3];
         double setConstantV;
         int setConstantVFlag;
+        
+        int targetHistoryFlag, targetHistorySaveInterval, targetHistoryLength;
+        
+        double totalCost;
 };
 class CoorPair{
 public:

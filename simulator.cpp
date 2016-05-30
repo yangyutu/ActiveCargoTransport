@@ -15,7 +15,7 @@ Simulator::Simulator(std::shared_ptr<Model> model0,std::shared_ptr<Controller> c
 }
 
 void Simulator::shapeForming(){
-    double totalCost =0.0;   
+    double &totalCost = parameter.totalCost;   
     model->createInitialState();
     totalCost = controller->calAssignment(model->getCurrState(),model->getTargets(),model->getDimP());
     controller->calControl(model->getCurrState(),model->getTargets(),model->getDimP());
@@ -36,7 +36,7 @@ void Simulator::shapeForming(){
 
 
 void Simulator::shapeForming_seq(){
-    double totalCost;   
+    double &totalCost = parameter.totalCost;   
     model->createInitialState();
     controller->buildTargetGraph();
     if (parameter.assignmentMethod == 1){
@@ -69,7 +69,7 @@ void Simulator::shapeForming_seq(){
 
 
 void Simulator::translate_2d(){
-    double totalCost;   
+    double &totalCost= parameter.totalCost;   
     model->createInitialState();
     totalCost = controller->calAssignment(model->getCurrState(),model->getTargets(),model->getDimP());
     controller->calControl(model->getCurrState(),model->getTargets(),model->getDimP());
@@ -97,7 +97,7 @@ void Simulator::translate_2d(){
 
 
 void Simulator::cargoTransport_2d(){
-    double totalCost;   
+    double &totalCost= parameter.totalCost;   
     model->createInitialState();
 //    totalCost = controller->calAssignment(model->getCurrState(),model->getTargets(),model->getDimP());
 //    controller->calControl(model->getCurrState(),model->getTargets(),model->getDimP());
@@ -144,7 +144,7 @@ void Simulator::cargoTransport_2d(){
 }
 
 void Simulator::rotate_2d(){
-    double totalCost;   
+    double &totalCost= parameter.totalCost;   
     model->createInitialState();
     totalCost = controller->calAssignment(model->getCurrState(),model->getTargets(),model->getDimP());
     controller->calControl(model->getCurrState(),model->getTargets(),model->getDimP());
