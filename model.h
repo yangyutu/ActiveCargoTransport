@@ -38,6 +38,8 @@ public:
         bool targetIsLandmark;
         bool targetIsTarget;
         bool notReached;
+        int transporterFlag;
+        
         double EudDistToTarget;
 	double ShortestPathDistToTarget;
         

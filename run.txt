@@ -1,5 +1,5 @@
 N
-36
+60
 dim
 2
 radius
@@ -25,7 +25,7 @@ velocity change position point (this parameter is depreciated, currently is calc
 Bpp
 2.29
 Os_pressure (kT nm^3) 5.8e-8
-0e-8:
+3.8e-8
 L_dep
 0.2
 cutoff
@@ -40,12 +40,12 @@ assignment method  1. single optimal cost based assignment 2. Eud distance based
 2
 nocontrolFlag
 0
-shapeformationflag/cargocaptureFlag(this is for capture/goingto target)
-1
-motionflag (for collective motion)
+shapeformationflag/cargocaptureFlag(this is for capture/goingto target, but not do collective motion to transport the cargo)
 0
+motionflag (for collective motion) (1: all particles translate(depreciated) 2: all particles rotate (depreciated) 3: all particles translate with cargo in straight line)
+3
 motion cycle, collective move step, collective restore step 
-300 3 20
+1000 10 0
 cargo Translation flag (this is for doing transport the target/cargo, it will contain collective move and restore)
 0
 cargo capture step
@@ -73,15 +73,17 @@ binary velocity flag
 set constant propulsion  velocity flag and value ratio within [0,1](this will override all the control policy and set every motor with the same velocity)
 0 0.0
 targetHistoryFlag, targetHistorySaveInterval, targetHistoryLength
-1 100 1000
+0 100 1000
+transporter nb thresh, dist thresh
+6 1.0
 cellListcutoff, dim, maxcount, box_x, box_y, box_z
 3.0 2 60 200.0 200.0 50.0
 initial config
-freespaceLocking/target_and_config/target_36pd=2.25.txt
+freespaceLocking/target_and_config/target_60pd=2.16.txt
 file tag
-freespaceLocking/traj/test/adaptive/multi36p_
+freespaceLocking/transport/AO3.8/test2/multip_
 target config
-freespaceLocking/target_and_config/target_36pd=2.25.txt
+freespaceLocking/target_and_config/target_60pd=2.16.txt
 obstaclefilename
 freespaceLocking/target_and_config/map12bit.txtwalldata.txt
 

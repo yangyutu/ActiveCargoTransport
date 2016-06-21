@@ -702,14 +702,21 @@ void Controller::translate_2d(double phi,Model::state s){
 // first select a subset of particles that is in the right direction
 //  let them go until shape change too much
     this->calInlier(s);
+    
     for (int i = 0; i < numP; i++){
         double proj;
         proj = cos(s[i]->phi - phi);
-        if (proj > sqrt(3.0)/2.0 && s[i]->nbcount >=6) {
-            s[i]->u = 2;
+        if (s[i]->nbcount >=parameter.transporter_nb_thresh && 
+                s[i]->ShortestPathDistToTarget<parameter.transporter_dist_thresh) {
+            s[i]->transporterFlag = 1;
+            if (proj > sqrt(3.0)/2.0) {
+            s[i]->u = 1.0;
+            }
+        }else{
+            s[i]->transporterFlag = 0;
+            
         }
-    }
-    
+    }    
 }
 
 void Controller::rotate_2d(Model::state s){
@@ -961,6 +968,9 @@ void Controller::alignTarget_rt(Model::state s, Model::state targets){
 }
 
 void Controller::translateCargo_2d(double phi, Model::state s){
+    std::cerr << "this method is depreciated!" << std::endl;
+    exit(5);
+    
     this->calInlier(s);
     for (int i = 0; i < numP; i++){
         double proj;

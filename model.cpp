@@ -418,6 +418,7 @@ void Model::outputTrajectory(std::ostream& os) {
         os << targets[i]->r[1]<< "\t";
         os << targets[i]->r[2]<<"\t";
         os << this->timeCounter*this->dt_ << "\t";
+        os << particles[i]->transporterFlag<<"\t";
         os << std::endl;
     }
     for (int j = 0; j < 3; j++){
@@ -426,6 +427,7 @@ void Model::outputTrajectory(std::ostream& os) {
     for (int j = 0; j < 3; j++){
         this->osCargo << targetCenter_avg.r[j]/radius << "\t";
     }
+    this->osCargo << this->timeCounter*this->dt_ << "\t";
     this->osCargo << std::endl;
     
 }

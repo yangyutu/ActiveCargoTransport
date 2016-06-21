@@ -29,6 +29,8 @@ int main(){
             simulator.translate_2d();
         } else if (parameter.motionFlag == 2) {
             simulator.rotate_2d();
+        } else if (parameter.motionFlag == 3) {
+            simulator.translate_2d_withCargo();
         } else if (parameter.cargoTransFlag == 1) {
             simulator.cargoTransport_2d();
         } else if (parameter.noControlFlag == 1) {
@@ -157,6 +159,9 @@ void readParameter(){
     getline(runfile, line);
     getline(runfile, line);
     runfile >> parameter.targetHistoryFlag >> parameter.targetHistorySaveInterval >> parameter.targetHistoryLength;
+    getline(runfile, line);
+    getline(runfile, line);
+    runfile >> parameter.transporter_nb_thresh >> parameter.transporter_dist_thresh;
     getline(runfile, line);
     getline(runfile, line);
     runfile >> parameter.cellListCutoff >> parameter.cellListDim >> parameter.cellListMaxCount >>parameter.cellListBox_x

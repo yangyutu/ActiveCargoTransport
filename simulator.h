@@ -10,6 +10,7 @@ public:
     void shapeForming();
     void shapeForming_seq();
     void translate_2d();
+    void translate_2d_withCargo();
     void rotate_2d();
     void cargoTransport_2d();
     

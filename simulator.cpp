@@ -67,6 +67,39 @@ void Simulator::shapeForming_seq(){
     }
 }
 
+void Simulator::translate_2d_withCargo(){
+    double &totalCost= parameter.totalCost;   
+    model->createInitialState();
+    totalCost = controller->calAssignment(model->getCurrState(),model->getTargets(),model->getDimP());
+    controller->calControl(model->getCurrState(),model->getTargets(),model->getDimP());
+    std::cout << totalCost << std::endl;
+    for(int c = 0; c < motionCycle; c++){
+        for (int s = 0; s < move_motionStep; s++) {
+            totalCost = controller->calAssignment(model->getCurrState(),model->getTargets(),model->getDimP());
+            // first all the particles are choosed to following assembly path
+            controller->calControl(model->getCurrState(),model->getTargets(),model->getDimP());
+            // part of particles are selected as transporters
+            controller->translate_2d(0.0, model->getCurrState());
+            model->run(controlFrequency);
+            // we calculate the total cost to see if things are particles are strongly deviated from its target
+
+            std::cout << "motion step: "<< s << "\t" <<totalCost << std::endl;
+//            controller->alignTarget_rt(model->getCurrState(),model->getTargets());
+        }
+        
+        for (int s = 0; s < move_recoverStep; s++) {
+            if ((s + 1) % assignmentFrequency == 0) {
+                totalCost = controller->calAssignment(model->getCurrState(), model->getTargets(), model->getDimP());
+                std::cout << "recover step: "<< s << "\t"<<totalCost <<totalCost << std::endl;
+            }
+            controller->calControl(model->getCurrState(), model->getTargets(), model->getDimP());
+            model->run(controlFrequency);
+//            controller->alignTarget_rt(model->getCurrState(),model->getTargets());
+        }
+    
+    }
+}
+
 
 void Simulator::translate_2d(){
     double &totalCost= parameter.totalCost;   
@@ -144,6 +177,9 @@ void Simulator::cargoTransport_2d(){
 }
 
 void Simulator::rotate_2d(){
+    
+    std::cerr << "rotation motion is depreciated in this repo!" << std::endl;
+    exit(4);
     double &totalCost= parameter.totalCost;   
     model->createInitialState();
     totalCost = controller->calAssignment(model->getCurrState(),model->getTargets(),model->getDimP());

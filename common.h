@@ -38,6 +38,11 @@ struct Parameter{
         int targetHistoryFlag, targetHistorySaveInterval, targetHistoryLength;
         
         double totalCost;
+        
+        // transporter selection criterion
+        int transporter_nb_thresh;
+        double transporter_dist_thresh;
+        
 };
 class CoorPair{
 public:
