@@ -175,6 +175,8 @@ void readParameter(){
     getline(runfile, parameter.targetConfig);
     getline(runfile, line);
     getline(runfile, parameter.obstacleFilename);
+    getline(runfile, line);
+    getline(runfile, parameter.velocityMapName);
 
 }
 

@@ -43,6 +43,9 @@ struct Parameter{
         int transporter_nb_thresh;
         double transporter_dist_thresh;
         
+        // velocity map
+        std::string velocityMapName;
+        
 };
 class CoorPair{
 public:

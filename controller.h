@@ -13,6 +13,7 @@
 #include "model.h"
 #include "lemon/list_graph.h"
 #include <array>
+#include <unordered_map>
 class Controller {
 public:
 
@@ -43,6 +44,7 @@ public:
     void buildTargetGraph();
     int getNumMarked(){return numMarked;}
     double getDeviation(){return deviation;}
+    void readVelocityMap(std::string filename);
 //    void register_2d(Model::state s, Model::state targets);
     struct ColliInfo{
         double vSet[3];
@@ -120,4 +122,9 @@ private:
    void calControl3d(Model::state s, Model::state targets);
     double calAssignment3d(Model::state s, Model::state targets);
     void calControl2d(Model::state s, Model::state targets);
+    
+    
+    // read velocity map
+    std::unordered_map<CoorPair,double,CoorPairHash,CoorPairEqual> velocityMap;
+    
 };

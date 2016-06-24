@@ -986,19 +986,17 @@ void Controller::translateCargo_2d(double phi, Model::state s){
 void Controller::translateCargoFollowPath_2d(Model::state s){
     int x = (int)round(s[0]->r[0]/radius);
     int y = (int)round(s[0]->r[1]/radius);
+
+    CoorPair temp;
+    temp.x = x; temp.y = y;
     
-    if (y > 30 && x < 45){
-        this->translateCargo_2d(0,s);
-    }else if (x >= 45 && y >15){
-        this->translateCargo_2d(3*M_PI/2.0,s);
-    } else if (y > 15 && x < 45){
-        this->translateCargo_2d(3*M_PI/2.0,s);    
-    } else {
-        this->translateCargo_2d(-M_PI,s);
+    if (velocityMap.find(temp) != velocityMap.end()){
+        double phi = this->velocityMap[temp];
+        this->translate_2d(phi,s);
+    } else{
     
+        std::cerr << "velocity not available at " << x << "\t" << y << std::endl;
     }
-    // the cargo just diffuse
-    s[0]->u = 0;
 }
 
 void Controller::alignCargo(Model::state s,Model::state targets){
@@ -1190,6 +1188,32 @@ void Controller::constructObstacles(){
         obstacleSet.insert(CoorPair(x,y));    
     }
 }
+
+void Controller::readVelocityMap(std::string filename){
+    
+    std::ifstream is;
+    is.open(filename);
+    
+    std::string line;
+    double dum;
+    int x,y;
+    double phi;
+    double rx,ry;
+    while (getline(is, line)){
+        std::stringstream linestream(line);
+        
+        linestream >> rx;
+        x = (int)round(rx);
+        linestream >> ry;
+        y = (int)round(ry);
+        linestream >> phi;
+        velocityMap[CoorPair(x,y)]=phi;
+    } 
+    is.close();
+}
+
+
+
 
 void Controller::constructDynamicObstacles(Model::state s){
     dynamicObstacleSet.clear();

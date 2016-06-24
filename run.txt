@@ -1,5 +1,5 @@
 N
-60
+36
 dim
 2
 radius
@@ -25,7 +25,7 @@ velocity change position point (this parameter is depreciated, currently is calc
 Bpp
 2.29
 Os_pressure (kT nm^3) 5.8e-8
-3.8e-8
+5.8e-8
 L_dep
 0.2
 cutoff
@@ -37,7 +37,7 @@ seed
 self-avoidance between multiple particles flag
 1
 assignment method  1. single optimal cost based assignment 2. Eud distance based assignment 3. shortest path landmark method based on assignment
-2
+3
 nocontrolFlag
 0
 shapeformationflag/cargocaptureFlag(this is for capture/goingto target, but not do collective motion to transport the cargo)
@@ -53,19 +53,19 @@ cargo capture step
 trajOutputInterval
 5000
 landmarknumber in each dimension, landmarkMin
-20 0.5
+100 -0.5
 landmarkdist
-5
+4
 blockcost
 100
 obstacleFlag
-0
+1
 target dynamic flag (whether target will do Brownian motion and drift motion)
 1
 target diffusion coefficent ratio, target velocity ratio, will target interacting with other objects? 
 1.0 0.0 1
 target center position
-0 0 0
+35 50 0
 particlecellListFlag, obstaclecellListFlag
 0 1
 binary velocity flag
@@ -77,15 +77,17 @@ targetHistoryFlag, targetHistorySaveInterval, targetHistoryLength
 transporter nb thresh, dist thresh
 6 1.0
 cellListcutoff, dim, maxcount, box_x, box_y, box_z
-3.0 2 60 200.0 200.0 50.0
+3.0 2 60 800.0 800.0 50.0
 initial config
-freespaceLocking/target_and_config/target_60pd=2.16.txt
+freespaceLocking/target_and_config/target_36pd=2.158.txt
 file tag
-freespaceLocking/transport/AO3.8/test2/multip_
+freespaceLocking/transport/mazes/map5bitlarge/multip_
 target config
-freespaceLocking/target_and_config/target_60pd=2.16.txt
+freespaceLocking/target_and_config/target_36pd=2.158.txt
 obstaclefilename
-freespaceLocking/target_and_config/map12bit.txtwalldata.txt
+freespaceLocking/transport/mazes/map5bitlarge/map5bitlarge_wall.txt
+velocity map name
+freespaceLocking/transport/mazes/map5bitlarge/map5bitlarge_velocitymap.txt
 
 
 

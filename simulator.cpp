@@ -130,6 +130,9 @@ void Simulator::translate_2d(){
 
 
 void Simulator::cargoTransport_2d(){
+    // first the controller should read the velocity map
+    controller->readVelocityMap(parameter.velocityMapName);
+    
     double &totalCost= parameter.totalCost;   
     model->createInitialState();
 //    totalCost = controller->calAssignment(model->getCurrState(),model->getTargets(),model->getDimP());
