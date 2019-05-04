@@ -5,8 +5,8 @@ N = 20;
 
 % first gen first line
 % attraction is 2.158, dl is 2.2
-a = 2.18/2.0;
-tag = 'd=2.18'
+a = 2.13/2.0;
+tag = 'd=2.13'
 size = N;
     line_y = zeros(size,1);
     line_x = 2*a*[1:size]';

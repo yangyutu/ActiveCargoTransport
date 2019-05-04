@@ -42,6 +42,19 @@ public:
         
         double EudDistToTarget;
 	double ShortestPathDistToTarget;
+        double energy_accumlator1,energy_accumlator2,energy_accumlator3,energy_accumlator4, eneregy_maintain_accumlator;
+        double instant_output_work, instant_conserve_work, instant_input_work;
+        double friction_accumulator1, friction_accumulator2,friction_accumulator3, friction_accumulator4;
+        double eneregy_useful_maintain_accumlator, v_projection;
+        double Fx,Fy, Vx,Vy; // Fx, Fy are the drifting velocity
+        double potential;
+        double maintainratio;
+        double energy_input_transport,energy_useful_transport;
+        double energy_vsp_input_maintain, energy_vsp_useful_maintain, energy_vsp_useful_maintain_positive;
+        double energy_vsp_input_transport, energy_vsp_useful_transport;
+        double energy_instant_vsp_input, energy_instant_vsp_transport, energy_instant_vsp_maintain;
+        
+        
         
         particle(double x = 0, double y = 0, double z = 0){
             r[0]=x;r[1]=y;r[2]=z;
@@ -71,7 +84,7 @@ public:
     double calEudDeviation();
 private:
     void calForces();
-    void calForcesHelper_DLAO(double ri[3], double rj[3], double F[3],int i, int j);
+    void calForcesHelper_DLAO(double ri[3], double rj[3], double F[3],int i, int j, double& pot);
     void calForcesHelper_DL(double ri[3], double rj[3], double F[3],int i, int j);
     
     bool cellListFlag;

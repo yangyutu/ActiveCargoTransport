@@ -68,7 +68,7 @@ void readParameter(){
     runfile >> parameter.dt;
     getline(runfile, line);
     getline(runfile, line);
-    runfile >> parameter.controlTimeInterval;
+    runfile >> parameter.controlTimeInterval >> parameter.assignmentTimeInterval;
     getline(runfile, line);
     getline(runfile, line);
     runfile >> parameter.diffu_t;    
@@ -161,7 +161,7 @@ void readParameter(){
     runfile >> parameter.targetHistoryFlag >> parameter.targetHistorySaveInterval >> parameter.targetHistoryLength;
     getline(runfile, line);
     getline(runfile, line);
-    runfile >> parameter.transporter_nb_thresh >> parameter.transporter_dist_thresh;
+    runfile >> parameter.transporter_nb_thresh >> parameter.transporter_dist_thresh >> parameter.transport_angle_thresh;
     getline(runfile, line);
     getline(runfile, line);
     runfile >> parameter.cellListCutoff >> parameter.cellListDim >> parameter.cellListMaxCount >>parameter.cellListBox_x

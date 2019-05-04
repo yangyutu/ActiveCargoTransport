@@ -26,7 +26,7 @@ struct Parameter{
         int assignmentMethod; // 1. single optimal cost based assignment 2. Eud distance based assignment
         // 3. shortest path landmark method based on assignment
         int dynamicTargetFlag;
-        double controlTimeInterval, targetDiffuseRatio,  targetVelocityRatio;
+        double controlTimeInterval, targetDiffuseRatio,  targetVelocityRatio, assignmentTimeInterval;
         double maxVelocity, velocityChangePoint;
         int selfAvoidanceFlag;
         int binaryVelocityFlag;
@@ -41,7 +41,7 @@ struct Parameter{
         
         // transporter selection criterion
         int transporter_nb_thresh;
-        double transporter_dist_thresh;
+        double transporter_dist_thresh, transport_angle_thresh; // angle are in unit of degree
         
         // velocity map
         std::string velocityMapName;

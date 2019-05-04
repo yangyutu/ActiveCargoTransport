@@ -53,3 +53,36 @@ u_ao = -P*pi*(4.0/3.0*(a+L)^3.*(1-3*r./(4*(a+L))+r.^3./(16*(a+L)^3)));
 plot(r/a,u_rep+u_ao);
 
 legend('DL repulsion','DL+AO (P=5.8e-8)','DL+AO (P=1.8e-8)','DL+AO (P=3.8e-8)','DL+AO (P=8.8e-8)','DL+AO (P=12.8e-8)','DL+AO (P=16.8e-8)','DL+AO (P=20.8e-8)')
+
+
+
+figure(4)
+plot(r/a,u_rep,'linewidth',2);
+xlabel('r/a');
+ylabel('u / kT');
+xlim([2, 2+0.4])
+ylim([-10 5]);
+hold on
+P = 1.8e-8; % P has unit of KT nm^3
+u_ao = -P*pi*(4.0/3.0*(a+L)^3.*(1-3*r./(4*(a+L))+r.^3./(16*(a+L)^3)));
+plot(r/a,u_rep+u_ao,'linewidth',2);
+hold on
+P = 3.8e-8; % P has unit of KT nm^3
+u_ao = -P*pi*(4.0/3.0*(a+L)^3.*(1-3*r./(4*(a+L))+r.^3./(16*(a+L)^3)));
+plot(r/a,u_rep+u_ao,'linewidth',2);
+P = 5.8e-8; % P has unit of KT nm^3
+u_ao = -P*pi*(4.0/3.0*(a+L)^3.*(1-3*r./(4*(a+L))+r.^3./(16*(a+L)^3)));
+plot(r/a,u_rep+u_ao,'linewidth',2);
+
+
+P = 8.8e-8; % P has unit of KT nm^3
+u_ao = -P*pi*(4.0/3.0*(a+L)^3.*(1-3*r./(4*(a+L))+r.^3./(16*(a+L)^3)));
+plot(r/a,u_rep+u_ao,'linewidth',2);
+
+polish
+xlabel('r / a','fontsize',20,'fontweight','bold')
+ylabel('u / kT','fontsize',20,'fontweight','bold')
+polish
+set(gca,'FontSize',20)
+pbaspect([1 1 1])
+legend('DL repulsion','DL+AO (P=1.8e-8)','DL+AO (P=3.8e-8)','DL+AO (P=5.8e-8)','DL+AO (P=8.8e-8)')

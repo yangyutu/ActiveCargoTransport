@@ -250,19 +250,27 @@ void Controller::calControl2d(Model::state s, Model::state targets){
         int t_idx = s[i]->targetIdx;
         if (t_idx >=0){
             double rx, ry;
+            double pos_x, pos_y; // particle future position
+            pos_x = (s[i]->r[0] + s[i]->Fx * parameter.controlTimeInterval)/radius;
+            pos_y = (s[i]->r[1] + s[i]->Fy * parameter.controlTimeInterval)/radius;
+            
             if (parameter.dynamicTargetFlag){
                 // if the target is dynamic, then we track its next mean position
                 rx = s[i]->targetPos[0]+parameter.maxVelocity*parameter.targetVelocityRatio/radius
-                        - s[i]->r[0]/radius ;
-                ry = s[i]->targetPos[1] - s[i]->r[1]/radius ;            
+                        - pos_x ;
+                ry = s[i]->targetPos[1] - pos_y ;            
             }else{
-                rx = s[i]->targetPos[0]- s[i]->r[0]/radius ;
-                ry = s[i]->targetPos[1] - s[i]->r[1]/radius ;            
+                rx = s[i]->targetPos[0]- pos_x ;
+                ry = s[i]->targetPos[1] - pos_y ;            
             }
                 
-             
-
+            double rx2,ry2;
+            rx2 = s[i]->targetPos[0] - s[i]->r[0]/radius;
+            ry2 = s[i]->targetPos[1] - s[i]->r[1]/radius;  
+            double dot_prod2 = cos(s[i]->phi)*rx2 + sin(s[i]->phi)*ry2;
             double dot_prod = cos(s[i]->phi)*rx + sin(s[i]->phi)*ry;
+//            std::cout << dot_prod << "\t" << dot_prod2 << std::endl;
+            dot_prod = dot_prod2;
             if (dot_prod < 0) {
                 s[i]->u = 0;
             } else {
@@ -289,7 +297,9 @@ void Controller::calControl2d(Model::state s, Model::state targets){
             if (s[i]->u > availControl[i]) {
                 s[i]->u = availControl[i];
             }
+           
         }
+        
     }
 }
 
@@ -706,15 +716,15 @@ void Controller::translate_2d(double phi,Model::state s){
     for (int i = 0; i < numP; i++){
         double proj;
         proj = cos(s[i]->phi - phi);
+        s[i]->transporterFlag = 0;
+        s[i]->u = 0.0;
         if (s[i]->nbcount >=parameter.transporter_nb_thresh && 
                 s[i]->ShortestPathDistToTarget<parameter.transporter_dist_thresh) {
-            s[i]->transporterFlag = 1;
-            if (proj > sqrt(3.0)/2.0) {
-            s[i]->u = 1.0;
-            }
-        }else{
-            s[i]->transporterFlag = 0;
             
+            if (proj > cos(parameter.transport_angle_thresh/180.0*M_PI)) {
+                s[i]->transporterFlag = 1; 
+                s[i]->u = 1.0;
+            }
         }
     }    
 }

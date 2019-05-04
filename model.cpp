@@ -1,7 +1,7 @@
 #include "model.h"
 #include "CellList.h"
 #include "common.h"
-
+#include<algorithm>
 double const Model::T = 293.0;
 double const Model::kb = 1.38e-23;
 double const Model::vis = 1e-3;
@@ -74,6 +74,25 @@ Model::Model(){
 
 void Model::run() {
     if (this->timeCounter == 0 || ((this->timeCounter + 1) % trajOutputInterval == 0)) {
+        // here we need to calculate the initial energy
+        for (int i = 0; i < numP; i++) {
+            for (int k = 0; k < dimP; k++) {
+               particles[i]->potential = 0.0;
+            }
+        }
+    
+
+        for (int i = 0; i < numP - 1; i++) {
+            for (int j = i + 1; j < numP; j++) {
+                double pot;
+                double F[3];
+                calForcesHelper_DLAO(particles[i]->r, particles[j]->r, F,i, j,pot);
+                particles[i]->potential += 0.5*pot;
+                particles[j]->potential += 0.5*pot;
+            }
+        }
+        
+        
         this->outputTrajectory(this->trajOs);
         this->outputOrderParameter(this->opOs);
     }
@@ -91,16 +110,130 @@ void Model::run() {
     
     if (dimP == 2){
         for (int i = 0; i < numP; i++) {
+            
+            double random_x = sqrt(2.0 * diffusivity_t / dt_) * (*rand_normal)(rand_generator);
 
-            particles[i]->r[0] += mobility * particles[i]->F[0] * dt_ +
-                        parameter.maxVelocity*particles[i]->u * cos(particles[i]->phi) * dt_
-                    +   sqrt(2.0 * diffusivity_t * dt_) * (*rand_normal)(rand_generator);
-            particles[i]->r[1] += mobility * particles[i]->F[1] * dt_ +
-                        parameter.maxVelocity*particles[i]->u * sin(particles[i]->phi) * dt_ 
-                    +   sqrt(2.0 * diffusivity_t * dt_) * (*rand_normal)(rand_generator);
+        //    random_x = 0.0;
+            
+            double random_y = sqrt(2.0 * diffusivity_t / dt_) * (*rand_normal)(rand_generator);
+            
+        //    random_y = 0.0;
+            double ux = mobility * particles[i]->F[0]  +
+                        parameter.maxVelocity*particles[i]->u * cos(particles[i]->phi) 
+                    +   random_x;
+            
+            
+            
+            
+            double uy = mobility * particles[i]->F[1]  +
+                        parameter.maxVelocity*particles[i]->u * sin(particles[i]->phi) 
+                    +   random_y;
+            
+            
+            particles[i]->r[0] += ux * dt_;
+            particles[i]->r[1] += uy * dt_;
         
+            particles[i]->energy_accumlator1 += (parameter.maxVelocity*particles[i]->u * cos(particles[i]->phi)*ux + 
+                        parameter.maxVelocity*particles[i]->u * sin(particles[i]->phi)*uy)*dt_;
+            
+
+            
+            particles[i]->energy_accumlator2 += (ux*ux + uy*uy)*dt_;
+            
+            
+            particles[i]->energy_accumlator3 += (ux* mobility * particles[i]->F[0]+
+                    uy* mobility * particles[i]->F[1] )*dt_;
+                        
+            
+            particles[i]->energy_accumlator4 += (ux* random_x+
+                    uy* random_y)*dt_;
+            
+            if (!particles[i]->transporterFlag){// counting maintaining input energy
+                particles[i]->eneregy_maintain_accumlator += (parameter.maxVelocity*particles[i]->u * cos(particles[i]->phi)*ux + 
+                        parameter.maxVelocity*particles[i]->u * sin(particles[i]->phi)*uy)*dt_;
+            }
+            particles[i]->Fx = mobility * particles[i]->F[0];
+            particles[i]->Fy = mobility * particles[i]->F[1];
+            
+            particles[i]->Vx = ux;
+            particles[i]->Vy = uy;
+            
             particles[i]->phi += sqrt(2.0 * diffusivity_r * dt_) * (*rand_normal)(rand_generator);
             
+            
+            if( particles[i]->Vx > 0){
+                particles[i]->instant_output_work = ux*(mobility * particles[i]->F[0]+parameter.maxVelocity*particles[i]->u * cos(particles[i]->phi))*dt_;
+            }
+            
+            particles[i]->instant_conserve_work = (ux* mobility * particles[i]->F[0]+
+                    uy* mobility * particles[i]->F[1] )*dt_;
+            particles[i]->instant_input_work = (parameter.maxVelocity*particles[i]->u * cos(particles[i]->phi)*ux + 
+                        parameter.maxVelocity*particles[i]->u * sin(particles[i]->phi)*uy)*dt_;
+            
+            particles[i]->friction_accumulator1 += (particles[i]->Fx + parameter.maxVelocity*particles[i]->u * cos(particles[i]->phi))*dt_;
+            particles[i]->friction_accumulator2 += ux*dt_;
+            particles[i]->friction_accumulator3 += (parameter.maxVelocity*particles[i]->u * cos(particles[i]->phi))*dt_;
+            particles[i]->friction_accumulator4 += (random_x)*dt_;
+           
+            
+            double motor_target_vector[2];
+            
+            motor_target_vector[0] = particles[i]->targetPos[0]*radius - particles[i]->r[0];
+            motor_target_vector[1] = particles[i]->targetPos[1]*radius - particles[i]->r[1];
+            double vector_norm;
+            vector_norm = pow(motor_target_vector[0],2) + pow(motor_target_vector[1],2);
+            vector_norm = sqrt(vector_norm);
+            motor_target_vector[0] = motor_target_vector[0]/vector_norm;
+            motor_target_vector[1] = motor_target_vector[1]/vector_norm;
+            
+            
+            double v_projection = ux*motor_target_vector[0]+uy*motor_target_vector[1];
+            particles[i]->v_projection = 0.0;
+            double v_sp_projection = parameter.maxVelocity*particles[i]->u * cos(particles[i]->phi)*motor_target_vector[0] + 
+            parameter.maxVelocity*particles[i]->u * sin(particles[i]->phi)*motor_target_vector[1];
+            
+            double vsp_x,vsp_y;
+            vsp_x = parameter.maxVelocity*particles[i]->u * cos(particles[i]->phi);
+            vsp_y = parameter.maxVelocity*particles[i]->u * sin(particles[i]->phi);
+            
+            
+            double ratio = cos(particles[i]->phi)*motor_target_vector[0] + sin(particles[i]->phi)*motor_target_vector[1];
+//            particles[i]->energy_vsp_input_maintain += (vsp_x*vsp_x + vsp_y*vsp_y)*dt_;
+            
+            particles[i]->energy_instant_vsp_input = vsp_x*vsp_x + vsp_y*vsp_y;
+            
+            if (!particles[i]->transporterFlag){
+//                particles[i]->eneregy_useful_maintain_accumlator += (parameter.maxVelocity*particles[i]->u * cos(particles[i]->phi)*ux + 
+//                        parameter.maxVelocity*particles[i]->u * sin(particles[i]->phi)*uy)*dt_*ratio*ratio;
+                particles[i]->eneregy_useful_maintain_accumlator += (v_projection*v_sp_projection)*dt_;
+                particles[i]->v_projection = ratio;
+                particles[i]->maintainratio = ratio*v_projection/sqrt(ux*ux + uy*uy);
+     //           if (ratio < 0){ // here is to prevent overshoot
+     //               particles[i]->u = 0.0;
+     //           }
+                particles[i]->energy_vsp_input_maintain += (vsp_x*vsp_x + vsp_y*vsp_y)*dt_;
+                particles[i]->energy_vsp_useful_maintain += (v_sp_projection*v_sp_projection)*dt_;
+                
+                particles[i]->energy_instant_vsp_maintain = (v_sp_projection*v_sp_projection);
+                particles[i]->energy_instant_vsp_transport = 0.0;
+                
+                
+                
+            } else{
+                particles[i]->energy_input_transport += (parameter.maxVelocity*particles[i]->u * cos(particles[i]->phi)*ux + 
+                        parameter.maxVelocity*particles[i]->u * sin(particles[i]->phi)*uy)*dt_;
+                particles[i]->energy_useful_transport += (parameter.maxVelocity*particles[i]->u * cos(particles[i]->phi)*ux)*dt_;
+            
+                particles[i]->energy_vsp_input_transport += (vsp_x*vsp_x + vsp_y*vsp_y)*dt_;
+                particles[i]->energy_vsp_useful_transport += (vsp_x*vsp_x)*dt_;
+                
+                particles[i]->energy_instant_vsp_maintain = 0;
+                particles[i]->energy_instant_vsp_transport = vsp_x*vsp_x;
+            
+            }
+        
+        
+        
         }
         
         
@@ -112,6 +245,10 @@ void Model::run() {
             double randDist[2], disp[2];
             randDist[0] = (*rand_normal)(rand_generator);
             randDist[1] = (*rand_normal)(rand_generator);
+            
+    //        randDist[0] = 0.0;
+    //        randDist[1] = 0.0;
+            
             
             disp[0] = parameter.targetDiffuseRatio*mobility * targetCenter.F[0] * dt_ 
                     + (parameter.targetVelocityRatio*parameter.maxVelocity*dt_ + 
@@ -214,7 +351,7 @@ void Model::readTarget(std::string filename){
  }
 
 // this force calculation includes double layer repulsion and depletion attraction 
-void Model::calForcesHelper_DLAO(double ri[3], double rj[3], double F[3],int i,int j) {
+void Model::calForcesHelper_DLAO(double ri[3], double rj[3], double F[3],int i,int j,double& pot) {
     double r[dimP], dist;
 
     dist = 0.0;
@@ -236,6 +373,11 @@ void Model::calForcesHelper_DLAO(double ri[3], double rj[3], double F[3],int i,i
             F[k] = Fpp * r[k] / dist;
 
         }
+        //    Bpp = parameter.Bpp * kb * T * 1e9; //2.29 is Bpp/a/kT, a in unit of nm
+        pot = parameter.Bpp * radius_nm * exp(-Kappa*(dist-2.0));
+        double norm_comb = 1 +  L_dep;
+        double ao = -4.0/3.0*parameter.Os_pressure*pow(radius_nm,3) *M_PI*(pow(norm_comb,3) -3.0/4.0*pow(norm_comb,2) *dist+1.0/16.0* pow(dist,3));
+        pot += ao;
     }
 }
 
@@ -268,6 +410,7 @@ void Model::calForces() {
     for (int i = 0; i < numP; i++) {
         for (int k = 0; k < dimP; k++) {
             particles[i]->F[k] = 0.0;
+            particles[i]->potential = 0.0;
         }
     }
     
@@ -275,7 +418,11 @@ void Model::calForces() {
 
         for (int i = 0; i < numP - 1; i++) {
             for (int j = i + 1; j < numP; j++) {
-                calForcesHelper_DLAO(particles[i]->r, particles[j]->r, F,i, j);
+                double pot;
+                calForcesHelper_DLAO(particles[i]->r, particles[j]->r, F,i, j,pot);
+                particles[i]->potential += 0.5*pot;
+                particles[j]->potential += 0.5*pot;
+                
                 for (int k = 0; k < dimP; k++) {
                     particles[i]->F[k] += F[k];
                     particles[j]->F[k] += -F[k];
@@ -309,7 +456,8 @@ void Model::calForces() {
             int nblistSize = nblist.size();
             for (int j = 0; j < nblistSize; j++){
                 if (i!=nblist[j]){
-                    calForcesHelper_DLAO(particles[i]->r, particles[nblist[j]]->r, F,i, nblist[j]);
+                    double pot;
+                    calForcesHelper_DLAO(particles[i]->r, particles[nblist[j]]->r, F,i, nblist[j],pot);
                     for (int k = 0; k < dimP; k++) {
                         particles[i]->F[k] += F[k];
                     }
@@ -394,13 +542,67 @@ void Model::createInitialState(){
 
 void Model::outputTrajectory(std::ostream& os) {
 
+	/*
+	columnIndex    dataName
+	0				motor ID
+	1               x
+	2               y
+	3				z
+	4				phi
+	5				theta
+	6				cost
+	7				u (from 0 to 1)
+	8				targetIdx
+	9				ShortestPathDistToTarget
+	10				availControl
+	11				t_x
+	12				t_y
+	13				t_z
+	14				time
+	15				Transporter Flag
+	16				energy_accum1
+	17				energy_accum2
+	18				energy_accum3
+	19				energy_accum4
+	20				Fx
+	21				Fy
+	22				Vx
+	23				Vy
+	24				potential
+	25				energy_maintain_accum
+	26				instant_input_work
+	27				instant_conserve_work
+	28				instant_output_work 
+	29				friction_accumulator1
+	30				friction_accumulator2
+	31				friction_accumulator3
+	32				friction_accumulator4
+	33				eneregy_useful_maintain_accumlator
+	34				v_projection
+	35				maintainratio
+	36				energy_input_transport
+	37				energy_useful_transport
+	38				energy_vsp_input_maintain accumulated
+	39				energy_vsp_useful_maintain accumulated 
+	40				energy_vsp_input_transport accumulated
+	41				energy_vsp_useful_transport accumulated
+	42				energy_instant_vsp_input   this is instant input energy
+	43				energy_instant_vsp_transport
+	44				energy_instant_vsp_maintain
+
+	
+	
+	
+	*/
+
+
     for (int i = 0; i < numP; i++) {
         os << i << "\t";
         this->osTarget << i << "\t";
         for (int j = 0; j < 3; j++){
             os << particles[i]->r[j]/radius << "\t";
         }
-        
+        // first four columns id, x, y z
         for (int j = 0; j < 3; j++){
             osTarget << targets[i]->r[j] << "\t";
         }
@@ -419,6 +621,36 @@ void Model::outputTrajectory(std::ostream& os) {
         os << targets[i]->r[2]<<"\t";
         os << this->timeCounter*this->dt_ << "\t";
         os << particles[i]->transporterFlag<<"\t";
+        os << particles[i]->energy_accumlator1<<"\t";
+        os << particles[i]->energy_accumlator2<<"\t";
+        os << particles[i]->energy_accumlator3<<"\t";
+        os << particles[i]->energy_accumlator4<<"\t";
+        os << particles[i]->Fx<<"\t";
+        os << particles[i]->Fy<<"\t";
+        os << particles[i]->Vx<<"\t";
+        os << particles[i]->Vy<<"\t";
+        os << particles[i]->potential<<"\t";
+        os << particles[i]->eneregy_maintain_accumlator<<"\t";
+        os << particles[i]->instant_input_work << "\t";
+        os << particles[i]->instant_conserve_work << "\t";
+        os << particles[i]->instant_output_work << "\t";
+        os << particles[i]->friction_accumulator1 << "\t";
+        os << particles[i]->friction_accumulator2 << "\t";
+        os << particles[i]->friction_accumulator3 << "\t";
+        os << particles[i]->friction_accumulator4 << "\t";       
+        os << particles[i]->eneregy_useful_maintain_accumlator << "\t";
+        os << particles[i]->v_projection << "\t";
+        os << particles[i]->maintainratio << "\t";
+        os << particles[i]->energy_input_transport << "\t";
+        os << particles[i]->energy_useful_transport << "\t";
+        os << particles[i]->energy_vsp_input_maintain << "\t";
+        os << particles[i]->energy_vsp_useful_maintain << "\t";
+ //       os << particles[i]->energy_vsp_useful_maintain_positive << "\t";
+        os << particles[i]->energy_vsp_input_transport << "\t";
+        os << particles[i]->energy_vsp_useful_transport << "\t";
+        os << particles[i]->energy_instant_vsp_input << "\t";
+        os << particles[i]->energy_instant_vsp_transport << "\t";
+        os << particles[i]->energy_instant_vsp_maintain << "\t";
         os << std::endl;
     }
     for (int j = 0; j < 3; j++){
@@ -466,6 +698,33 @@ void Model::readxyz(const std::string filename) {
         particles[i]->ori_vec[0][0] = cos(particles[i]->phi)*sin(particles[i]->theta);
         particles[i]->ori_vec[0][1] = sin(particles[i]->phi)*sin(particles[i]->theta);
         particles[i]->ori_vec[0][2] = cos(particles[i]->theta);
+        
+        // initialize energy input accumulator
+        particles[i]->energy_accumlator1 = 0.0;
+        particles[i]->energy_accumlator2 = 0.0;
+        particles[i]->energy_accumlator3 = 0.0;
+        particles[i]->energy_accumlator4 = 0.0;
+        particles[i]->eneregy_maintain_accumlator = 0.0;
+        particles[i]->instant_input_work = 0.0;
+        particles[i]->instant_conserve_work = 0.0;
+        particles[i]->instant_output_work =0.0;
+        particles[i]->friction_accumulator1 = 0.0;
+        particles[i]->friction_accumulator2 =0.0;
+        particles[i]->friction_accumulator3 = 0.0;
+        particles[i]->friction_accumulator4 =0.0;
+        particles[i]->eneregy_useful_maintain_accumlator = 0.0;
+        particles[i]->v_projection = 0.0;
+        particles[i]->Fx = 0.0;
+        particles[i]->Fy = 0.0;
+        particles[i]->maintainratio = 0.0;
+        particles[i]->energy_input_transport = 0.0;
+        particles[i]->energy_useful_transport = 0.0;
+        
+        particles[i]->energy_vsp_input_maintain =0.0;
+        particles[i]->energy_vsp_useful_maintain =0.0;
+        particles[i]->energy_vsp_useful_maintain_positive =0.0;
+        particles[i]->energy_vsp_input_transport = 0.0;
+        particles[i]->energy_vsp_useful_transport = 0.0;
     }
     this->updateBodyFrameVec();
     

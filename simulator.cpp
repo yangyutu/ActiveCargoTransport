@@ -6,7 +6,7 @@ extern Parameter parameter;
 Simulator::Simulator(std::shared_ptr<Model> model0,std::shared_ptr<Controller> controller0):
                     model(model0),controller(controller0){
     controlFrequency = parameter.controlTimeInterval/model->dt();
-    assignmentFrequency = 1;
+    assignmentFrequency = parameter.assignmentTimeInterval/parameter.controlTimeInterval;
     nstep_control = parameter.controlStep;
     nstep_equilibrate = parameter.equilibrateStep;
     motionCycle = parameter.CollectiveMoveCycle;
@@ -23,7 +23,7 @@ void Simulator::shapeForming(){
     for(int s=0; s < nstep_control; s++){
         if ((s+1)%assignmentFrequency == 0){
             totalCost = controller->calAssignment(model->getCurrState(),model->getTargets(),model->getDimP());
-            std::cout << s << "\t" <<totalCost << std::endl;
+            std::cout << "cargo catch in shape forming " << s << "\t" <<totalCost << std::endl;
         }
         controller->calControl(model->getCurrState(),model->getTargets(),model->getDimP());        
         model->run(controlFrequency);
@@ -67,23 +67,39 @@ void Simulator::shapeForming_seq(){
     }
 }
 
+
+
 void Simulator::translate_2d_withCargo(){
     double &totalCost= parameter.totalCost;   
     model->createInitialState();
+
+    // first do a catch
     totalCost = controller->calAssignment(model->getCurrState(),model->getTargets(),model->getDimP());
     controller->calControl(model->getCurrState(),model->getTargets(),model->getDimP());
     std::cout << totalCost << std::endl;
+    for(int s=0; s < nstep_control; s++){
+        if ((s+1)%assignmentFrequency == 0){
+            totalCost = controller->calAssignment(model->getCurrState(),model->getTargets(),model->getDimP());
+            std::cout << "catch step "<<s << "\t" <<totalCost << std::endl;
+        }
+        controller->calControl(model->getCurrState(),model->getTargets(),model->getDimP());        
+        model->run(controlFrequency);
+    }
+
     for(int c = 0; c < motionCycle; c++){
         for (int s = 0; s < move_motionStep; s++) {
-            totalCost = controller->calAssignment(model->getCurrState(),model->getTargets(),model->getDimP());
-            // first all the particles are choosed to following assembly path
+            if ((s+1)%assignmentFrequency == 0){
+                totalCost = controller->calAssignment(model->getCurrState(),model->getTargets(),model->getDimP());
+                std::cout << "motion cycle: "<< c << "\t" <<totalCost << std::endl;
+            }
+                // first all the particles are choosed to following assembly path
             controller->calControl(model->getCurrState(),model->getTargets(),model->getDimP());
             // part of particles are selected as transporters
             controller->translate_2d(0.0, model->getCurrState());
             model->run(controlFrequency);
             // we calculate the total cost to see if things are particles are strongly deviated from its target
 
-            std::cout << "motion step: "<< s << "\t" <<totalCost << std::endl;
+
 //            controller->alignTarget_rt(model->getCurrState(),model->getTargets());
         }
         

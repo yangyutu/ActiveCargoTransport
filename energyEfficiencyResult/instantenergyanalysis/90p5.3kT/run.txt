@@ -7,25 +7,25 @@ radius
 ncycles
 1
 constrol step
-0
+3000
 equilibrate step
 0
 dt
 0.000025
-control time interval (s), assignment time interval
+control time interval (s) and assignment interval
 0.1 0.1
 diffu_t
 2.145e-13
 diffu_r
 0.161
 maximum speed for particle m/s
-5.0e-6
+5.0e-6 
 velocity change position point (this parameter is depreciated, currently is calculated automatically in the program)
 5
 Bpp
 2.29
 Os_pressure (kT nm^3) 5.8e-8
-1.28000e-07
+0.0
 L_dep
 0.2
 cutoff
@@ -33,7 +33,7 @@ cutoff
 kappa
 50
 seed
-5
+4
 self-avoidance between multiple particles flag
 1
 assignment method  1. single optimal cost based assignment 2. Eud distance based assignment 3. shortest path landmark method based on assignment
@@ -43,15 +43,15 @@ nocontrolFlag
 shapeformationflag/cargocaptureFlag(this is for capture/goingto target, but not do collective motion to transport the cargo)
 0
 motionflag (for collective motion) (1: all particles translate(depreciated) 2: all particles rotate (depreciated) 3: all particles translate with cargo in straight line)
-1
+3
 motion cycle, collective move step, collective restore step 
-2000 10 0
+1000 10 0
 cargo Translation flag (this is for doing transport the target/cargo, it will contain collective move and restore)
 0
 cargo capture step
 0
 trajOutputInterval
-50000
+5000
 landmarknumber in each dimension, landmarkMin
 20 0.5
 landmarkdist
@@ -63,7 +63,7 @@ obstacleFlag
 target dynamic flag (whether target will do Brownian motion and drift motion)
 1
 target diffusion coefficent ratio, target velocity ratio, will target interacting with other objects? 
-1.0 0.0 1
+1 0.0 1
 target center position
 0 0 0
 particlecellListFlag, obstaclecellListFlag
@@ -75,19 +75,22 @@ set constant propulsion  velocity flag and value ratio within [0,1](this will ov
 targetHistoryFlag, targetHistorySaveInterval, targetHistoryLength
 0 100 1000
 transporter nb thresh, dist thresh, angle thresh in degree
-0 100.0 30
+0 1.0 30
 cellListcutoff, dim, maxcount, box_x, box_y, box_z
 3.0 2 60 200.0 200.0 50.0
 initial config
-target_90pd=2.14.txt
+freespaceLocking/target_and_config/config_forlocking.txt
 file tag
 multip_
 target config
-target_90pd=2.14.txt
+freespaceLocking/target_and_config/target_90pd=2.25.txt
 obstaclefilename
 freespaceLocking/target_and_config/map12bit.txtwalldata.txt
 velocity map name
 freespaceLocking/transport/mazes/map5bitlarge/map5bitlarge_velocitymap.txt
 
+
+
+freespaceLocking/target_and_config/config_forlocking.txt
 
 
