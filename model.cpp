@@ -264,12 +264,9 @@ void Model::run() {
             
                   
             
-            for (int i = 0; i < numP; i++) {
-                targets[i]->r[0] += disp[0] / radius;
-                targets[i]->r[1] += disp[1] / radius;
-            }
+
             
-            if (parameter.targetHistoryFlag){// whether to use target history based tracking
+            if (parameter.targetHistoryFlag == 1){// whether to use target history based tracking, use time basis criterion
                 
                 // first we need to update our target history buffer
                 if ( (this->timeCounter + 1) % parameter.targetHistorySaveInterval == 0){
@@ -285,6 +282,29 @@ void Model::run() {
                 for (int i = 0; i < numP; i++) {
                     targets[i]->r[0] = (parameter.targetCenter[0] + initialDistToCenter[i]->r[0]) + avg(0,1)/radius;
                     targets[i]->r[1] = (parameter.targetCenter[1] + initialDistToCenter[i]->r[1]) + avg(0,2)/radius;
+                }
+            }else if (parameter.targetHistoryFlag == 2){ // use distance based criterion to update target position
+                double dispX, dispY;
+                dispX = this->previousTargetCenter.r[0] - targetCenter.r[0];
+                dispY = this->previousTargetCenter.r[1] - targetCenter.r[1];        
+                accumTargetMove = sqrt(pow(dispX/radius,2) + pow(dispY/radius,2));
+                if (accumTargetMove > parameter.targetMoveThresh){
+                    
+                    for (int i = 0; i < numP; i++) {
+                        targets[i]->r[0] = (parameter.targetCenter[0] + initialDistToCenter[i]->r[0]) + targetCenter.r[0]/radius;
+                        targets[i]->r[1] = (parameter.targetCenter[1] + initialDistToCenter[i]->r[1]) + targetCenter.r[1]/radius;
+                    }
+                    this->previousTargetCenter.r[0] = targetCenter.r[0];
+                    this->previousTargetCenter.r[1] = targetCenter.r[1];
+                    
+                }
+            
+            
+            }else{
+            
+                for (int i = 0; i < numP; i++) {
+                    targets[i]->r[0] += disp[0] / radius;
+                    targets[i]->r[1] += disp[1] / radius;
                 }
             }
     
@@ -504,6 +524,10 @@ void Model::createInitialState(){
     this->targetCenter.r[0] = parameter.targetCenter[0]*radius;
     this->targetCenter.r[1] = parameter.targetCenter[1]*radius;
     this->targetCenter.r[2] = parameter.targetCenter[2]*radius;
+    this->previousTargetCenter.r[0] = parameter.targetCenter[0]*radius;
+    this->previousTargetCenter.r[1] = parameter.targetCenter[1]*radius;
+    this->previousTargetCenter.r[2] = parameter.targetCenter[2]*radius;    
+    
     
     for (int i = 0; i < numP; i++){
         initialDistToCenter.push_back(particle_ptr(new Model::particle));
@@ -521,7 +545,8 @@ void Model::createInitialState(){
         
         }
     }
-    
+    // initialize target move tracker
+    accumTargetMove = 0.0;
     
     
     

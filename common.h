@@ -36,7 +36,7 @@ struct Parameter{
         int setConstantVFlag;
         
         int targetHistoryFlag, targetHistorySaveInterval, targetHistoryLength;
-        
+        double targetMoveThresh;
         double totalCost;
         
         // transporter selection criterion

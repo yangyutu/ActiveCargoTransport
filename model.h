@@ -93,7 +93,7 @@ private:
     static const double kb, T, vis;
     int numP, numObstacles;
     double radius, radius_nm;
-    double LJ,rm;
+    double LJ,rm,accumTargetMove;
     double Bpp; //2.29 is Bpp/a/kT
     double Kappa; // here is kappa*radius
     double Os_pressure;
@@ -103,7 +103,7 @@ private:
     std::vector<double> velocity={0.0,5.0e-6,5.0e-6}; // here is for simpication of binary actuation
 //    std::vector<double> velocity={0.0, 5.0e-6};
     int numControl;
-    particle targetCenter, targetCenter_avg;
+    particle targetCenter, targetCenter_avg, previousTargetCenter;
     state particles, targets,initialDistToCenter;
     arma::mat targetCenter_history;
     long long targetCenter_historyCounter;

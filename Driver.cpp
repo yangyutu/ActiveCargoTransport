@@ -159,6 +159,7 @@ void readParameter(){
     getline(runfile, line);
     getline(runfile, line);
     runfile >> parameter.targetHistoryFlag >> parameter.targetHistorySaveInterval >> parameter.targetHistoryLength;
+    parameter.targetMoveThresh = parameter.targetHistorySaveInterval;
     getline(runfile, line);
     getline(runfile, line);
     runfile >> parameter.transporter_nb_thresh >> parameter.transporter_dist_thresh >> parameter.transport_angle_thresh;
