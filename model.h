@@ -96,7 +96,7 @@ private:
     double LJ,rm,accumTargetMove;
     double Bpp; //2.29 is Bpp/a/kT
     double Kappa; // here is kappa*radius
-    double Os_pressure;
+    double Os_pressure, Os_pressure_origin;
     double L_dep; // 0.2 of radius size, i.e. 200 nm
     double combinedSize;
     double eps[3][3][3];
@@ -117,6 +117,9 @@ private:
     long long timeCounter,fileCounter;
     std::ofstream trajOs, opOs, osTarget, osCargo;
     std::string filetag;
+    std::default_random_engine generator;
+    std::uniform_real_distribution<double> Uniformdistribution{0.0,1.0};
+    std::normal_distribution<double> Normaldistribution{0.0,1.0};
     void outputTrajectory(std::ostream& os);
     void outputOrderParameter(std::ostream& os);
     void readxyz(const std::string filename);

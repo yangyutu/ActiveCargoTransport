@@ -178,6 +178,8 @@ void readParameter(){
     getline(runfile, parameter.obstacleFilename);
     getline(runfile, line);
     getline(runfile, parameter.velocityMapName);
+    getline(runfile, line);
+    runfile >> parameter.noiseTestFlag >> parameter.noiseTestLevel >> parameter.noiseType;
 
 }
 

@@ -122,8 +122,10 @@ private:
    void calControl3d(Model::state s, Model::state targets);
     double calAssignment3d(Model::state s, Model::state targets);
     void calControl2d(Model::state s, Model::state targets);
-    
-    
+
+    std::default_random_engine generator;
+    std::uniform_real_distribution<double> Uniformdistribution{0.0,1.0};
+    std::normal_distribution<double> Normaldistribution{0.0,1.0};
     // read velocity map
     std::unordered_map<CoorPair,double,CoorPairHash,CoorPairEqual> velocityMap;
     

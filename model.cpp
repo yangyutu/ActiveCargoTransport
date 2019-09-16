@@ -23,6 +23,7 @@ Model::Model(){
     Bpp = parameter.Bpp * kb * T * 1e9; //2.29 is Bpp/a/kT
     Kappa = parameter.kappa; // here is kappa*radius
     Os_pressure = parameter.Os_pressure * kb * T * 1e9;
+    Os_pressure_origin = parameter.Os_pressure * kb * T * 1e9;
     L_dep = parameter.L_dep; // 0.2 of radius size, i.e. 200 nm
     radius_nm = radius*1e9;
     combinedSize = (1+L_dep)*radius_nm;
@@ -334,6 +335,17 @@ void Model::run() {
 }
 
 void Model::run(int steps){
+    
+    if (parameter.noiseTestFlag) {
+        if (parameter.noiseType == 1) {
+            Os_pressure = Os_pressure_origin * (1.0 + (2.0 * Uniformdistribution(generator) - 1.0) * parameter.noiseTestLevel );
+        } 
+        if (parameter.noiseType == 2) {
+            Os_pressure = Os_pressure_origin * (1.0 + Normaldistribution(generator) * parameter.noiseTestLevel );
+        }
+    }
+    
+    
     for (int i = 0; i < steps; i++){
 	run();
     }

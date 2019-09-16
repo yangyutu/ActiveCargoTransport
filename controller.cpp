@@ -267,9 +267,30 @@ void Controller::calControl2d(Model::state s, Model::state targets){
             double rx2,ry2;
             rx2 = s[i]->targetPos[0] - s[i]->r[0]/radius;
             ry2 = s[i]->targetPos[1] - s[i]->r[1]/radius;  
+            
+
+            
             double dot_prod2 = cos(s[i]->phi)*rx2 + sin(s[i]->phi)*ry2;
             double dot_prod = cos(s[i]->phi)*rx + sin(s[i]->phi)*ry;
 //            std::cout << dot_prod << "\t" << dot_prod2 << std::endl;
+            if (parameter.noiseTestFlag) {
+                double dphi{0};
+                if (parameter.noiseType == 1) {
+                    rx2 += (2.0 * Uniformdistribution(generator) - 1.0) * parameter.noiseTestLevel;
+                    ry2 += (2.0 * Uniformdistribution(generator) - 1.0) * parameter.noiseTestLevel;
+                    dphi = M_PI * (2.0 * Uniformdistribution(generator) - 1.0) * parameter.noiseTestLevel;
+                }else if (parameter.noiseType == 2) {
+                    rx2 += Normaldistribution(generator) * parameter.noiseTestLevel;
+                    ry2 += Normaldistribution(generator) * parameter.noiseTestLevel;
+                    dphi = M_PI * Normaldistribution(generator) * parameter.noiseTestLevel;
+                }
+                dot_prod2 = cos(s[i]->phi + dphi)*rx2 + sin(s[i]->phi + dphi)*ry2;
+                dot_prod = cos(s[i]->phi + dphi)*rx + sin(s[i]->phi + dphi)*ry;
+                
+            }            
+            
+            
+            
             dot_prod = dot_prod2;
             if (dot_prod < 0) {
                 s[i]->u = 0;
@@ -288,7 +309,15 @@ void Controller::calControl2d(Model::state s, Model::state targets){
                     } else {
                         s[i]->u = dot_prod/disp_limit;
                     }
-               
+                    if (parameter.noiseTestFlag) {
+                        if (parameter.noiseType == 1){
+                            s[i]->u *= (1.0 + (2.0 * Uniformdistribution(generator) - 1.0) * parameter.noiseTestLevel );
+                        }
+                        if (parameter.noiseType == 2){
+                            s[i]->u *= (1.0 + Normaldistribution(generator) * parameter.noiseTestLevel );
+                        }
+                        
+                    }
                
                }
  
@@ -716,8 +745,21 @@ void Controller::translate_2d(double phi,Model::state s){
     for (int i = 0; i < numP; i++){
         double proj;
         proj = cos(s[i]->phi - phi);
+        
+        
+        if (parameter.noiseTestFlag) {
+            double dphi{0};
+            if (parameter.noiseType == 1) {
+                dphi = M_PI*(2.0 * Uniformdistribution(generator) - 1.0) * parameter.noiseTestLevel;
+            }else if (parameter.noiseType == 2) {
+                dphi = M_PI*Normaldistribution(generator)* parameter.noiseTestLevel;
+            }
+            proj = cos(s[i]->phi - phi + dphi);          
+        }  
+        
+        
         s[i]->transporterFlag = 0;
-        s[i]->u = 0.0;
+        //s[i]->u = 0.0;
         if (s[i]->nbcount >=parameter.transporter_nb_thresh && 
                 s[i]->ShortestPathDistToTarget<parameter.transporter_dist_thresh) {
             

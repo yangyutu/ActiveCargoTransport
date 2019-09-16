@@ -19,7 +19,7 @@ DEBUGFLAG=-DDEBUG -g3 -DARMA_NO_DEBUG
 RELEASEFLAG= -O3 -march=native -DARMA_NO_DEBUG
 CXXFLAGS=  -std=c++0x -I$(HOME)Dropbox/workspace/munkres-cpp/src $(BOOST_INCLUDE) -D__LINUX  -I./libicp $(ARMA_INCLUDE) -DARMA_DONT_USE_WRAAPER
 #CXXFLAGS += $(DEBUGFLAG)
-CXXFLAGS += $(DEBUGFLAG)
+CXXFLAGS += $(RELEASEFLAG)
 LINKOPTFLAGS= -O3 -flto=4 -fwhole-program
 LDFLAG= -L./libicp -licp -llapack -lblas -lgfortran -lquadmath -pthread
 
@@ -35,7 +35,7 @@ test_cell.exe:$(OBJ2)
 	$(CXX) -o $@ $^ $(LDFLAG) 
 
 %.o:%.cpp
-	$(CXX) -c $(CXXFLAGS) $(DEBUGFLAG) $^
+	$(CXX) -c $(CXXFLAGS) $(RELEASEFLAG) $^
 
 clean:
 	rm *.o *.exe

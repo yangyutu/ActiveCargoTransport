@@ -1,5 +1,5 @@
 N
-90
+60
 dim
 2
 radius
@@ -7,7 +7,7 @@ radius
 ncycles
 1
 constrol step
-0
+50000
 equilibrate step
 0
 dt
@@ -25,7 +25,7 @@ velocity change position point (this parameter is depreciated, currently is calc
 Bpp
 2.29
 Os_pressure (kT nm^3) 5.8e-8
-5.80000e-08
+0.00000e+00
 L_dep
 0.2
 cutoff
@@ -41,11 +41,11 @@ assignment method  1. single optimal cost based assignment 2. Eud distance based
 nocontrolFlag
 0
 shapeformationflag/cargocaptureFlag(this is for capture/goingto target, but not do collective motion to transport the cargo)
-0
+1
 motionflag (for collective motion) (1: all particles translate(depreciated) 2: all particles rotate (depreciated) 3: all particles translate with cargo in straight line)
 3
 motion cycle, collective move step, collective restore step 
-10000 10 0
+600 10 0
 cargo Translation flag (this is for doing transport the target/cargo, it will contain collective move and restore)
 0
 cargo capture step
@@ -73,23 +73,22 @@ binary velocity flag
 set constant propulsion  velocity flag and value ratio within [0,1](this will override all the control policy and set every motor with the same velocity)
 0 0.0
 targetHistoryFlag, targetHistorySaveInterval, targetHistoryLength either(1, 100, 1000) using time averaging or (2, 1, *) use distance criterion
-0 1 1000
+2 10 1000
 transporter nb thresh, dist thresh, angle thresh in degree
-3  1.0 30
-cellListcutoff, dim, maxcount, box_x, box_y, box_z
+0 1.0 30
+cellList cutoff, dim, max count, box_x, box_y, box_z
 3.0 2 60 200.0 200.0 50.0
 initial config
-target_90pd=2.158.txt
+target_60pd=2.25.txt
 file tag
 multip_
 target config
-target_90pd=2.158.txt
+target_60pd=2.25.txt
 obstaclefilename
 freespaceLocking/target_and_config/map12bit.txtwalldata.txt
 velocity map name
 freespaceLocking/transport/mazes/map5bitlarge/map5bitlarge_velocitymap.txt
-noiseTest, level, noiseType (2 Gaussian, 1 Uniform)
-1 0.05 2
-
+noiseTestFlag, noiseTestLevel
+1 0.0
 
 

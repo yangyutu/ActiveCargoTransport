@@ -34,7 +34,8 @@ struct Parameter{
         double targetCenter[3];
         double setConstantV;
         int setConstantVFlag;
-        
+        int noiseTestFlag, noiseType;
+        double noiseTestLevel;
         int targetHistoryFlag, targetHistorySaveInterval, targetHistoryLength;
         double targetMoveThresh;
         double totalCost;
